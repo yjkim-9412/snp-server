@@ -1,10 +1,14 @@
 package SNP.management.service.student;
 
 import SNP.management.domain.ScheduleDTO;
+import SNP.management.domain.StudentDTO;
+import SNP.management.entity.Teacher;
 import SNP.management.entity.student.Classes;
 import SNP.management.entity.student.Student;
 import SNP.management.repository.student.StudentRepositoryImp;
+import SNP.management.repository.teacher.TeacherRepository;
 import SNP.management.service.schedule.ScheduleService;
+import SNP.management.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 @Slf4j
 @Service
 @Transactional
@@ -20,13 +26,44 @@ import java.util.Map;
 public class StudentServiceImp extends Classes implements StudentService, ScheduleService {
 
 
-     final StudentRepositoryImp studentRepository;
+    private final StudentRepositoryImp studentRepository;
+    private final TeacherRepository teacherRepository;
 
+    //학생 저장 업데이트
+    @Override
+    public Long save(StudentDTO studentDTO) {
+        //기존 학생 유무 검증
+        if (studentDTO.getId() != null) {
+            Optional<Student> student = studentRepository.findById(studentDTO.getId());
+
+            Student getStudent = student.orElseThrow(() -> {
+                throw new NullPointerException();
+            });
+
+            //학생 담당 선생님 조회 검증
+            checkTeacher(studentDTO, getStudent);
+            //학생 업데이트
+            studentRepository.save(getStudent);
+
+            return getStudent.getId();
+        }
+
+        // 존재 학생 없을시 새로 생성
+        Student student = new Student(studentDTO);
+        //담당 선생님 조회
+        checkTeacher(studentDTO, student);
+
+
+        return studentRepository.save(student);
+    }
+
+    private void checkTeacher(StudentDTO studentDTO, Student getStudent) {
+        Optional<Teacher> teacher = teacherRepository.findById(studentDTO.getTeacher_id());
+        teacher.ifPresentOrElse(getStudent::connectTeacher,() ->log.info("Teacher is null"));
+    }
 
     /**
      * 스케줄 처음 생성할때만 사용 그 이외에는 단독 사용 금지
-     * @param student
-     * @param scheduleDTO
      */
     @Override
     public void createScheduleFor(Student student, ScheduleDTO scheduleDTO) {

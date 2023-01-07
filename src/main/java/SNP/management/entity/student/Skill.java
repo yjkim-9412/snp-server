@@ -1,5 +1,6 @@
 package SNP.management.entity.student;
 
+import SNP.management.domain.StudentDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,12 @@ public class Skill {
         this.speed = speed;
         this.readLv = readLv;
         this.intLv = intLv;
+    }
+
+    public Skill setSkill(StudentDTO studentDTO) {
+        this.speed = studentDTO.getSpeed();
+        this.readLv = studentDTO.getReadLv();
+        this.intLv = studentDTO.getIntLv();
+        return this;
     }
 }

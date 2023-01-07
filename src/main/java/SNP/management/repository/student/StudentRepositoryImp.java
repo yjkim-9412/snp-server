@@ -1,8 +1,7 @@
 package SNP.management.repository.student;
 
+
 import SNP.management.entity.student.Classes;
-import SNP.management.entity.student.QClasses;
-import SNP.management.entity.student.QStudent;
 import SNP.management.entity.student.Student;
 import SNP.management.service.student.StudentService;
 import SNP.management.service.student.StudentServiceImp;
@@ -15,10 +14,18 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static SNP.management.entity.student.QClasses.*;
 import static SNP.management.entity.student.QStudent.*;
+import static SNP.management.entity.study.QAType.aType;
+import static SNP.management.entity.study.QATypeHigh.aTypeHigh;
+import static SNP.management.entity.study.QBType.bType;
+import static SNP.management.entity.study.QBTypeHigh.bTypeHigh;
+import static SNP.management.entity.study.QCType.cType;
+import static SNP.management.entity.study.QDType.dType;
 
 @Slf4j
 @Repository
@@ -31,12 +38,13 @@ public class StudentRepositoryImp implements StudentRepository, ClassesRepositor
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public void save(Student student) {
+    public Long save(Student student) {
         em.persist(student);
+        return student.getId();
     }
 
-    public Student findById(Long id) {
-        return em.find(Student.class, id);
+    public Optional<Student> findById(Long id) {
+        return Optional.ofNullable(em.find(Student.class, id));
     }
 
     public List<Student> findAllByName(String name) {
@@ -72,4 +80,7 @@ public class StudentRepositoryImp implements StudentRepository, ClassesRepositor
         em.persist(classes);
         em.flush();
     }
+
+
+
 }

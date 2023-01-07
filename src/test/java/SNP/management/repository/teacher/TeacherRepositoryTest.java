@@ -39,7 +39,7 @@ class TeacherRepositoryTest {
 
         em.flush();
         em.clear();
-        Teacher foundTeacher = teacherRepository.findById(teacher.getId());
+        Teacher foundTeacher = teacherRepository.findById(teacher.getId()).get();
 
         assertThat(foundTeacher.getName()).isEqualTo(teacher.getName());
 
@@ -54,7 +54,7 @@ class TeacherRepositoryTest {
         teacherRepository.save(teacher);
         em.flush();
 
-        Teacher found = teacherRepository.findById(teacher.getId());
+        Teacher found = teacherRepository.findById(teacher.getId()).get();
         teacherDTO.setPhone("22222222");
         found.save(teacherDTO);
         em.persist(found);

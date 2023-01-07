@@ -1,11 +1,13 @@
 package SNP.management.repository.student;
 
+import SNP.management.domain.ClassTypeDTO;
 import SNP.management.entity.student.Classes;
+import SNP.management.entity.student.Student;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ClassesRepository {
 
     public List<Classes> findClassesByStudentId(Long id);
+
 }

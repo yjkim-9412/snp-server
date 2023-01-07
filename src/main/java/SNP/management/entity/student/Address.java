@@ -1,5 +1,6 @@
 package SNP.management.entity.student;
 
+import SNP.management.domain.StudentDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,5 +19,11 @@ public class Address {
     public Address(String city, String street) {
         this.city = city;
         this.street = street;
+    }
+
+    public Address setAddress(StudentDTO studentDTO) {
+        this.city = studentDTO.getCity();
+        this.street = studentDTO.getStreet();
+        return this;
     }
 }

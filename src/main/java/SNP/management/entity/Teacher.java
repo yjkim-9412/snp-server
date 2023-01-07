@@ -1,15 +1,17 @@
 package SNP.management.entity;
 
+import SNP.management.domain.ScheduleDTO;
 import SNP.management.domain.TeacherDTO;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @Table(name = "TEACHER")
+@NoArgsConstructor
 public class Teacher {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +30,6 @@ public class Teacher {
         this.pw = teacherDTO.getPw();;
         return this;
     }
+
+
 }

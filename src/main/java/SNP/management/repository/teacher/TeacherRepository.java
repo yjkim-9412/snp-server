@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -24,19 +25,20 @@ public class TeacherRepository {
         em.persist(teacher);
     }
 
-    public Teacher findById(Long id) {
-        return em.find(Teacher.class, id);
+    public Optional<Teacher> findById(Long id) {
+        Teacher teacher = em.find(Teacher.class, id);
+        return Optional.ofNullable(teacher);
     }
 
-    public Teacher update(TeacherDTO teacherDTO) {
-        Teacher foundTeacher = findById(teacherDTO.getId());
-        foundTeacher.save(teacherDTO);
-        return foundTeacher;
+    public void update(TeacherDTO teacherDTO) {
+
+        Optional<Teacher> teacher = findById(teacherDTO.getId());
+        teacher.ifPresent(value ->value.save(teacherDTO));
     }
 
     public void delete(Long id) {
-        Teacher foundId = findById(id);
-        em.remove(foundId);
+        Optional<Teacher> teacher = findById(id);
+        teacher.ifPresent(value -> em.remove(id));
     }
 
 }

@@ -40,8 +40,6 @@ class ScheduleTest extends Classes{
 
         //학생1 스케줄 생성
         ScheduleDTO scheduleDTO = createTestSchedule(student, 1, 3, 5);
-        System.out.println("student.getId() = " + student.getId());
-        System.out.println("scheduleDTO.getScheduleMap() = " + scheduleDTO.getScheduleMap());
         //스케줄 DB 추가
        studentService.createScheduleFor(student,scheduleDTO);
     }
