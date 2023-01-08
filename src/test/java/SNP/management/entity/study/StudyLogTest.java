@@ -1,11 +1,14 @@
 package SNP.management.entity.study;
 
-import SNP.management.entity.student.Student;
-import SNP.management.entity.student.StudentLog;
-import SNP.management.repository.student.StudentRepositoryImp;
-import SNP.management.service.student.StudentServiceImp;
+import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.entity.student.StudentLog;
+import SNP.management.domain.entity.study.AType;
+import SNP.management.domain.entity.study.BType;
+import SNP.management.domain.entity.study.Study;
+import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.repository.student.StudentRepositoryImp;
+import SNP.management.domain.service.student.StudentServiceImp;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +56,7 @@ class StudyLogTest extends StudentLog{
     @Test
     void saveLog() {
         //given
-        Student student = new Student().testStudentType("student1", 15, "4432321",StudyType.A_CLASS);
+        Student student = new Student().testStudentType("student1", 15, "4432321", StudyType.A_CLASS);
         studentRepository.save(student);
 
         Study aType = new AType();

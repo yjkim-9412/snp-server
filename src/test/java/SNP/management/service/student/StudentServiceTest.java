@@ -1,10 +1,10 @@
 package SNP.management.service.student;
 
-import SNP.management.domain.StudentDTO;
-import SNP.management.entity.student.Student;
-import SNP.management.repository.student.StudentRepositoryImp;
-import SNP.management.repository.teacher.TeacherRepository;
-import org.junit.jupiter.api.Assertions;
+import SNP.management.Web.student.StudentDTO;
+import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.repository.student.StudentRepositoryImp;
+import SNP.management.domain.repository.teacher.TeacherRepository;
+import SNP.management.domain.service.student.StudentServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +15,6 @@ import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

@@ -1,7 +1,8 @@
 package SNP.management.repository.teacher;
 
-import SNP.management.domain.TeacherDTO;
-import SNP.management.entity.Teacher;
+import SNP.management.Web.teacher.TeacherDTO;
+import SNP.management.domain.entity.Teacher;
+import SNP.management.domain.repository.teacher.TeacherRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

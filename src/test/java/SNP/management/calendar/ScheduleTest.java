@@ -1,10 +1,10 @@
 package SNP.management.calendar;
 
-import SNP.management.domain.ScheduleDTO;
-import SNP.management.entity.student.Classes;
-import SNP.management.entity.student.Student;
-import SNP.management.repository.student.StudentRepositoryImp;
-import SNP.management.service.student.StudentServiceImp;
+import SNP.management.Web.schedule.ScheduleDTO;
+import SNP.management.domain.entity.student.Classes;
+import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.repository.student.StudentRepositoryImp;
+import SNP.management.domain.service.student.StudentServiceImp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
