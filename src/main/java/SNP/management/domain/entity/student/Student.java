@@ -1,7 +1,7 @@
 package SNP.management.domain.entity.student;
 
 
-import SNP.management.Web.student.StudentDTO;
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.study.StudyType;
 import lombok.Getter;
@@ -27,7 +27,6 @@ public class Student {
     private String parentName;
     private String parentPhone;
     private String gender;
-    private int study_count;
 
     @Enumerated(EnumType.STRING)
     private StudyType studyType;
@@ -68,8 +67,7 @@ public class Student {
         this.parentName = studentDTO.getParentName();
         this.parentPhone = studentDTO.getParentPhone();
         this.gender = studentDTO.getGender();
-        this.study_count = studentDTO.getStudy_count();
-        this.studyType = StudyType.valueOf(studentDTO.getStudyType());
+        this.studyType = studentDTO.getStudyType();
         this.address = new Address().setAddress(studentDTO);
         this.grade = new Grade().setGrade(studentDTO);
         this.skill = new Skill().setSkill(studentDTO);
@@ -89,8 +87,7 @@ public class Student {
         this.parentName = studentDTO.getParentName();
         this.parentPhone = studentDTO.getParentPhone();
         this.gender = studentDTO.getGender();
-        this.study_count = studentDTO.getStudy_count();
-        this.studyType = StudyType.valueOf(studentDTO.getStudyType());
+        this.studyType = studentDTO.getStudyType();
         this.address = new Address().setAddress(studentDTO);
         this.grade = new Grade().setGrade(studentDTO);
         this.skill = new Skill().setSkill(studentDTO);

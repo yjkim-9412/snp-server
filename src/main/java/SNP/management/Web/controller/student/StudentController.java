@@ -1,16 +1,19 @@
 package SNP.management.Web.controller.student;
 
-import SNP.management.Web.schedule.ScheduleDTO;
-import SNP.management.Web.student.StudentDTO;
+import SNP.management.Web.form.student.StudentSaveForm;
+import SNP.management.Web.form.student.StudentUpdateForm;
+import SNP.management.Web.resolver.BindingResolver;
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.service.student.StudentServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -19,26 +22,26 @@ public class StudentController {
 
     private final StudentRepositoryImp studentRepository;
     private final StudentServiceImp studentService;
+    private final BindingResolver bindingResolver;
 
 
-    @PostMapping("/schedule")
-    public String schedule(@RequestBody ScheduleDTO scheduleDTO) {
+    @PostMapping("/students/saveForm")
+    public Object saveStudent(@RequestBody @Validated StudentSaveForm studentSaveForm, BindingResult bindingResult) {
 
-        log.info("id = {}", scheduleDTO.getId());
+        if (bindingResult.hasErrors()) {return bindingResolver.bindingAPI(bindingResult);}
+        studentService.save(new StudentDTO().FormToStudentDTO(studentSaveForm));
 
-        for (Map.Entry<Integer, String> result : scheduleDTO.getScheduleMap().entrySet()) {
-            log.info("result.getKey() = {}", result.getKey());
-            log.info("result.getValue() = {}", result.getValue());
-        }
-        return null;
+        return "/students";
     }
 
-    @PostMapping("/student/save")
-    public String saveStudent(@RequestBody StudentDTO studentDTO) {
+    @PostMapping("/student/update")
+    public Object updateStudent(@RequestBody @Validated StudentUpdateForm studentUpdateForm, BindingResult bindingResult) {
 
-        studentService.save(studentDTO);
+        if (bindingResult.hasErrors()) {return bindingResolver.bindingAPI(bindingResult);}
+        studentService.save(new StudentDTO().FormToStudentDTO(studentUpdateForm));
 
         return "/student/form";
     }
+
 
 }

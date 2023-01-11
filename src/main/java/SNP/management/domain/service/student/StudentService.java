@@ -1,6 +1,6 @@
 package SNP.management.domain.service.student;
 
-import SNP.management.Web.student.StudentDTO;
+import SNP.management.domain.DTO.StudentDTO;
 
 public interface StudentService {
 

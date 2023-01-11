@@ -22,6 +22,8 @@ public abstract class Study {
     private boolean OT;
     private String introduce;
 
+    private int stepCount;
+
     @Column(name = "studyType",insertable = false,updatable = false)
     private String studyType;
 

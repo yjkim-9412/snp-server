@@ -1,7 +1,8 @@
-package SNP.management.service.student;
+package SNP.management.repository.service.student;
 
-import SNP.management.Web.student.StudentDTO;
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.entity.study.StudyType;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import SNP.management.domain.service.student.StudentServiceImp;
@@ -32,7 +33,7 @@ class StudentServiceTest {
         //give
         StudentDTO studentDTO = new StudentDTO("student1",15,"951205","010-8888-8888",
                 "xxt1205@gmail.com","아빠","010-6664-6664",
-                "남자",0,"A_CLASS","부산시","금단로",
+                "남자",0, StudyType.A_CLASS,"부산시","금단로",
                 "고등학생",3,300,5,32,1L);
 
         // when

@@ -1,7 +1,7 @@
 package SNP.management.domain.service.student;
 
-import SNP.management.Web.schedule.ScheduleDTO;
-import SNP.management.Web.student.StudentDTO;
+import SNP.management.domain.DTO.ScheduleDTO;
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.student.Classes;
@@ -30,20 +30,19 @@ public class StudentServiceImp extends Classes implements StudentService, Schedu
     //학생 저장 업데이트
     @Override
     public Long save(StudentDTO studentDTO) {
+        Student byId = studentRepository.findById(studentDTO.getId())
+                .filter(s -> s.getId().equals(studentDTO.getId()))
+                .orElse(null);
+
         //기존 학생 유무 검증
-        if (studentDTO.getId() != null) {
-            Optional<Student> student = studentRepository.findById(studentDTO.getId());
-
-            Student getStudent = student.orElseThrow(() -> {
-                throw new NullPointerException();
-            });
-
+        if (byId != null) {
+//            Optional<Student> student = studentRepository.findById(studentDTO.getId());
             //학생 담당 선생님 조회 검증
-            checkTeacher(studentDTO, getStudent);
+            checkTeacher(studentDTO, byId);
             //학생 업데이트
-            studentRepository.save(getStudent);
+            studentRepository.save(byId);
 
-            return getStudent.getId();
+            return byId.getId();
         }
 
         // 존재 학생 없을시 새로 생성
@@ -73,32 +72,47 @@ public class StudentServiceImp extends Classes implements StudentService, Schedu
 
     @Override
     public void addSchedule(Student student, ScheduleDTO scheduleDTO) {
+        //해당학생 시간표 조회
         List<Classes> classesByStudentId = studentRepository.findClassesByStudentId(student.getId());
 
-        if (classesByStudentId.isEmpty()){
+
+        if (classesByStudentId.isEmpty()){// 시간표가 없을때
             log.info("classesByStudentId = {}", classesByStudentId.isEmpty());
             createScheduleFor(student, scheduleDTO);
-        } else {
+        } else {// 시간표가 있을때 //기존 시간표와 파라미터 시간표 매치,검증
             checkDuplicateAndSave(student, scheduleDTO, classesByStudentId);
         }
     }
 
+    /**
+     * 기존시간표와 파라미터 시간표 비교후 업데이트
+     * @param student
+     * @param scheduleDTO
+     * @param classesByStudentId
+     */
     @Override
     public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Classes> classesByStudentId) {
-        for (Classes classes : classesByStudentId) {
-            for (Map.Entry<Integer, String> es : scheduleDTO.getScheduleMap().entrySet()){
+        for (Classes classes : classesByStudentId) {// 해당 학생 기존 시간표
+            for (Map.Entry<Integer, String> es : scheduleDTO.getScheduleMap().entrySet()){ // 파라미터 시간표
+
                 if (classes.getDayOfWeek().getDayInt() != es.getKey()
-                        && !classes.getTime().equals(es.getValue())) {
+                        && !classes.getTime().equals(es.getValue())) { //서로 일치하는 시간표가 없을때
+
                     studentRepository.saveSchedule(classes);
+
                 } else if (classes.getDayOfWeek().getDayInt() == es.getKey()
-                        && !classes.getTime().equals(es.getValue())) {
+                        && !classes.getTime().equals(es.getValue())) { // 요일만 일치할때
+
                     Classes changeTime = classes.changeTime(es.getValue());
                     studentRepository.saveSchedule(changeTime);
+
                 } else if (classes.getDayOfWeek().getDayInt() != es.getKey()
-                        && classes.getTime().equals(es.getValue())) {
+                        && classes.getTime().equals(es.getValue())) {// 시간만 일치할때.
+
                     Classes changeDayOfWeek = classes.changeDayOfWeek(es.getKey());
                     studentRepository.saveSchedule(changeDayOfWeek);
                 }
+
             }
         }
     }

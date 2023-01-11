@@ -1,6 +1,7 @@
 package SNP.management.domain.repository.teacher;
 
-import SNP.management.Web.teacher.TeacherDTO;
+import SNP.management.domain.DTO.TeacherDTO;
+import SNP.management.domain.entity.QTeacher;
 import SNP.management.domain.entity.Teacher;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
+
+import static SNP.management.domain.entity.QTeacher.*;
 
 @Repository
 @Transactional
@@ -25,20 +28,32 @@ public class TeacherRepository {
         em.persist(teacher);
     }
 
+
     public Optional<Teacher> findById(Long id) {
-        Teacher teacher = em.find(Teacher.class, id);
-        return Optional.ofNullable(teacher);
+        Teacher findTeacher = em.find(Teacher.class, id);
+        return Optional.ofNullable(findTeacher);
     }
+
 
     public void update(TeacherDTO teacherDTO) {
 
-        Optional<Teacher> teacher = findById(teacherDTO.getId());
-        teacher.ifPresent(value ->value.save(teacherDTO));
+        Optional<Teacher> findTeacher = findById(teacherDTO.getId());
+        Teacher teacher = findTeacher.orElseThrow(IllegalAccessError::new);
+        teacher.save(teacherDTO);
+        em.persist(teacher);
     }
 
     public void delete(Long id) {
-        Optional<Teacher> teacher = findById(id);
-        teacher.ifPresent(value -> em.remove(id));
+        Optional<Teacher> findTeacher = findById(id);
+        em.remove(findTeacher.orElseThrow(IllegalAccessError::new));
+    }
+
+    public Optional<Teacher> findByLogin(TeacherDTO teacherDTO) {
+        Teacher findTeacher = queryFactory
+                .selectFrom(teacher)
+                .where(teacher.email.eq(teacherDTO.getEmail()).and(teacher.pw.eq(teacherDTO.getPw())))
+                .fetchOne();
+        return Optional.ofNullable(findTeacher);
     }
 
 }

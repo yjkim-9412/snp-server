@@ -1,6 +1,6 @@
 package SNP.management.domain.entity.student;
 
-import SNP.management.Web.student.StudentDTO;
+import SNP.management.domain.DTO.StudentDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

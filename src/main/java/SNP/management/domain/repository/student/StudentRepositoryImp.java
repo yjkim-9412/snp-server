@@ -1,6 +1,8 @@
 package SNP.management.domain.repository.student;
 
 
+import SNP.management.domain.entity.student.QClasses;
+import SNP.management.domain.entity.student.QStudent;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.student.Classes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,8 +14,9 @@ import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
-import static SNP.management.entity.student.QClasses.*;
-import static SNP.management.entity.student.QStudent.*;
+import static SNP.management.domain.entity.student.QClasses.*;
+import static SNP.management.domain.entity.student.QStudent.*;
+
 
 @Slf4j
 @Repository

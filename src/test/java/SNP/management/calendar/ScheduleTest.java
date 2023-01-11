@@ -1,6 +1,6 @@
 package SNP.management.calendar;
 
-import SNP.management.Web.schedule.ScheduleDTO;
+import SNP.management.domain.DTO.ScheduleDTO;
 import SNP.management.domain.entity.student.Classes;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.repository.student.StudentRepositoryImp;

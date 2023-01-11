@@ -1,6 +1,7 @@
 package SNP.management.domain.entity;
 
-import SNP.management.Web.teacher.TeacherDTO;
+import SNP.management.Web.form.teacher.TeacherLoginForm;
+import SNP.management.domain.DTO.TeacherDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,6 +27,12 @@ public class Teacher {
         this.phone = teacherDTO.getPhone();
         this.email = teacherDTO.getEmail();
         this.pw = teacherDTO.getPw();;
+        return this;
+    }
+
+    public Teacher login(TeacherDTO teacherDTO) {
+        this.email = teacherDTO.getEmail();
+        this.pw = teacherDTO.getPw();
         return this;
     }
 

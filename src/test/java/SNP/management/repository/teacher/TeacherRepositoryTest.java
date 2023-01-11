@@ -1,6 +1,6 @@
 package SNP.management.repository.teacher;
 
-import SNP.management.Web.teacher.TeacherDTO;
+import SNP.management.domain.DTO.TeacherDTO;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import org.junit.jupiter.api.BeforeEach;
