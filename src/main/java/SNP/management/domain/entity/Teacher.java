@@ -1,6 +1,5 @@
 package SNP.management.domain.entity;
 
-import SNP.management.Web.form.teacher.TeacherLoginForm;
 import SNP.management.domain.DTO.TeacherDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

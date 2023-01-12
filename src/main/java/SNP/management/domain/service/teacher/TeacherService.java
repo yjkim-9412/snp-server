@@ -1,7 +1,6 @@
 package SNP.management.domain.service.teacher;
 
-import SNP.management.Web.exception.LoginException;
-import SNP.management.Web.form.teacher.TeacherLoginForm;
+import SNP.management.web.exception.LoginException;
 import SNP.management.domain.DTO.TeacherDTO;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.repository.teacher.TeacherRepository;
@@ -25,5 +24,6 @@ public class TeacherService {
         teacherDTO.teacherToDTO(teacher);
         return teacherDTO;
     }
+
 
 }

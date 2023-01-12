@@ -38,6 +38,8 @@ public class StudentLog {
     @Enumerated
     private StudyType studyType;
 
+    private Integer studyCount;
+
     private int step;
 
     private LocalDateTime date;

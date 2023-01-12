@@ -3,6 +3,7 @@ package SNP.management.domain.entity.student;
 
 import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.Teacher;
+import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.entity.study.StudyType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,10 @@ public class Student {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_course")
+    private Study study;
 
     public Student testStudent(String name, int age, String birth) {
         this.name = name;

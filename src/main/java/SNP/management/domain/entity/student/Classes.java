@@ -1,9 +1,8 @@
 package SNP.management.domain.entity.student;
 
-import SNP.management.domain.calendar.DaysOfWeek;
+import SNP.management.domain.enumlist.DayOfWeek;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,14 +12,13 @@ import javax.persistence.*;
  */
 @Entity
 @Getter @Setter(AccessLevel.PRIVATE)
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "CLASSES")
 public class Classes {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-    private DaysOfWeek dayOfWeek;
+    private DayOfWeek dayOfWeek;
     private String time;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,11 +27,12 @@ public class Classes {
 
     public Classes saveClass(int day, String time, Student student) {
         Classes classes = new Classes();
-        classes.setDayOfWeek(DaysOfWeek.values()[day]);
+        classes.setDayOfWeek(DayOfWeek.values()[day]);
         classes.setTime(time);
         classes.setStudent(student);
         return classes;
     }
+
 
     public Classes changeTime(String time) {
         this.time = time;
@@ -41,7 +40,7 @@ public class Classes {
     }
 
     public Classes changeDayOfWeek(int day) {
-        this.dayOfWeek = DaysOfWeek.values()[day];
+        this.dayOfWeek = DayOfWeek.values()[day];
         return this;
     }
 }

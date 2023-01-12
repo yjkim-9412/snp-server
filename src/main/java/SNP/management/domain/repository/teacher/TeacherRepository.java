@@ -24,8 +24,14 @@ public class TeacherRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public void save(Teacher teacher) {
-        em.persist(teacher);
+    public Long save(TeacherDTO teacherDTO) {
+        if (teacherDTO.getId() == null) {
+            Teacher save = new Teacher().save(teacherDTO);
+            em.persist(save);
+            return save.getId();
+        }
+           em.persist( findById(teacherDTO.getId()).orElseThrow(NullPointerException::new));
+        return teacherDTO.getId();
     }
 
 
