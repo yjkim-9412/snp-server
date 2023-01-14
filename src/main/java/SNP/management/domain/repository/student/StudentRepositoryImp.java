@@ -30,6 +30,7 @@ public class StudentRepositoryImp implements StudentRepository {
     @Override
     public Long save(Student student) {
         em.persist(student);
+        em.flush();
         return student.getId();
     }
     @Override

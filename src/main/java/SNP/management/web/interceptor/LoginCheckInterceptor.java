@@ -1,9 +1,11 @@
 package SNP.management.web.interceptor;
 
+import SNP.management.web.exception.SessionException;
 import SNP.management.web.resolver.SessionConst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import javax.security.auth.login.LoginException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,9 +26,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             log.info("미인증 사용자");
 
             //로그인 페이지로 리턴
-            response.sendRedirect("/login");
+            throw new SessionException("세션 미인증");
 
-            return false;
         }
 
         return true;

@@ -47,6 +47,9 @@ public class Student {
     @JoinColumn(name = "study_course")
     private Study study;
 
+    @Column(name = "study_count")
+    private int studyCount;
+
     public Student testStudent(String name, int age, String birth) {
         this.name = name;
         this.age = age;
@@ -99,5 +102,6 @@ public class Student {
 
         return this;
     }
+
 
 }

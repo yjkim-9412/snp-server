@@ -28,13 +28,8 @@ public class TeacherController {
     private final BindingResolver bindingResolver;
     private final TeacherRepository teacherRepository;
 
-    @GetMapping("/login")
-    public Object loginForm() {
 
-
-        return "/login";
-    }
-    @PostMapping("/login/teacher")
+    @PostMapping("/login")
     public Object loginTeacher(@RequestBody @Validated @Login TeacherLoginForm loginTeacher, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()){
             return bindingResolver.bindingAPI(bindingResult);

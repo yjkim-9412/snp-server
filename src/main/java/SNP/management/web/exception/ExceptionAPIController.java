@@ -37,4 +37,11 @@ public class ExceptionAPIController {
         log.error("loginFail", e);
         return new ErrorResultForm("LOGIN_FAIL", "아이디 또는 비밀번호가 틀렸습니다.");
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler
+    public ErrorResultForm ErrorSessionException(SessionException e) {
+        log.error("sessionFail", e);
+        return new ErrorResultForm("SESSION_FAIL", "/login");
+    }
 }

@@ -23,6 +23,7 @@ public class MainController {
     @GetMapping("/")
     public Object getMain() {
 
-        return null;
+        return "main";
     }
+
 }

@@ -8,6 +8,8 @@ import SNP.management.domain.entity.student.QClasses;
 import SNP.management.domain.entity.student.QStudent;
 import SNP.management.domain.entity.student.QStudentLog;
 import SNP.management.domain.entity.study.QStudy;
+import SNP.management.domain.entity.study.Study;
+import SNP.management.domain.entity.study.StudyType;
 import SNP.management.domain.enumlist.DayOfWeek;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import javax.persistence.EntityManager;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static SNP.management.domain.entity.QTeacher.*;
 import static SNP.management.domain.entity.student.QClasses.*;
@@ -50,6 +53,17 @@ public class RecordRepository {
 
 
         return list;
+    }
+
+    public Study getFirstStudy(StudyType studyType) {
+        Study firstStep = queryFactory
+                .selectFrom(study)
+                .where(study.studyType.eq(studyType).and(study.step.eq(1)))
+                .fetchOne();
+        if (firstStep == null){
+            throw new NullPointerException("getFirstStudy 값이 없음");
+        }
+        return firstStep;
     }
 
 }

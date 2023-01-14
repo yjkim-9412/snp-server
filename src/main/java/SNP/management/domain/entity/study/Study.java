@@ -25,7 +25,8 @@ public abstract class Study {
     private int stepCount;
 
     @Column(name = "studyType",insertable = false,updatable = false)
-    private String studyType;
+    @Enumerated(EnumType.STRING)
+    private StudyType studyType;
 
 
     public Study saveType(int step, String level, String detail, int numberOfDays, int accumulation, boolean OT, String introduce) {
