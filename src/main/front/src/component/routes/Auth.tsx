@@ -16,6 +16,8 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import 'password-validator';
 import {styled} from "@mui/material";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {Cookie} from "@mui/icons-material";
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -25,7 +27,7 @@ const FormHelperTexts = styled(FormHelperText)`
 `;
 
 interface ChildLogin {
-    sendLoginStatus: () => void
+    setIsLoggedIn:  React.Dispatch<React.SetStateAction<Boolean>>
 }
 interface Props extends ChangeEvent<HTMLInputElement>{
     target: HTMLInputElement & EventTarget
@@ -33,8 +35,10 @@ interface Props extends ChangeEvent<HTMLInputElement>{
 
 
 
-const Auth: React.FC<ChildLogin> = ({sendLoginStatus}) => {
 
+
+const Auth: React.FC = () => {
+    const navigate = useNavigate();
     const passwordValidator = require('password-validator');
     const schema = new passwordValidator().is().min(8).has().uppercase().has().lowercase().has().digits();
 
@@ -45,13 +49,14 @@ const Auth: React.FC<ChildLogin> = ({sendLoginStatus}) => {
     const [pwError, setPwError] = useState<string>('');
     const [loginError, setLoginError] = useState<string>('');
 
+    let TeacherLoginForm = {'email':email, 'pw':pw};
     const changeEmail = (e: Props) =>{
         setEmail(e.target.value);
         console.log(email);
         if (!validator.isEmail(email)) {
             setEmailError("올바른 형식의 이메일이 아닙니다.")
         }else {setEmailError('');}
-        console.log(emailError);
+        console.log(TeacherLoginForm);
     }
     const changePw = (e: Props) =>{
         setPw(e.target.value);
@@ -59,15 +64,23 @@ const Auth: React.FC<ChildLogin> = ({sendLoginStatus}) => {
         if (!schema.validate(pw)) {
             setPwError("올바른 형식의 비밀번호가 아닙니다.")
         }else {setPwError('');}
-        console.log(pwError);
+        console.log(TeacherLoginForm);
     }
 
-    const onSubmit = (e:React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        axios.post('/api/login', null, {params: [email, pw]}).then(res => {
-            if (res.status === 200 && res.data.token) {
-                localStorage.setItem("loginTeacher", res.data.token);
-            } else {
+    const  onSubmitLogin  = async (e: React.BaseSyntheticEvent) => {
+        e.preventDefault()
+        if (email === '' && pw === ''){
+            setEmailError("올바른 형식의 이메일이 아닙니다.")
+            return;
+        }else if (pw === ''){
+            setPwError("올바른 형식의 비밀번호가 아닙니다.")
+            return;
+        }
+        await axios.post('/api/login',TeacherLoginForm).then(res => {
+            if (res.status === 200) {
+                sessionStorage.setItem('lg', email);
+                navigate('/');
+            } else if (res.status === 401){
                 console.log("login Fail");
                 setLoginError("비밀번호 또는 이메일주소가 맞지 않습니다.");
             }
@@ -90,7 +103,7 @@ const Auth: React.FC<ChildLogin> = ({sendLoginStatus}) => {
                     <Typography component="h1" variant="h5">
                         로그인
                     </Typography>
-                    <Box component="form" noValidate  sx={{ mt: 3 }}>
+                    <Box component="form" noValidate  sx={{ mt: 3 }} onSubmit={onSubmitLogin}>
                         <FormControl component="fieldset" variant="standard">
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -124,7 +137,7 @@ const Auth: React.FC<ChildLogin> = ({sendLoginStatus}) => {
                                 </Grid>
                             </Grid>
                             <Button
-                                onClick={sendLoginStatus}
+                                type="submit"
                                 fullWidth
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}

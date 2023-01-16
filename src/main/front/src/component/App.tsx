@@ -3,18 +3,13 @@ import axios from "axios";
 import Router from "./Router";
 import AppRouter from "./Router";
 import "bootstrap/dist/css/bootstrap.css";
-import '../component/routes/modules/Login.module.css'
 import '../axios.config';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
 
-    const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
-    const changeLoginStatus = () => {
-        setIsLoggedIn(!isLoggedIn);
-        console.log(isLoggedIn);
-    }
     return (
-        <AppRouter isLoggedIn = {isLoggedIn} sendLoginStatus={changeLoginStatus} />
+        <AppRouter  />
     );
 }
 export default App;

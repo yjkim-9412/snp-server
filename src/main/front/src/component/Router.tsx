@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 import Auth from "./routes/Auth";
 import Home from "./routes/Home";
+import {Cookie} from "@mui/icons-material";
+import {useCookies} from "react-cookie";
 // const Router = () => {
 //
 //     return(
@@ -18,20 +20,24 @@ import Home from "./routes/Home";
 // }
 interface ChildLogin {
     isLoggedIn: Boolean,
-    sendLoginStatus: () => void
+    setIsLoggedIn:  React.Dispatch<React.SetStateAction<Boolean>>
 }
+const AppRouter: React.FC = () => {
+    const navigate = useNavigate();
+    const [cookies] = useCookies(['JSESSIONID']);
 
-const AppRouter: React.FC<ChildLogin> = ({ isLoggedIn, sendLoginStatus} ) => {
+    useEffect(() => {
+        if (!sessionStorage.getItem('lg')) {
+            navigate('/login');
+        }
+    }, []);
+
     return (
-        <BrowserRouter>
             <Routes>
-                {isLoggedIn ? (
-                    <>
-                        <Route path="/" element={<Home sendLoginStatus={sendLoginStatus}/>}></Route>
-                    </>) : (<Route path="/" element={<Auth sendLoginStatus={sendLoginStatus} />}></Route>
-                )}
+                <Route path="/" element={<Home />}></Route>
+                <Route path="/login" element={<Auth  />}></Route>
             </Routes>
-        </BrowserRouter>
+
     );
 }
 export default AppRouter;

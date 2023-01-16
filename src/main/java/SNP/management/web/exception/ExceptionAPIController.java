@@ -31,7 +31,7 @@ public class ExceptionAPIController {
         return new ErrorResultForm("TYPE_MISMATCH", e.getMessage());
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ErrorResultForm ErrorLoginException(LoginException e) {
         log.error("loginFail", e);
