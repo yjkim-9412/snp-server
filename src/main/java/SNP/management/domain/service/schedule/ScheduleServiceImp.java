@@ -21,6 +21,10 @@ import java.util.Optional;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+/**
+ * 학생 날짜 수업조회는 RecordRepository 에 있습니다.
+ * 해당 ScheduleServiceImp 는 학생 수업 스케줄 추가
+ */
 public class ScheduleServiceImp implements ScheduleService{
 
     private final StudentServiceImp studentService;

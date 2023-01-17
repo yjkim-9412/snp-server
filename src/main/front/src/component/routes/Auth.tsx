@@ -52,19 +52,15 @@ const Auth: React.FC = () => {
     let TeacherLoginForm = {'email':email, 'pw':pw};
     const changeEmail = (e: Props) =>{
         setEmail(e.target.value);
-        console.log(email);
         if (!validator.isEmail(email)) {
             setEmailError("올바른 형식의 이메일이 아닙니다.")
         }else {setEmailError('');}
-        console.log(TeacherLoginForm);
     }
     const changePw = (e: Props) =>{
         setPw(e.target.value);
-        console.log(pw);
         if (!schema.validate(pw)) {
             setPwError("올바른 형식의 비밀번호가 아닙니다.")
         }else {setPwError('');}
-        console.log(TeacherLoginForm);
     }
 
     const  onSubmitLogin  = async (e: React.BaseSyntheticEvent) => {

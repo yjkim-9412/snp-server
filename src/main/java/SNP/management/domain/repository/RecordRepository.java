@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,21 @@ public class RecordRepository {
             throw new NullPointerException("getFirstStudy 값이 없음");
         }
         return firstStep;
+    }
+
+    public List<RecordDTO> findAllByDay(int day){
+        DayOfWeek dayOfWeek = DayOfWeek.values()[day];
+        List<RecordDTO> listDTO = new ArrayList<>();
+        List<Classes> list = queryFactory.selectFrom(classes)
+                .join(classes.student, student).fetchJoin()
+                .join(student.study, study).fetchJoin()
+                .join(student.teacher, teacher).fetchJoin()
+                .where(classes.dayOfWeek.eq(dayOfWeek))
+                .fetch();
+        for (Classes classes : list) {
+            listDTO.add(new RecordDTO(classes));
+        }
+        return listDTO;
     }
 
 }

@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,6 +19,7 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class TeacherController {
 
     private final TeacherService teacherService;
@@ -29,7 +27,7 @@ public class TeacherController {
     private final TeacherRepository teacherRepository;
 
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public Object loginTeacher(@RequestBody @Validated @Login TeacherLoginForm loginTeacher, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()){
             return bindingResolver.bindingAPI(bindingResult);
@@ -44,6 +42,12 @@ public class TeacherController {
         session.setAttribute(SessionConst.LOGIN_TEACHER, loginTeacher);
 
         return "/main";
+    }
+
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        session.invalidate();
     }
 
 

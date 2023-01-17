@@ -107,4 +107,12 @@ public class StudentTest {
             System.out.println("classes.getStudent().getTeacher().getName() = " + classes.getStudent().getTeacher().getName());
         }
     }
+
+    @Test
+    void getTodaySchedule() {
+        List<RecordDTO> allByDay = recordRepository.findAllByDay(2);
+        for (RecordDTO recordDTO : allByDay) {
+            System.out.println("recordDTO = " + recordDTO.toString());
+        }
+    }
 }

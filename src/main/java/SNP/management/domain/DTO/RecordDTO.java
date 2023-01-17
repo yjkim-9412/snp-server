@@ -1,5 +1,6 @@
 package SNP.management.domain.DTO;
 
+import SNP.management.domain.entity.student.Classes;
 import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.web.form.student.RecordForm;
 import com.querydsl.core.annotations.QueryProjection;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class RecordDTO {
 
-
+    private Long id;
     private String time;
     private String teacherName;
     private String studentName;
@@ -22,7 +23,8 @@ public class RecordDTO {
 
 
     @QueryProjection
-    public RecordDTO(String time, String teacherName, String studentName, String parentPhone, String stepName) {
+    public RecordDTO(Long id, String time, String teacherName, String studentName, String parentPhone, String stepName) {
+        this.id = id;
         this.time = time;
         this.teacherName = teacherName;
         this.studentName = studentName;
@@ -38,5 +40,15 @@ public class RecordDTO {
         this.stepName = recordForm.getStepName();
         return this;
     }
+
+    public RecordDTO (Classes classes) {
+        this.id = classes.getStudent().getId();
+        this.time = classes.getTime();
+        this.teacherName = classes.getStudent().getTeacher().getName();
+        this.studentName = classes.getStudent().getName();
+        this.parentPhone = classes.getStudent().getParentPhone();
+        this.stepName = classes.getStudent().getStudy().getDetail();
+    }
+
 
 }
