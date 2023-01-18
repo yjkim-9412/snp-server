@@ -18,11 +18,11 @@ return(
     <ThemeProvider theme={theme}>
     <Container component="main" maxWidth="xl">
         <Box>
-            <Grid2 container spacing={2} display="flex">
+            <Grid2 container  display="flex">
                 <Header/>
-                <CalendarMain/>
             </Grid2>
-            <Grid2 container>
+            <Grid2 container  display="flex">
+                <CalendarMain/>
             </Grid2>
         </Box>
         <Box>

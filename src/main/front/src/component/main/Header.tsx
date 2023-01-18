@@ -16,7 +16,6 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
 const pages = ['신규학생 등록', '수업자료 등록'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Header = () => {
     const navigate = useNavigate();
@@ -62,13 +61,13 @@ const Header = () => {
                         SNP
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                        <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
+                        <Button href="/student/register" sx={{ my: 2, color: 'white', display: 'block' }}>
                             신규학생 등록
                         </Button>
                         <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
                             수업자료 등록
                         </Button>
-                        <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
+                        <Button href="" sx={{ my: 2, color: 'white', display: 'block' }}>
                             도서등록 조회
                         </Button>
                         <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>

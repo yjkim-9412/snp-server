@@ -4,6 +4,7 @@ import Auth from "./routes/Auth";
 import Home from "./routes/Home";
 import {Cookie} from "@mui/icons-material";
 import {useCookies} from "react-cookie";
+import StudentRegister from "./register/StudentRegister";
 // const Router = () => {
 //
 //     return(
@@ -36,6 +37,7 @@ const AppRouter: React.FC = () => {
             <Routes>
                 <Route path="/" element={<Home />}></Route>
                 <Route path="/login" element={<Auth  />}></Route>
+                <Route path="/student/register" element={<StudentRegister/>}></Route>
             </Routes>
 
     );

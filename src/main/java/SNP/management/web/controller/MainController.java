@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,9 +26,18 @@ public class MainController {
     private final BindingResolver bindingResolver;
     private final RecordService recordService;
 
-
     @GetMapping("/main/{dayOfWeek}")
     public List<RecordDTO> getMain(@PathVariable int dayOfWeek) {
+        String name = "name j";
+        name.split(" ");
+          String[] x = {"a","b"};
+        Map<String, String> A = new HashMap<>();
+        for (String s : x) {
+            
+        }
+          
+        List<RecordDTO> allByDay = recordService.findAllByDay(dayOfWeek);
+
         return recordService.findAllByDay(dayOfWeek);
     }
 

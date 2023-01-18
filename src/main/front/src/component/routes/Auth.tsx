@@ -18,6 +18,7 @@ import {styled} from "@mui/material";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {Cookie} from "@mui/icons-material";
+import ChangeProps from "../../interface/ChangeProps";
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -26,12 +27,7 @@ const FormHelperTexts = styled(FormHelperText)`
   color: #d32f2f !important;
 `;
 
-interface ChildLogin {
-    setIsLoggedIn:  React.Dispatch<React.SetStateAction<Boolean>>
-}
-interface Props extends ChangeEvent<HTMLInputElement>{
-    target: HTMLInputElement & EventTarget
-}
+
 
 
 
@@ -50,13 +46,13 @@ const Auth: React.FC = () => {
     const [loginError, setLoginError] = useState<string>('');
 
     let TeacherLoginForm = {'email':email, 'pw':pw};
-    const changeEmail = (e: Props) =>{
+    const changeEmail = (e: ChangeProps) =>{
         setEmail(e.target.value);
         if (!validator.isEmail(email)) {
             setEmailError("올바른 형식의 이메일이 아닙니다.")
         }else {setEmailError('');}
     }
-    const changePw = (e: Props) =>{
+    const changePw = (e: ChangeProps) =>{
         setPw(e.target.value);
         if (!schema.validate(pw)) {
             setPwError("올바른 형식의 비밀번호가 아닙니다.")
