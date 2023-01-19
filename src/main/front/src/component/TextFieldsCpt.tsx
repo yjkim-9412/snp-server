@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {CssBaseline, FormHelperText, Grid, styled, TextField, ThemeProvider, Typography} from "@mui/material";
-import ChangeProps from "../interface/ChangeProps";
+import PropsAction from "../interface/PropsAction";
+import {StudentFieldType} from "../interface/StudentFieldType";
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -14,16 +15,11 @@ const TextFields = styled(TextField)`
         -webkit-appearance: none;
     }
 `;
-type TextFieldsCpt = {
-    onChange: (e:ChangeProps) => void,
-    studentValue: string
-    textType: string
-    labelType: string
-}
 
-const TextFieldsCpt:React.FC<TextFieldsCpt> = ({onChange, studentValue,textType,labelType}) => {
+
+const TextFieldsCpt:React.FC<StudentFieldType> = ({onChangeType, studentValue,textType,labelType}) => {
     return(
-        <Grid item xs={6}>
+        <>
             <TextFields
                 required
                 fullWidth
@@ -32,11 +28,11 @@ const TextFieldsCpt:React.FC<TextFieldsCpt> = ({onChange, studentValue,textType,
                 name={textType}
                 label={labelType}
                 value={studentValue}
-                onChange={onChange}
+                onChange={onChangeType}
                 // error={pwError!== ''}
             />
             <FormHelperTexts></FormHelperTexts>
-        </Grid>
+        </>
     )
 }
 export default TextFieldsCpt;
