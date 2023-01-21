@@ -1,6 +1,6 @@
 import * as React from 'react';
 import DaumPostcode from 'react-daum-postcode';
-import {Hidden, Modal} from "@mui/material";
+import {Hidden, Modal, styled} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Box, Grid, TextField} from "@mui/material/";
 import {StudentFieldAddress, StudentFieldType} from "../../interface/StudentFieldType";
@@ -16,7 +16,16 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress}) => {
+const TextFields = styled(TextField)`
+   input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+        .MuiFormHelperText-root {
+  color: #FF0000 !important;
+}
+`;
+const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErrorType}) => {
     /**
      * useState
      */
@@ -43,7 +52,7 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress}) => {
             console.log(`
                 주소: ${JSON.stringify(data)}
             `)
-            onChangeAddress(address);
+            onChangeAddress({city: data.sido + " " + data.sigungu, street: data.query});
             setOpenPostcode(false);
         },
     }
@@ -51,7 +60,7 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress}) => {
     return (
 
         <Grid item xs={12}>
-            <TextField
+            <TextFields
                 required
                 fullWidth
                 type="text"

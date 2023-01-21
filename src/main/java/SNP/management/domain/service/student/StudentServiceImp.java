@@ -19,7 +19,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StudentServiceImp implements StudentService {
 
-
     private final StudentRepositoryImp studentRepository;
     private final TeacherRepository teacherRepository;
     private final RecordRepository recordRepository;
@@ -35,16 +34,15 @@ public class StudentServiceImp implements StudentService {
 
         //기존 학생 유무 검증
         if (studentDTO.getId() == null) {
-
             // 존재 학생 없을시 새로 생성
             Student student = new Student(studentDTO);
-
+            // 담임 검사
             checkTeacher(studentDTO, student);
-
+            // 학생 체크
             checkStudyType(studentDTO, student);
-
             //학생저장후 DTO setId
             studentDTO.setId(studentRepository.save(student));
+
         }else {
             Student findByStudent = studentRepository.findById(studentDTO.getId()).orElseThrow(NullPointerException::new);
 
@@ -76,10 +74,9 @@ public class StudentServiceImp implements StudentService {
      * @param getStudent
      */
     private void checkTeacher(StudentDTO studentDTO, Student getStudent) {
-        Optional<Teacher> teacher = teacherRepository.findById(studentDTO.getTeacherId());
-        teacher.ifPresentOrElse(getStudent::connectTeacher,() ->log.info("Teacher is null"));
+        if (studentDTO.getTeacherId() != null) {
+            Optional<Teacher> teacher = teacherRepository.findById(studentDTO.getTeacherId());
+            teacher.ifPresentOrElse(getStudent::connectTeacher,() ->log.info("Teacher is null"));
+        }
     }
-
-
-
 }

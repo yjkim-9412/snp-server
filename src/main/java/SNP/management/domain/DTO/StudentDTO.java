@@ -90,14 +90,13 @@ public class StudentDTO {
         this.parentPhone = studentSaveForm.getParentPhone();
         this.gender = studentSaveForm.getGender();
         this.studyType = studentSaveForm.getStudyType();
-        this.city = studentSaveForm.getAddress().getCity();
-        this.street = studentSaveForm.getAddress().getStreet();
+        this.city = studentSaveForm.getCity();
+        this.street = studentSaveForm.getStreet();
         this.grade = studentSaveForm.getGrade();
         this.gradeLv = studentSaveForm.getGradeLv();
-        this.speed = studentSaveForm.getSkill().getSpeed();
-        this.readLv = studentSaveForm.getSkill().getReadLv();
-        this.intLv = studentSaveForm.getSkill().getIntLv();
-        this.teacherId = studentSaveForm.getTeacherId();
+        this.speed = studentSaveForm.getSpeed();
+        this.readLv = studentSaveForm.getReadLv();
+        this.intLv = studentSaveForm.getIntLv();
         return this;
     }
 

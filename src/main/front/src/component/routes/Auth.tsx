@@ -17,7 +17,6 @@ import 'password-validator';
 import {styled} from "@mui/material";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Cookie} from "@mui/icons-material";
 import PropsAction from "../../interface/PropsAction";
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -26,11 +25,6 @@ const FormHelperTexts = styled(FormHelperText)`
   font-weight: 700 !important;
   color: #d32f2f !important;
 `;
-
-
-
-
-
 
 
 const Auth: React.FC = () => {
@@ -73,10 +67,10 @@ const Auth: React.FC = () => {
                 sessionStorage.setItem('lg', email);
                 navigate('/');
             } else if (res.status === 401){
-                console.log("login Fail");
                 setLoginError("비밀번호 또는 이메일주소가 맞지 않습니다.");
             }
-        }).catch(error => console.log(error));
+        }).catch(error => {console.log(error)
+        setLoginError("비밀번호 또는 이메일주소가 맞지 않습니다.")});
     }
 
 

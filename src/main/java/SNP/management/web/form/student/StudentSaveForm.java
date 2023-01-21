@@ -4,6 +4,7 @@ import SNP.management.domain.entity.study.StudyType;
 import SNP.management.domain.enumlist.GradeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Email;
@@ -13,14 +14,15 @@ import javax.validation.constraints.NotNull;
 import static SNP.management.web.resolver.ValidationConst.*;
 
 @Data
-@AllArgsConstructor
+@NoArgsConstructor
 public class StudentSaveForm {
 
     @NotBlank(message = NOT_BLANK_NAME)
     private String name;
 
-    private int age;
+    private Integer age;
     private String birth;
+    @NotBlank(message = NOT_BLANK_PHONE)
     private String phone;
 
     @Email(message = EMAIL_EMAIL)
@@ -37,10 +39,12 @@ public class StudentSaveForm {
     private GradeType grade; //초,중,고
     @Range(min = 1, max = 6)
     private Integer gradeLv;//학년 단계 ex)1,2,3학년
-    private Long teacherId;
 
-    private AddressForm address;
-    private SkillForm skill;
+    private Integer speed;
+    private Integer readLv;
+    private Integer intLv;
+    private String city;
+    private String street;
 
     public StudentSaveForm(String name, int age, String birth, String phone, String email, String parentName, String parentPhone, String gender, StudyType studyType, GradeType grade, Integer gradeLv) {
         this.name = name;

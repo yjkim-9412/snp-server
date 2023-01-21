@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CssBaseline, FormHelperText, Grid, styled, TextField, ThemeProvider, Typography} from "@mui/material";
 import PropsAction from "../interface/PropsAction";
 import {StudentFieldType} from "../interface/StudentFieldType";
@@ -14,13 +14,37 @@ const TextFields = styled(TextField)`
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
     }
+        .MuiFormHelperText-root {
+  color: #FF0000 !important;
+}
 `;
 
 
-const TextFieldsCpt:React.FC<StudentFieldType> = ({onChangeType, studentValue,textType,labelType}) => {
+const TextFieldsCpt:React.FC<StudentFieldType> = ({onChangeType, studentValue,textType,labelType,fieldErrorType}) => {
+    const [isError, setIsError] = useState<boolean>(false);
+    const [ErrorText, setErrorText] = useState<string>('');
+    useEffect(() => {
+        if (fieldErrorType === ''){
+            setIsError(false);
+            setErrorText('');
+        }else {
+            setIsError(true);
+            setErrorText(fieldErrorType);
+        }
+    },[fieldErrorType])
+    useEffect(() => {
+        if (studentValue != '') {
+            setIsError(false);
+            if (ErrorText != ''){
+                setErrorText('');
+            }
+        }
+    },[studentValue])
     return(
         <>
             <TextFields
+                error={isError}
+                helperText={ErrorText}
                 required
                 fullWidth
                 type="text"
@@ -29,9 +53,7 @@ const TextFieldsCpt:React.FC<StudentFieldType> = ({onChangeType, studentValue,te
                 label={labelType}
                 value={studentValue}
                 onChange={onChangeType}
-                // error={pwError!== ''}
             />
-            <FormHelperTexts></FormHelperTexts>
         </>
     )
 }
