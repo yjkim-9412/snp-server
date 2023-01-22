@@ -14,24 +14,17 @@ const Course:React.FC<StudentFieldSelect> = ({onChangeSelect, fieldErrorType}) =
     const [course, setCourse] = useState<string>('');
     const [ErrorText, setErrorText] = useState<string>('');
     useEffect(() => {
-        if (fieldErrorType === ''){
-            setErrorText('');
-        }else {
+        if (fieldErrorType !== ''){
             setErrorText(fieldErrorType);
         }
     },[fieldErrorType])
-    useEffect(() => {
-        if (course != '') {
-            if (ErrorText != ''){
-                setErrorText('');
-            }
-        }
-    },[course])
+
     const onChange = (e: SelectChangeEvent) => {
         let name = e.target.name;
         let value = e.target.value;
         onChangeSelect({name, value});
         setCourse(value);
+        setErrorText('');
     }
     return(
         <Box

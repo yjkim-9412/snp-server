@@ -14,6 +14,7 @@ public interface StudentRepository {
 
     public List<Student> findAllByName(String name);
 
+    public Optional<Student> findByEmail(String email);
     public void delete(Student student);
 
 }

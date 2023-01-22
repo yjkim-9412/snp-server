@@ -4,7 +4,7 @@ import {Hidden, Modal, styled} from "@mui/material";
 import Button from "@mui/material/Button";
 import {Box, Grid, TextField} from "@mui/material/";
 import {StudentFieldAddress, StudentFieldType} from "../../interface/StudentFieldType";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -32,6 +32,16 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
     const [openPostcode, setOpenPostcode] = useState<boolean>(false);
     const [address, setAddress] = useState({'city': '', 'street': ''})
     const focusRef = useRef<HTMLDivElement>(null);
+    const [isError, setIsError] = useState<boolean>(false);
+    const [ErrorText, setErrorText] = useState<string>('');
+    useEffect(() => {
+        setErrorText(fieldErrorType);
+        if (fieldErrorType === '') {
+            setIsError(false);
+        }else {
+            setIsError(true);
+        }
+    },[fieldErrorType])
 
     /**
      * handler
@@ -54,6 +64,8 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
             `)
             onChangeAddress({city: data.sido + " " + data.sigungu, street: data.query});
             setOpenPostcode(false);
+            setErrorText('');
+            setIsError(false);
         },
     }
 
@@ -61,6 +73,7 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
 
         <Grid item xs={12}>
             <TextFields
+                helperText={ErrorText}
                 required
                 fullWidth
                 type="text"
@@ -69,7 +82,7 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
                 label="주소"
                 value={address.city + " " + address.street}
                 aria-readonly={true}
-                // error={pwError!== ''}
+                error={isError}
             />
             <div>
                 <Button

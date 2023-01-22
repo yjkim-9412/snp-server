@@ -10,4 +10,8 @@ public interface StudentService {
 
     public StudentDTO findById(Long id);
 
+    public void update(StudentDTO studentDTO);
+
+    public void duplicate(StudentDTO studentDTO);
+
 }

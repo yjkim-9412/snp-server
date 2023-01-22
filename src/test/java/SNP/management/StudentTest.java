@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,11 +58,8 @@ public class StudentTest {
         SkillForm skillForm = new SkillForm(200,5,6);
 
         StudentSaveForm studentSaveForm = new StudentSaveForm("student1",15,"941205","010-9999-3333",
-                "xxe@test.com","father","010-6666-3333","남", StudyType.A_CLASS,
+                "test@test.com","father","010-6666-3333","남", StudyType.A_CLASS,
                 GradeType.MIDDLE,3);
-        studentSaveForm.setAddress(addressForm);
-        studentSaveForm.setSkill(skillForm);
-        studentSaveForm.setTeacherId(teacherId);
         StudentDTO studentDTO = new StudentDTO().FormToUpdateDTO(studentSaveForm);
         studentService.save(studentDTO);
 
@@ -76,7 +74,7 @@ public class StudentTest {
         em.clear();
     }
     @Test
-    void saveSchedule() {
+    void saveSchedule() { // 일정 저장
         StudentDTO studentDTO = studentService.findById(1L);
         ScheduleForm scheduleForm = new ScheduleForm();
         scheduleForm.setMap(0, "12:00");
@@ -85,7 +83,7 @@ public class StudentTest {
         scheduleService.addSchedule(new ScheduleDTO().FormToDTO(studentDTO.getId(),scheduleForm));
     }
     @Test
-    void getSchedule() {
+    void getSchedule() { // 특정 학생 일정 가져오기
         StudentDTO studentDTO = studentService.findById(2L);
         ScheduleForm scheduleForm = new ScheduleForm();
         scheduleForm.setMap(0, "12:00");
@@ -100,7 +98,7 @@ public class StudentTest {
     }
 
     @Test
-    void getDayOfClass() {
+    void getDayOfClassJAVA() {// 오늘자 학생 수업 가져오기 java LocalDate 기준
         List<Classes> allLast = recordRepository.findAllLast();
         for (Classes classes : allLast) {
             System.out.println("classes.getStudent().getName() = " + classes.getStudent().getName());
@@ -109,10 +107,22 @@ public class StudentTest {
     }
 
     @Test
-    void getTodaySchedule() {
+    void getDayOfClassAPI() {// 오늘자 수업 학생  가져오기 API 파라미터 기준
         List<RecordDTO> allByDay = recordRepository.findAllByDay(2);
         for (RecordDTO recordDTO : allByDay) {
             System.out.println("recordDTO = " + recordDTO.toString());
         }
+    }
+
+    @Test
+    void duplicate() {// 중복검사
+        // given
+        StudentDTO studentDTO = new StudentDTO();
+        studentDTO.setEmail("test@test.com");
+
+        //when, then
+        assertThatThrownBy(() -> studentService.duplicate(studentDTO))
+                .isExactlyInstanceOf(DuplicateKeyException.class);
+
     }
 }

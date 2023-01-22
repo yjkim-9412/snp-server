@@ -15,11 +15,11 @@ import javax.persistence.Embeddable;
 public class Skill {
 
     @Column
-    private int speed;
+    private Integer speed;
     @Column
-    private int readLv;
+    private Integer readLv;
     @Column
-    private int intLv;
+    private Integer intLv;
 
     public Skill(int speed, int readLv, int intLv) {
         this.speed = speed;

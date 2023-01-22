@@ -1,6 +1,7 @@
 package SNP.management.web.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,14 +35,21 @@ public class ExceptionAPIController {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ErrorResultForm ErrorLoginException(LoginException e) {
-        log.error("loginFail", e);
+        log.error("[exceptionHandler]", e);
         return new ErrorResultForm("LOGIN_FAIL", "아이디 또는 비밀번호가 틀렸습니다.");
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ErrorResultForm ErrorSessionException(SessionException e) {
-        log.error("sessionFail", e);
-        return new ErrorResultForm("SESSION_FAIL", "/login");
+        log.error("[exceptionHandler]", e);
+        return new ErrorResultForm("SESSION_FAIL", "세션 만료");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResultForm ErrorDuplicateKeyException(DuplicateKeyException e) {
+        log.error("[exceptionHandler]", e);
+        return new ErrorResultForm("DUPLICATE_ERROR", "중복된 값입니다.");
     }
 }

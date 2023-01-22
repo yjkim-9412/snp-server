@@ -27,10 +27,10 @@ public class StudentDTO {
     private String city;
     private String street;
     private GradeType grade;
-    private int gradeLv;
-    private int speed;
-    private int readLv;
-    private int intLv;
+    private Integer gradeLv;
+    private Integer speed;
+    private Integer readLv;
+    private Integer intLv;
 
     private Long teacherId;
     private String teacherName;

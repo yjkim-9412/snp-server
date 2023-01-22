@@ -142,74 +142,72 @@ export default function SignUpStudent() {
 
     /** 빈값 텍스트필드 에러표시*/
     const setError = (e: string) => {
+        const errorMessage = "필수 값입니다";
         switch (e) {
             case "name":
-                setFieldError({...fieldError, name: "필수 값입니다"});
+                setFieldError({...fieldError, name: errorMessage});
                 break;
             case "age":
-                setFieldError({...fieldError, age: "필수 값입니다"});
+                setFieldError({...fieldError, age: errorMessage});
                 setAgeError(true);
                 break;
             case "gender":
-                setFieldError({...fieldError, gender: "필수 값입니다"});
+                setFieldError({...fieldError, gender: errorMessage});
                 break;
             case "studyType":
-                setFieldError({...fieldError, studyType: "필수 값입니다"});
+                setFieldError({...fieldError, studyType: errorMessage});
                 break;
             case "phone":
-                setFieldError({...fieldError, phone: "필수 값입니다"});
+                setFieldError({...fieldError, phone: errorMessage});
                 break;
             case "email":
-                setFieldError({...fieldError, email: "필수 값입니다"});
+                setFieldError({...fieldError, email: errorMessage});
                 break;
             case "parentName":
-                setFieldError({...fieldError, parentName: "필수 값입니다"});
+                setFieldError({...fieldError, parentName: errorMessage});
                 break;
             case "parentPhone":
-                setFieldError({...fieldError, parentPhone: "필수 값입니다"});
+                setFieldError({...fieldError, parentPhone: errorMessage});
                 break;
             case "birth":
-                setFieldError({...fieldError, birth: "필수 값입니다"});
+                setFieldError({...fieldError, birth: errorMessage});
                 break;
             case "speed":
-                setFieldError({...fieldError, speed: "필수 값입니다"});
+                setFieldError({...fieldError, speed: errorMessage});
                 break;
             case "readLv":
-                setFieldError({...fieldError, readLv: "필수 값입니다"});
+                setFieldError({...fieldError, readLv: errorMessage});
                 break;
             case "intLv":
-                setFieldError({...fieldError, intLv: "필수 값입니다"});
+                setFieldError({...fieldError, intLv: errorMessage});
                 break;
             case "city":
-                setFieldError({...fieldError, city: "필수 값입니다"});
+                setFieldError({...fieldError, city: errorMessage});
                 break;
             case "street":
-                setFieldError({...fieldError, city: "필수 값입니다"});
+                setFieldError({...fieldError, city: errorMessage});
                 break;
             case "grade":
-                setFieldError({...fieldError, grade: "필수 값입니다"});
+                setFieldError({...fieldError, grade: errorMessage});
                 break;
             case "gradeLv":
-                setFieldError({...fieldError, grade: "필수 값입니다"});
+                setFieldError({...fieldError, grade: errorMessage});
                 break;
         }
     }
+
+    /** submit 이벤트 핸들러*/
     const onSubmitStudent = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
         for (const entryElement of Object.entries(studentSaveForm)) {
-            if (entryElement[1] === '') {
+            if (entryElement[1] === '' || entryElement[1] === null || entryElement[1] === undefined) {
                 setSubmitError("필수 값을 입력해 주세요");
-                setError(entryElement[0])
+                 setError(entryElement[0])
                 return;
             }
         }
-
         await axios.post('/api/students/saveForm', studentSaveForm).then((res) => {
-                if (res.data != null) {
-                    setFieldError(res.data);
-                    console.log("data = "+res.data);
-                    return;
-                }
+                    navigate('/');
             }
         ).catch(error => console.log(error));
     }

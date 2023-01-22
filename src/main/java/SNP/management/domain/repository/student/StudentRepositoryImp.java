@@ -1,6 +1,7 @@
 package SNP.management.domain.repository.student;
 
 
+import SNP.management.domain.entity.student.QStudent;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.student.Classes;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
@@ -46,6 +47,15 @@ public class StudentRepositoryImp implements StudentRepository {
                 .fetch();
         return students;
     }
+
+    @Override
+    public Optional<Student> findByEmail(String email) {
+        Student student = queryFactory.selectFrom(QStudent.student)
+                .where(QStudent.student.email.eq(email))
+                .fetchOne();
+        return Optional.ofNullable(student);
+    }
+
     @Override
     public void delete(Student student) {
         em.remove(student);

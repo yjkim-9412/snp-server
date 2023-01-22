@@ -78,9 +78,7 @@ public class RecordTest {
         StudentSaveForm studentSaveForm = new StudentSaveForm("student1",15,"941205","010-9999-3333",
                 "xxe@test.com","father","010-6666-3333","남", StudyType.A_CLASS,
                 GradeType.MIDDLE,3);
-        studentSaveForm.setAddress(addressForm);
-        studentSaveForm.setSkill(skillForm);
-        studentSaveForm.setTeacherId(teacherId);
+
         StudentDTO studentDTO = new StudentDTO().FormToUpdateDTO(studentSaveForm);
         studentService.save(studentDTO);
 

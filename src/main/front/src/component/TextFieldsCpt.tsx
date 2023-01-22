@@ -24,22 +24,23 @@ const TextFieldsCpt:React.FC<StudentFieldType> = ({onChangeType, studentValue,te
     const [isError, setIsError] = useState<boolean>(false);
     const [ErrorText, setErrorText] = useState<string>('');
     useEffect(() => {
-        if (fieldErrorType === ''){
+        setErrorText(fieldErrorType);
+        if (fieldErrorType === '') {
             setIsError(false);
-            setErrorText('');
         }else {
             setIsError(true);
-            setErrorText(fieldErrorType);
         }
     },[fieldErrorType])
-    useEffect(() => {
-        if (studentValue != '') {
+    const onChangeText = (e:React.ChangeEvent<HTMLInputElement> & EventTarget) => {
+        onChangeType(e)
+        if (e.target.value === '' || e.target.value === null) {
+            setIsError(true);
+            setErrorText("필수 값 입니다.")
+        }else {
+            setErrorText('');
             setIsError(false);
-            if (ErrorText != ''){
-                setErrorText('');
-            }
         }
-    },[studentValue])
+    }
     return(
         <>
             <TextFields
@@ -52,7 +53,7 @@ const TextFieldsCpt:React.FC<StudentFieldType> = ({onChangeType, studentValue,te
                 name={textType}
                 label={labelType}
                 value={studentValue}
-                onChange={onChangeType}
+                onChange={onChangeText}
             />
         </>
     )

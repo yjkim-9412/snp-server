@@ -18,33 +18,16 @@ const GradeOp: React.FC<StudentFieldSelect> = ({onChangeSelect, fieldErrorType})
     const [isError, setIsError] = useState<boolean>(false);
     const [ErrorText, setErrorText] = useState<string>('');
     useEffect(() => {
-        if (fieldErrorType === '') {
-            setIsError(false);
-            setErrorText('');
-        } else {
+        if (fieldErrorType !== '') {
             setIsError(true);
             setErrorText(fieldErrorType);
         }
     }, [fieldErrorType])
-    useEffect(() => {
-        if (grade != '') {
-            setIsError(false);
-            if (ErrorText != ''){
-                setErrorText('');
-            }
-        }
-    },[grade])
-    useEffect(() => {
-        if (gradeLv != '') {
-            setIsError(false);
-            if (ErrorText != ''){
-                setErrorText('');
-            }
-        }
-    },[gradeLv])
+
     const onChange = (e: SelectChangeEvent) => {
         let name = e.target.name;
         let value = e.target.value;
+
         if (name === 'grade') {
             setGrade(value as string);
             if (value === 'MIDDLE' || value === 'HIGH') {
@@ -57,6 +40,8 @@ const GradeOp: React.FC<StudentFieldSelect> = ({onChangeSelect, fieldErrorType})
             setGradeLv(value as string);
         }
         onChangeSelect({name, value});
+        setErrorText('');
+        setIsError(false);
     }
     return (
         <Box
