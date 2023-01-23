@@ -7,7 +7,7 @@ import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.entity.study.StudyType;
 import SNP.management.domain.enumlist.GradeType;
-import SNP.management.domain.repository.RecordRepository;
+import SNP.management.domain.repository.schedule.ScheduleRepositoryImp;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import SNP.management.domain.service.schedule.ScheduleServiceImp;
@@ -16,7 +16,6 @@ import SNP.management.web.form.student.AddressForm;
 import SNP.management.web.form.student.ScheduleForm;
 import SNP.management.web.form.student.SkillForm;
 import SNP.management.web.form.student.StudentSaveForm;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +23,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -45,7 +42,7 @@ public class RecordTest {
     @Autowired
     ScheduleServiceImp scheduleService;
     @Autowired
-    RecordRepository recordRepository;
+    ScheduleRepositoryImp scheduleRepository;
 
     @BeforeEach
     void before(){
@@ -58,7 +55,7 @@ public class RecordTest {
         StudyType type = StudyType.A_CLASS;
 
         //when
-        Study firstStudy = recordRepository.getFirstStudy(type);
+        Study firstStudy = scheduleRepository.getFirstStudy(type);
 
         //then
         assertThat(firstStudy.getStudyType()).isEqualTo(type);

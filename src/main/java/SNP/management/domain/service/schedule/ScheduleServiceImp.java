@@ -1,5 +1,6 @@
 package SNP.management.domain.service.schedule;
 
+import SNP.management.domain.DTO.RecordDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
 
 import SNP.management.domain.DTO.StudentDTO;
@@ -66,9 +67,6 @@ public class ScheduleServiceImp implements ScheduleService{
 
     /**
      * 기존시간표와 파라미터 시간표 비교후 업데이트
-     * @param student
-     * @param scheduleDTO
-     * @param classesByStudentId
      */
     @Override
     public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Classes> classesByStudentId) {
@@ -95,5 +93,9 @@ public class ScheduleServiceImp implements ScheduleService{
 
             }
         }
+    }
+    @Override
+    public List<RecordDTO> findAllByDay(int day) {
+        return scheduleRepository.findAllByDay(day);
     }
 }

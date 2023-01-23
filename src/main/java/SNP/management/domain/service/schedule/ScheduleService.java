@@ -1,5 +1,6 @@
 package SNP.management.domain.service.schedule;
 
+import SNP.management.domain.DTO.RecordDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
 import SNP.management.domain.entity.student.Classes;
 import SNP.management.domain.entity.student.Student;
@@ -19,4 +20,6 @@ public interface ScheduleService {
     public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Classes> classesByStudentId);
 
     public ScheduleDTO getSchedule(Long id);
+
+    public List<RecordDTO> findAllByDay(int day);
 }

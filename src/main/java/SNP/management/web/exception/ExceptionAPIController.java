@@ -16,14 +16,14 @@ public class ExceptionAPIController {
     @ExceptionHandler
     public ErrorResultForm ErrorIllegalArgument(IllegalArgumentException e) {
         log.error("[exceptionHandler]", e);
-        return new ErrorResultForm("BAD", e.getMessage());
+        return new ErrorResultForm("BAD_TYPE", e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler
     public ErrorResultForm ErrorException(Exception e) {
         log.error("[exceptionHandler]", e);
-        return new ErrorResultForm("EX", "서버 오류");
+        return new ErrorResultForm("EX_SERVER",  e.getMessage());
     }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
@@ -36,20 +36,20 @@ public class ExceptionAPIController {
     @ExceptionHandler
     public ErrorResultForm ErrorLoginException(LoginException e) {
         log.error("[exceptionHandler]", e);
-        return new ErrorResultForm("LOGIN_FAIL", "아이디 또는 비밀번호가 틀렸습니다.");
+        return new ErrorResultForm("LOGIN_FAIL",  e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler
     public ErrorResultForm ErrorSessionException(SessionException e) {
         log.error("[exceptionHandler]", e);
-        return new ErrorResultForm("SESSION_FAIL", "세션 만료");
+        return new ErrorResultForm("SESSION_FAIL",  e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResultForm ErrorDuplicateKeyException(DuplicateKeyException e) {
         log.error("[exceptionHandler]", e);
-        return new ErrorResultForm("DUPLICATE_ERROR", "중복된 값입니다.");
+        return new ErrorResultForm("DUPLICATE_ERROR", e.getMessage());
     }
 }

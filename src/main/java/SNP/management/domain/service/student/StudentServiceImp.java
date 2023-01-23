@@ -2,8 +2,7 @@ package SNP.management.domain.service.student;
 
 import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
-import SNP.management.domain.entity.Teacher;
-import SNP.management.domain.repository.RecordRepository;
+import SNP.management.domain.repository.schedule.ScheduleRepositoryImp;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,7 +19,7 @@ public class StudentServiceImp implements StudentService {
 
     private final StudentRepositoryImp studentRepository;
     private final TeacherRepository teacherRepository;
-    private final RecordRepository recordRepository;
+    private final ScheduleRepositoryImp scheduleRepository;
 
     @Override
     public StudentDTO findById(Long id) {
@@ -41,8 +38,6 @@ public class StudentServiceImp implements StudentService {
             duplicate(studentDTO);
 
             Student student = new Student(studentDTO);
-            // 담임 검사
-            checkTeacher(studentDTO, student);
             // 학생 체크
             checkStudyType(studentDTO, student);
             //학생저장후 DTO setId
@@ -58,8 +53,6 @@ public class StudentServiceImp implements StudentService {
     @Override
     public void update(StudentDTO studentDTO) {
         Student findByStudent = studentRepository.findById(studentDTO.getId()).orElseThrow(NullPointerException::new);
-
-        checkTeacher(studentDTO, findByStudent);
 
         checkStudyType(studentDTO, findByStudent);
 
@@ -84,18 +77,10 @@ public class StudentServiceImp implements StudentService {
      */
     private Student checkStudyType(StudentDTO studentDTO, Student student) {
         if (studentDTO.getStudyType() != null) {
-            student.setStudy(recordRepository.getFirstStudy(studentDTO.getStudyType()));
+            student.setStudy(scheduleRepository.getFirstStudy(studentDTO.getStudyType()));
         }
         return student;
     }
 
-    /**
-     * save 학생의 담당 선생님 조회 검증
-     */
-    private void checkTeacher(StudentDTO studentDTO, Student getStudent) {
-        if (studentDTO.getTeacherId() != null) {
-            Optional<Teacher> teacher = teacherRepository.findById(studentDTO.getTeacherId());
-            teacher.ifPresentOrElse(getStudent::connectTeacher,() ->log.info("Teacher is null"));
-        }
-    }
+
 }

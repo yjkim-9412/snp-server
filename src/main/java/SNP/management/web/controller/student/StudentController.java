@@ -46,10 +46,6 @@ public class StudentController {
         return "/student/form";
     }
 
-    @GetMapping("/info/{id}")
-    public Object getInfo (@PathVariable Long id){
-        return new StudentForm(studentService.findById(id), scheduleService.getSchedule(id));
-    }
     @PostMapping("/info/{id}/schedule")
     public void saveClasses (@PathVariable Long id, @RequestBody @Validated ScheduleForm scheduleForm, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
