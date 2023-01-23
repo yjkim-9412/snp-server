@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-public class RecordTest {
+public class ScheduleTest {
 
 
     @Autowired

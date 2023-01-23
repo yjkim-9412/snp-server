@@ -66,29 +66,6 @@ public class StudentTest {
         em.flush();
         em.clear();
     }
-    @Test
-    void saveSchedule() { // 일정 저장
-        StudentDTO studentDTO = studentService.findById(1L);
-        ScheduleForm scheduleForm = new ScheduleForm();
-        scheduleForm.setMap(0, "12:00");
-        scheduleForm.setMap(3, "14:00");
-        scheduleForm.setMap(5, "16:00");
-        scheduleService.addSchedule(new ScheduleDTO().FormToDTO(studentDTO.getId(),scheduleForm));
-    }
-    @Test
-    void getSchedule() { // 특정 학생 일정 등록 후 가져오기
-        StudentDTO studentDTO = studentService.findById(2L);
-        ScheduleForm scheduleForm = new ScheduleForm();
-        scheduleForm.setMap(0, "12:00");
-        scheduleForm.setMap(3, "14:00");
-        scheduleForm.setMap(4, "16:00");
-        scheduleService.addSchedule(new ScheduleDTO().FormToDTO(studentDTO.getId(),scheduleForm));
-        em.flush();
-        em.clear();
-
-        ScheduleDTO scheduleDTO = scheduleService.getSchedule(studentDTO.getId());
-        assertThat(scheduleDTO.getScheduleMap()).isEqualTo(scheduleForm.getSchedule());
-    }
 
     @Test
     void getDayOfClassJAVA() {// 오늘자 학생 수업 가져오기 java LocalDate 기준
