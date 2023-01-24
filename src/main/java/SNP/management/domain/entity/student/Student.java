@@ -5,15 +5,17 @@ import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.entity.study.StudyType;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "STUDENT")
 public class Student {
 
@@ -32,8 +34,7 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private StudyType studyType;
 
-    @Embedded
-    private Address address;
+    private String address;
     @Embedded
     private Grade grade;
     @Embedded
@@ -44,11 +45,17 @@ public class Student {
     private Teacher teacher;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_course")
+    @JoinColumn(name = "study_id")
     private Study study;
+
+
 
     @Column(name = "study_count")
     private int studyCount;
+    @Column(insertable = false)
+    private String date;
+
+    private Boolean registration;
 
     public Student testStudent(String name, int age, String birth) {
         this.name = name;
@@ -76,9 +83,11 @@ public class Student {
         this.parentPhone = studentDTO.getParentPhone();
         this.gender = studentDTO.getGender();
         this.studyType = studentDTO.getStudyType();
-        this.address = new Address().setAddress(studentDTO);
+        this.address = studentDTO.getAddress();
         this.grade = new Grade().setGrade(studentDTO);
         this.skill = new Skill().setSkill(studentDTO);
+        this.registration = studentDTO.getRegistration();
+        this.date = studentDTO.getDate();
     }
 
     public void connectTeacher(Teacher teacher) {
@@ -96,12 +105,12 @@ public class Student {
         this.parentPhone = studentDTO.getParentPhone();
         this.gender = studentDTO.getGender();
         this.studyType = studentDTO.getStudyType();
-        this.address = new Address().setAddress(studentDTO);
+        this.address = studentDTO.getAddress();
         this.grade = new Grade().setGrade(studentDTO);
         this.skill = new Skill().setSkill(studentDTO);
+        this.date = studentDTO.getDate();
 
         return this;
     }
-
 
 }

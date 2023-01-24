@@ -31,12 +31,12 @@ public class StudentUpdateForm {
     @NotBlank(message = "{NotBlank.gender}")
     private String gender;
     private StudyType studyType;
-    private String city;
-    private String street;
+    private String address;
     private GradeType grade;
     private int gradeLv;
     private int speed;
     private int readLv;
     private int intLv;
     private Long teacher_id;
+    private Boolean registration;
 }

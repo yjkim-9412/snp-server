@@ -43,10 +43,12 @@ public class StudentSaveForm {
     private Integer speed;
     private Integer readLv;
     private Integer intLv;
-    private String city;
-    private String street;
+    private String address;
+    private Boolean registration;
 
-    public StudentSaveForm(String name, int age, String birth, String phone, String email, String parentName, String parentPhone, String gender, StudyType studyType, GradeType grade, Integer gradeLv) {
+
+    public StudentSaveForm(String name, int age, String birth, String phone, String email, String parentName,
+                           String parentPhone, String gender, StudyType studyType, GradeType grade, Integer gradeLv) {
         this.name = name;
         this.age = age;
         this.birth = birth;

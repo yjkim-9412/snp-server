@@ -1,4 +1,4 @@
-package SNP.management.web.controller.student;
+package SNP.management.web.controller;
 
 import SNP.management.domain.DTO.ScheduleDTO;
 import SNP.management.domain.service.schedule.ScheduleServiceImp;
@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,12 +32,20 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return bindingResolver.bindingAPI(bindingResult);
         }
-        studentService.save(new StudentDTO().FormToUpdateDTO(studentSaveForm));
+        studentService.save(new StudentDTO().FormToSaveDTO(studentSaveForm));
 
 
         return "/students";
     }
 
+    @GetMapping("/")
+    public List<StudentForm> getStudentList() {
+
+        List<StudentForm> studentForm = new ArrayList<>();
+        List<StudentDTO> students = studentService.findByAll();
+
+        return studentForm;
+    }
     @PostMapping("/update")
     public Object updateStudent(@RequestBody @Validated StudentUpdateForm studentUpdateForm, BindingResult bindingResult) {
 

@@ -1,6 +1,6 @@
 package SNP.management.domain.repository.student;
 
-import SNP.management.domain.entity.student.Classes;
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
 
 import java.util.List;
@@ -16,5 +16,7 @@ public interface StudentRepository {
 
     public Optional<Student> findByEmail(String email);
     public void delete(Student student);
+
+    public List<StudentDTO> findByAll();
 
 }

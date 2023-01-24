@@ -1,11 +1,11 @@
 package SNP.management.domain.service.schedule;
 
-import SNP.management.domain.DTO.RecordDTO;
+import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
 
-import SNP.management.domain.DTO.StudentDTO;
-import SNP.management.domain.entity.student.Classes;
+import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.repository.schedule.ScheduleRepositoryImp;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.service.student.StudentServiceImp;
@@ -40,8 +40,8 @@ public class ScheduleServiceImp implements ScheduleService{
     @Override
     public void createScheduleFor(Student student, ScheduleDTO scheduleDTO) {
         for (Map.Entry<Integer, String> e : scheduleDTO.getScheduleMap().entrySet()) {
-            Classes classes = new Classes().saveClass(e.getKey(), e.getValue(), student);
-            scheduleRepository.saveSchedule(classes);
+            Schedule schedule = new Schedule().saveClass(e.getKey(), e.getValue(), student);
+            scheduleRepository.saveSchedule(schedule);
         }
     }
 
@@ -51,14 +51,14 @@ public class ScheduleServiceImp implements ScheduleService{
         Student student = studentOptional.orElseThrow(NullPointerException::new);
 
         //해당학생 시간표 조회
-        List<Classes> classesByStudentId = scheduleRepository.findClassesByStudentId(student.getId());
+        List<Schedule> scheduleByStudentId = scheduleRepository.findClassesByStudentId(student.getId());
 
 
-        if (classesByStudentId.isEmpty()){// 시간표가 없을때
+        if (scheduleByStudentId.isEmpty()){// 시간표가 없을때
             log.info("classesByStudentId = {}", true);
             createScheduleFor(student, scheduleDTO);
         } else {// 시간표가 있을때 //기존 시간표와 파라미터 시간표 매치,검증
-            checkDuplicateAndSave(student, scheduleDTO, classesByStudentId);
+            checkDuplicateAndSave(student, scheduleDTO, scheduleByStudentId);
         }
     }
 
@@ -69,25 +69,25 @@ public class ScheduleServiceImp implements ScheduleService{
      * 기존시간표와 파라미터 시간표 비교후 업데이트
      */
     @Override
-    public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Classes> classesByStudentId) {
-        for (Classes classes : classesByStudentId) {// 해당 학생 기존 시간표
+    public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleByStudentId) {
+        for (Schedule schedule : scheduleByStudentId) {// 해당 학생 기존 시간표
             for (Map.Entry<Integer, String> es : scheduleDTO.getScheduleMap().entrySet()){ // 파라미터 시간표
 
-                if (classes.getDayOfWeek().getDayInt() != es.getKey()
-                        && !classes.getTime().equals(es.getValue())) { //서로 일치하는 시간표가 없을때
+                if (schedule.getDayOfWeek().getDayInt() != es.getKey()
+                        && !schedule.getTime().equals(es.getValue())) { //서로 일치하는 시간표가 없을때
 
-                    scheduleRepository.saveSchedule(classes);
+                    scheduleRepository.saveSchedule(schedule);
 
-                } else if (classes.getDayOfWeek().getDayInt() == es.getKey()
-                        && !classes.getTime().equals(es.getValue())) { // 요일만 일치할때
+                } else if (schedule.getDayOfWeek().getDayInt() == es.getKey()
+                        && !schedule.getTime().equals(es.getValue())) { // 요일만 일치할때
 
-                    Classes changeTime = classes.changeTime(es.getValue());
+                    Schedule changeTime = schedule.changeTime(es.getValue());
                     scheduleRepository.saveSchedule(changeTime);
 
-                } else if (classes.getDayOfWeek().getDayInt() != es.getKey()
-                        && classes.getTime().equals(es.getValue())) {// 시간만 일치할때.
+                } else if (schedule.getDayOfWeek().getDayInt() != es.getKey()
+                        && schedule.getTime().equals(es.getValue())) {// 시간만 일치할때.
 
-                    Classes changeDayOfWeek = classes.changeDayOfWeek(es.getKey());
+                    Schedule changeDayOfWeek = schedule.changeDayOfWeek(es.getKey());
                     scheduleRepository.saveSchedule(changeDayOfWeek);
                 }
 
@@ -95,7 +95,7 @@ public class ScheduleServiceImp implements ScheduleService{
         }
     }
     @Override
-    public List<RecordDTO> findAllByDay(int day) {
-        return scheduleRepository.findAllByDay(day);
+    public List<TodayScheduleDTO> findAllByDay(int day) {
+        return scheduleRepository.findAllByDay(DayOfWeek.values()[day]);
     }
 }

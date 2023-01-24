@@ -1,16 +1,16 @@
 package SNP.management.domain.repository.student;
 
 
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.QStudent;
 import SNP.management.domain.entity.student.Student;
-import SNP.management.domain.entity.student.Classes;
-import SNP.management.domain.repository.schedule.ScheduleRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +54,18 @@ public class StudentRepositoryImp implements StudentRepository {
                 .where(QStudent.student.email.eq(email))
                 .fetchOne();
         return Optional.ofNullable(student);
+    }
+
+    @Override
+    public List<StudentDTO> findByAll() {
+        List<StudentDTO> listDTO = new ArrayList<>();
+        List<Student> students = queryFactory
+                .selectFrom(student)
+                .fetch();
+        for (Student student : students) {
+            listDTO.add(new StudentDTO(student));
+        }
+        return listDTO;
     }
 
     @Override

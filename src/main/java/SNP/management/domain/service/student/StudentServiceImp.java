@@ -2,6 +2,9 @@ package SNP.management.domain.service.student;
 
 import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.entity.study.Study;
+import SNP.management.domain.repository.StudyDataJpa;
+import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.schedule.ScheduleRepositoryImp;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.repository.teacher.TeacherRepository;
@@ -10,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -20,6 +25,8 @@ public class StudentServiceImp implements StudentService {
     private final StudentRepositoryImp studentRepository;
     private final TeacherRepository teacherRepository;
     private final ScheduleRepositoryImp scheduleRepository;
+    private final StudyDataJpa studyDataJpa;
+    private final StudyRepository studyRepository;
 
     @Override
     public StudentDTO findById(Long id) {
@@ -37,6 +44,7 @@ public class StudentServiceImp implements StudentService {
             //학생 이메일 중복검사
             duplicate(studentDTO);
 
+            //엔티티 객체 생성
             Student student = new Student(studentDTO);
             // 학생 체크
             checkStudyType(studentDTO, student);
@@ -60,6 +68,11 @@ public class StudentServiceImp implements StudentService {
         studentDTO.setId(studentRepository.save(findByStudent));
     }
 
+    @Override
+    public List<StudentDTO> findByAll() {
+        return studentRepository.findByAll();
+    }
+
     /**
      * 학생 이메일 중복 검사
      * @throws DuplicateKeyException 중복시 예외 발생
@@ -75,11 +88,11 @@ public class StudentServiceImp implements StudentService {
      * null 아닐시 해당수업 코스 저장 1단계 저장
      * @param studentDTO getStudyType StudyType 객체 조회
      */
-    private Student checkStudyType(StudentDTO studentDTO, Student student) {
+    private void checkStudyType(StudentDTO studentDTO, Student student) {
         if (studentDTO.getStudyType() != null) {
-            student.setStudy(scheduleRepository.getFirstStudy(studentDTO.getStudyType()));
+            Study study = studyRepository.getFirstStudy(studentDTO.getStudyType());
+            student.saveStudyCourse(study);
         }
-        return student;
     }
 
 

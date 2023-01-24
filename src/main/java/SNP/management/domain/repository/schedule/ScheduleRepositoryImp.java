@@ -1,7 +1,8 @@
 package SNP.management.domain.repository.schedule;
 
-import SNP.management.domain.DTO.RecordDTO;
-import SNP.management.domain.entity.student.Classes;
+import SNP.management.domain.DTO.QTodayScheduleDTO;
+import SNP.management.domain.DTO.TodayScheduleDTO;
+import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.entity.study.StudyType;
 import SNP.management.domain.enumlist.DayOfWeek;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static SNP.management.domain.entity.QTeacher.teacher;
-import static SNP.management.domain.entity.student.QClasses.classes;
+import static SNP.management.domain.entity.student.QSchedule.*;
 import static SNP.management.domain.entity.student.QStudent.student;
 import static SNP.management.domain.entity.study.QStudy.study;
 
@@ -33,68 +34,54 @@ public class ScheduleRepositoryImp implements ScheduleRepository {
 
 
     @Override
-    public List<Classes> findClassesByStudentId(Long id ) {
+    public List<Schedule> findClassesByStudentId(Long id ) {
         log.info("before id = {}",id);
 
-        List<Classes> studentClassList = queryFactory
-                .select(classes)
-                .from(classes)
-                .innerJoin(classes.student, student)
-                .where(classes.student.id.eq(id))
+        List<Schedule> studentClassList = queryFactory
+                .select(schedule)
+                .from(schedule)
+                .innerJoin(schedule.student, student)
+                .where(schedule.student.id.eq(id))
                 .fetch();
         log.info("after");
-        for (Classes classes1 : studentClassList) {
-            log.info("list={}", classes1);
+        for (Schedule schedule1 : studentClassList) {
+            log.info("list={}", schedule1);
         }
         return studentClassList;
     }
 
     @Override
-    public void saveSchedule(Classes classes) {
-        em.persist(classes);
+    public void saveSchedule(Schedule schedule) {
+        em.persist(schedule);
         em.flush();
     }
     @Override
-    public List<Classes> findAllLast() {
+    public List<Schedule> findAllLast() {
         LocalDate date = LocalDate.now();
         DayOfWeek dayOfWeek = DayOfWeek.values()[date.getDayOfWeek().getValue()];
 
         log.info("dayOfWeek = {}",dayOfWeek);
 
-        List<Classes> list = queryFactory.selectFrom(classes)
-                .leftJoin(classes.student, student).fetchJoin()
+        List<Schedule> list = queryFactory.selectFrom(schedule)
+                .leftJoin(schedule.student, student).fetchJoin()
                 .leftJoin(student.study, study).fetchJoin()
                 .leftJoin(student.teacher, teacher).fetchJoin()
-                .where(classes.dayOfWeek.eq(dayOfWeek))
+                .where(schedule.dayOfWeek.eq(dayOfWeek))
                 .fetch();
 
 
         return list;
     }
+
     @Override
-    public Study getFirstStudy(StudyType studyType) {
-        Study firstStep = queryFactory
-                .selectFrom(study)
-                .where(study.studyType.eq(studyType).and(study.step.eq(1)))
-                .fetchOne();
-        if (firstStep == null){
-            throw new NullPointerException("getFirstStudy 값이 없음");
-        }
-        return firstStep;
-    }
-    @Override
-    public List<RecordDTO> findAllByDay(int day){
-        DayOfWeek dayOfWeek = DayOfWeek.values()[day];
-        List<RecordDTO> listDTO = new ArrayList<>();
-        List<Classes> list = queryFactory.selectFrom(classes)
-                .join(classes.student, student).fetchJoin()
-                .join(student.study, study).fetchJoin()
-                .join(student.teacher, teacher).fetchJoin()
-                .where(classes.dayOfWeek.eq(dayOfWeek))
+    public List<TodayScheduleDTO> findAllByDay(DayOfWeek dayOfWeek) {
+        return queryFactory
+                .select(new QTodayScheduleDTO(student.id, schedule.time,
+                        student.name, student.parentPhone, study.detail))
+                .from(schedule)
+                .join(schedule.student, student)
+                .leftJoin(student.study, study)
+                .where(schedule.dayOfWeek.eq(dayOfWeek))
                 .fetch();
-        for (Classes classes : list) {
-            listDTO.add(new RecordDTO(classes));
-        }
-        return listDTO;
     }
 }

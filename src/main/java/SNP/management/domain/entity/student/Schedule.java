@@ -12,8 +12,8 @@ import javax.persistence.*;
  */
 @Entity
 @Getter @Setter(AccessLevel.PRIVATE)
-@Table(name = "CLASSES")
-public class Classes {
+@Table(name = "SCHEDULE")
+public class Schedule {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,21 +25,21 @@ public class Classes {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    public Classes saveClass(int day, String time, Student student) {
-        Classes classes = new Classes();
-        classes.setDayOfWeek(DayOfWeek.values()[day]);
-        classes.setTime(time);
-        classes.setStudent(student);
-        return classes;
+    public Schedule saveClass(int day, String time, Student student) {
+        Schedule schedule = new Schedule();
+        schedule.setDayOfWeek(DayOfWeek.values()[day]);
+        schedule.setTime(time);
+        schedule.setStudent(student);
+        return schedule;
     }
 
 
-    public Classes changeTime(String time) {
+    public Schedule changeTime(String time) {
         this.time = time;
         return this;
     }
 
-    public Classes changeDayOfWeek(int day) {
+    public Schedule changeDayOfWeek(int day) {
         this.dayOfWeek = DayOfWeek.values()[day];
         return this;
     }

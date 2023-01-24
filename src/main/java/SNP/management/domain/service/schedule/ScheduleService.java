@@ -1,8 +1,8 @@
 package SNP.management.domain.service.schedule;
 
-import SNP.management.domain.DTO.RecordDTO;
+import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
-import SNP.management.domain.entity.student.Classes;
+import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.entity.student.Student;
 
 import java.util.List;
@@ -17,9 +17,9 @@ public interface ScheduleService {
     public void addSchedule(ScheduleDTO scheduleDTO);
 
 
-    public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Classes> classesByStudentId);
+    public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleByStudentId);
 
     public ScheduleDTO getSchedule(Long id);
 
-    public List<RecordDTO> findAllByDay(int day);
+    public List<TodayScheduleDTO> findAllByDay(int day);
 }

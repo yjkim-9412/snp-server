@@ -3,7 +3,7 @@ package SNP.management.web.form.student;
 import lombok.Data;
 
 @Data
-public class RecordForm {
+public class TodayScheduleForm {
 
     private String time;
     private String teacherName;
