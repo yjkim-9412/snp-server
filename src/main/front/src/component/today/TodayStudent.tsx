@@ -1,29 +1,91 @@
-import dayjs, {Dayjs} from "dayjs";
-import * as React from 'react';
-import {DataGrid, GridColDef, GridValueGetterParams} from '@mui/x-data-grid';
+import React, {useRef} from 'react';
+import {
+    DataGrid,
+    GridColDef, GridFooter, GridFooterContainer,
+    gridPageCountSelector,
+    gridPageSelector, GridToolbarContainer, GridToolbarExport,
+    useGridApiContext,
+    useGridSelector
+} from '@mui/x-data-grid';
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {styled} from "@mui/material";
-import {Box} from "@mui/material/";
+import {Pagination, styled} from "@mui/material";
+import {Box, Button} from "@mui/material/";
+import {Link} from "react-router-dom";
 
 
 type Date = {
     dayOfWeek: number
 }
 
+type StudentList = {
+    id: number,
+    time: string,
+    studentName: string,
+    parentPhone: string,
+    stepName: string
+}
+function CustomPagination() {
+    const apiRef = useGridApiContext();
+    const page = useGridSelector(apiRef, gridPageSelector);
+    const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+    return (
+        <Pagination
+            color="primary"
+            count={pageCount}
+            page={page + 1}
+            onChange={(event, value) => apiRef.current.setPage(value - 1)}
+        />
+    );
+}
 
 
 const TodayStudent: React.FC<Date> = ({dayOfWeek}) => {
-    const [rows, setRows] = useState<readonly any[]>([]);
+    const [rows, setRows] = useState<readonly StudentList[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    // useEffect(() => {
-    //     axios.get('/api/main/'+dayOfWeek )
-    //         .then(res => {
-    //             setRows(res.data);
-    //         }).catch(error => console.log(error));
-    // }, [dayOfWeek])
+    const dataGridRef = useRef<HTMLDivElement| null>(null);
+    const columns: GridColDef[] = [
+        {field: 'time', headerName: '수업시간', width: 120},
+        {field: 'studentName', headerName: '학생이름', width: 125},
+        {field: 'parentPhone', headerName: '부모님 연락처', width: 150},
+        {field: 'stepName', headerName: '수업단계', width: 140},
+        {
+            field: 'info', headerName: '학생정보', width: 100, renderCell: (params) => (
+                <Link to={`/students/info/${params.row.id}`} style={{marginLeft:10}}>보기</Link>
+            )
+        }
+
+    ];
+    function CustomToolbar() {
+        return (
+            <GridToolbarContainer >
+                <GridToolbarExport csvOptions={{fileName: '오늘 수업 학생'}}/>
+            </GridToolbarContainer>
+        );
+    }
+    function CustomFooter () {
+        return (
+            <GridFooterContainer>
+                <GridFooter sx={{
+                    border: 'none',
+                }} />
+               <CustomToolbar/>
+            </GridFooterContainer>
+        );
+    }
+    useEffect(() => {
+        setIsLoading(true);
+        axios.get('/api/main/' + dayOfWeek)
+            .then(res => {
+                setRows(res.data);
+                setIsLoading(false);
+            }).catch(error => console.log(error));
+    }, [dayOfWeek])
+
+
     return (
-        <div style={{height: 400, width: '100%', float: 'left'}}>
+        <div style={{height: 400, width: '100%'}} ref={dataGridRef}>
             <DataGrid
                 rows={rows}
                 columns={columns}
@@ -31,9 +93,10 @@ const TodayStudent: React.FC<Date> = ({dayOfWeek}) => {
                 rowsPerPageOptions={[5]}
                 components={{
                     NoRowsOverlay: CustomNoRowsOverlay,
+                    Pagination: CustomPagination,
+                    Footer: CustomFooter
                 }}
                 loading={isLoading}
-
             />
         </div>
     )
@@ -41,27 +104,7 @@ const TodayStudent: React.FC<Date> = ({dayOfWeek}) => {
 export default TodayStudent;
 
 
-const columns: GridColDef[] = [
-    {field: 'time', headerName: '수업시간', width: 140},
-    {field: 'teacherName', headerName: '담임교사', width: 140},
-    {field: 'studentName', headerName: '학생이름', width: 140},
-    {field: 'parentPhone', headerName: '부모님 연락처', width: 150},
-    {field: 'stepName', headerName: '수업단계', width: 140},
-];
-
-
-// const rows = [
-//     { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-//     { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-//     { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-//     { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-//     { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-//     { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-//     { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-//     { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-//     { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-// ];
-const StyledGridOverlay = styled('div')(({ theme }) => ({
+const StyledGridOverlay = styled('div')(({theme}) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -84,6 +127,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
         fill: theme.palette.mode === 'light' ? '#f5f5f5' : '#fff',
     },
 }));
+
 function CustomNoRowsOverlay() {
     return (
         <StyledGridOverlay>
@@ -121,12 +165,12 @@ function CustomNoRowsOverlay() {
                         d="M149.121 33.292l-6.83 2.65a1 1 0 0 1-1.317-1.23l1.937-6.207c-2.589-2.944-4.109-6.534-4.109-10.408C138.802 8.102 148.92 0 161.402 0 173.881 0 184 8.102 184 18.097c0 9.995-10.118 18.097-22.599 18.097-4.528 0-8.744-1.066-12.28-2.902z"
                     />
                     <g className="ant-empty-img-4" transform="translate(149.65 15.383)">
-                        <ellipse cx="20.654" cy="3.167" rx="2.849" ry="2.815" />
-                        <path d="M5.698 5.63H0L2.898.704zM9.259.704h4.985V5.63H9.259z" />
+                        <ellipse cx="20.654" cy="3.167" rx="2.849" ry="2.815"/>
+                        <path d="M5.698 5.63H0L2.898.704zM9.259.704h4.985V5.63H9.259z"/>
                     </g>
                 </g>
             </svg>
-            <Box sx={{ mt: 1 }}>오늘 수업 예정인 학생이 없습니다.</Box>
+            <Box sx={{mt: 1}}>수업 예정인 학생이 없습니다.</Box>
         </StyledGridOverlay>
     );
 }

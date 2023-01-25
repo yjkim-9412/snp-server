@@ -23,6 +23,7 @@ import Skill from "./Skill";
 import axios from "axios";
 import Course from "./Course";
 import {FormControl, FormHelperText} from "@mui/material/";
+import RegistrationCheck from "./RegistrationCheck";
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -41,18 +42,6 @@ const TextFields = styled(TextField)`
 }
 `;
 
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="">
-                SNP
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 type StudentType = {
     "name": string, "age": string, "birth": string, "phone": string, 'email': string, 'parentName': string,
@@ -76,7 +65,7 @@ export default function SignUpStudent() {
     const [studentSaveForm, setStudentSaveForm] = useState({
         "name": '', "age": '', "birth": '', "phone": '', 'email': '', 'parentName': '',
         'parentPhone': '', 'gender': '', 'studyType': '', 'grade': '', 'gradeLv': '',
-        'city': '', 'street': '',
+        'address':'', 'registration': 'false',
         'speed': '0', 'readLv': '0', 'intLv': '0'
     });
 
@@ -94,9 +83,14 @@ export default function SignUpStudent() {
             setStudentSaveForm({...studentSaveForm, studyType: e.value})
         }
     }
+    /**예비등록생 핸들러 */
+    const onChangeSelectBoolean = (e: { name: string, value: string }) => {
+        setStudentSaveForm({...studentSaveForm, registration: e.value});
+
+    }
     /**주소 onChange */
-    const onChangeAddress = (e: { city: string, street: string }) => {
-        setStudentSaveForm({...studentSaveForm, city: e.city, street: e.street});
+    const onChangeAddress = (e: { address:string }) => {
+        setStudentSaveForm({...studentSaveForm, address: e.address});
     }
 
     /**텍스트 onChange */
@@ -270,8 +264,20 @@ export default function SignUpStudent() {
                                                 labelType={'성별'} fieldErrorType={fieldError.gender}/>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <Grid container spacing={0}>
                                         {/**수업코스*/}
-                                        <Course onChangeSelect={onChangeSelect} fieldErrorType={fieldError.studyType}/>
+                                        <Course onChangeSelect={onChangeSelect} fieldErrorType={fieldError.studyType} courseProps={studentSaveForm.studyType}/>
+                                        {/**예비등록 여부*/}
+                                        <RegistrationCheck onChangeSelect={onChangeSelectBoolean}/>
+                                            </Grid>
+                                        </Box>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         {/**연락처*/}
@@ -292,10 +298,12 @@ export default function SignUpStudent() {
                                                        labelType={'이메일'} fieldErrorType={fieldError.email}/>
                                     </Grid>
                                     <Grid item xs={12} sm={12}>
-                                        <GradeOp onChangeSelect={onChangeSelect} fieldErrorType={fieldError.grade}/>
+                                        <GradeOp onChangeSelect={onChangeSelect} fieldErrorType={fieldError.grade}
+                                                 gradeProps={studentSaveForm.grade} gradeLvProps={studentSaveForm.gradeLv}/>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <AddressByKakao onChangeAddress={onChangeAddress} fieldErrorType={fieldError.city}/>
+                                        <AddressByKakao onChangeAddress={onChangeAddress} fieldErrorType={fieldError.city}
+                                        addressProps={studentSaveForm.address}/>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         {/**학부모*/}
@@ -325,7 +333,7 @@ export default function SignUpStudent() {
                                             fullWidth
                                             variant="contained"
                                             sx={{mt: 3, mb: 2}}
-                                            onClick={() => navigate('/')}
+                                            onClick={() => navigate('/main')}
                                         >
                                             취소
                                         </Button>

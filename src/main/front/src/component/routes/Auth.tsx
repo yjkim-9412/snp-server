@@ -65,7 +65,7 @@ const Auth: React.FC = () => {
         await axios.post('/api/login',TeacherLoginForm).then(res => {
             if (res.status === 200) {
                 sessionStorage.setItem('lg', email);
-                navigate('/');
+                navigate('/main');
             } else if (res.status === 401){
                 setLoginError("비밀번호 또는 이메일주소가 맞지 않습니다.");
             }

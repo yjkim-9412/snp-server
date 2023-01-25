@@ -38,12 +38,12 @@ const Skill:React.FC<StudentFieldSkill>  = ({onChangeType, studentReadLv,student
         return (
             <Box>
                     <CardActions>
-                        <h5 style={{marginTop:10, marginLeft:250}}>기초검사(선택사항)</h5>
+                        <label aria-label="skill-label" style={{marginTop:10, marginLeft:250}}>기초검사</label>
                         <ExpandMore
                             expand={expanded}
                             onClick={handleExpandClick}
                             aria-expanded={expanded}
-                            aria-label="show more"
+                            aria-label="skill-label"
                         >
                             <ExpandMoreIcon/>
                         </ExpandMore>

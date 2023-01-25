@@ -66,10 +66,10 @@ public class StudentController {
     }
 
 
+    @GetMapping("/info/{id}")
+    public StudentDTO getStudent(@PathVariable Long id) {
 
-    @PostMapping("/log/{id}/save")
-    public void saveLog(@PathVariable Long id, @RequestBody @Validated SaveLogForm saveLogForm ,BindingResult bindingResult) {
-
+        return studentService.findById(id);
     }
 
 

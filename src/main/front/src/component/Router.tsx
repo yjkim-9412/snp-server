@@ -5,27 +5,16 @@ import Home from "./routes/Home";
 import {Cookie} from "@mui/icons-material";
 import {useCookies} from "react-cookie";
 import StudentReCard from "./register/SignUpStudent";
-// const Router = () => {
-//
-//     return(
-//         <div>
-//             <BrowserRouter>
-//                 <Routes>
-//                     <Route path="/login" element={<Login/>}></Route>
-//                     <Route path="/" element={<Main/>}></Route>
-//                 </Routes>
-//             </BrowserRouter>
-//         </div>
-//     );
-//
-// }
+import Dashboard from './main/DashBord';
+import CalendarMain from "./today/CalendarMain";
+import Info from "./student/Info";
+
 interface ChildLogin {
     isLoggedIn: Boolean,
     setIsLoggedIn:  React.Dispatch<React.SetStateAction<Boolean>>
 }
 const AppRouter: React.FC = () => {
     const navigate = useNavigate();
-    const [cookies] = useCookies(['JSESSIONID']);
 
     useEffect(() => {
         if (!sessionStorage.getItem('lg')) {
@@ -35,9 +24,12 @@ const AppRouter: React.FC = () => {
 
     return (
             <Routes>
-                <Route path="/" element={<Home />}></Route>
-                <Route path="/login" element={<Auth  />}></Route>
-                <Route path="/student/register" element={<StudentReCard/>}></Route>
+                <Route path="/" element={<Dashboard />}>
+                    <Route path="/main" element={<CalendarMain/>}/>
+                    <Route path="/students/info/:id" element={<Info/>}/>
+                </Route>
+                <Route path="/login" element={<Auth  />}/>
+                <Route path="/student/register" element={<StudentReCard/>}/>
             </Routes>
 
     );

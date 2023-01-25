@@ -19,13 +19,23 @@ export interface StudentFieldRadio{
 }
 
 export interface StudentFieldAddress{
-    onChangeAddress: (e:{city:string, street:string}) => void
+    onChangeAddress: (e:{address:string}) => void
     fieldErrorType: string
-
+    addressProps: string
 }
 export interface StudentFieldSelect {
     onChangeSelect:(e:{name: string, value: string}) => void
-    fieldErrorType: string
+    fieldErrorType: string,
+    gradeProps: string,
+    gradeLvProps: string
+}
+export interface StudentFieldSelectCourse {
+    onChangeSelect:(e:{name: string, value: string}) => void
+    fieldErrorType: string,
+    courseProps: string
+}
+export interface StudentFieldSelectBoolean {
+    onChangeSelect:(e:{name: string, value: string}) => void
 }
 export interface StudentFieldSkill {
     onChangeType: (e:React.ChangeEvent<HTMLInputElement> & EventTarget ) => void,

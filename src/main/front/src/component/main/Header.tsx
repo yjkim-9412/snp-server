@@ -67,13 +67,10 @@ const Header = () => {
                         <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
                             수업자료 등록
                         </Button>
-                        <Button href="" sx={{ my: 2, color: 'white', display: 'block' }}>
-                            도서등록 조회
-                        </Button>
                         <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
                             도서등록 조회
                         </Button>
-                        <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
+                        <Button href="/" sx={{ my: 2, color: 'white', display: 'block'}}>
                             수업교재 코드 등록
                         </Button>
 

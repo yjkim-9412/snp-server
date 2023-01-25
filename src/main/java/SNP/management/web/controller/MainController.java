@@ -1,6 +1,6 @@
 package SNP.management.web.controller;
 
-import SNP.management.domain.DTO.RecordDTO;
+import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.service.schedule.ScheduleServiceImp;
 import SNP.management.domain.service.student.StudentServiceImp;
 import SNP.management.web.resolver.BindingResolver;
@@ -23,16 +23,8 @@ public class MainController {
     private final BindingResolver bindingResolver;
 
     @GetMapping("/main/{dayOfWeek}")
-    public List<RecordDTO> getMain(@PathVariable int dayOfWeek) {
-        String name = "name j";
-        name.split(" ");
-          String[] x = {"a","b"};
-        Map<String, String> A = new HashMap<>();
-        for (String s : x) {
-            
-        }
-          
-        List<RecordDTO> allByDay = scheduleService.findAllByDay(dayOfWeek);
+    public List<TodayScheduleDTO> getMain(@PathVariable int dayOfWeek) {
+
 
         return scheduleService.findAllByDay(dayOfWeek);
     }

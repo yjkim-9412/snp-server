@@ -9,7 +9,6 @@ import SNP.management.web.form.student.StudentUpdateForm;
 import SNP.management.domain.entity.study.StudyType;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class StudentDTO {
@@ -33,9 +32,6 @@ public class StudentDTO {
     private Integer speed;
     private Integer readLv;
     private Integer intLv;
-
-    private Long teacherId;
-    private String teacherName;
 
     private String address;
 
@@ -62,7 +58,6 @@ public class StudentDTO {
         this.speed = speed;
         this.readLv = readLv;
         this.intLv = intLv;
-        this.teacherId = teacherId;
         this.registration = registration;
         this.address = address;
     }
@@ -83,8 +78,6 @@ public class StudentDTO {
         this.speed = student.getSkill().getSpeed();
         this.readLv = student.getSkill().getReadLv();
         this.intLv = student.getSkill().getIntLv();
-        this.teacherId = student.getTeacher().getId();
-        this.teacherName = student.getTeacher().getName();
         this.date = student.getDate();
     }
 
@@ -124,7 +117,6 @@ public class StudentDTO {
         this.speed = studentUpdateForm.getSpeed();
         this.readLv = studentUpdateForm.getReadLv();
         this.intLv = studentUpdateForm.getIntLv();
-        this.teacherId = studentUpdateForm.getTeacher_id();
         this.registration = studentUpdateForm.getRegistration();
         return this;
     }

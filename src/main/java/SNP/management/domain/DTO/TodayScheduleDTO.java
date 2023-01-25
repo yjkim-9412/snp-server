@@ -1,7 +1,6 @@
 package SNP.management.domain.DTO;
 
 import SNP.management.domain.entity.student.Schedule;
-import SNP.management.web.form.student.TodayScheduleForm;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,13 +26,7 @@ public class TodayScheduleDTO {
         this.stepName = stepName;
     }
 
-    public TodayScheduleDTO FormToDTO(TodayScheduleForm todayScheduleForm) {
-        this.time = todayScheduleForm.getTime();
-        this.studentName = todayScheduleForm.getStudentName();
-        this.parentPhone = todayScheduleForm.getParentPhone();
-        this.stepName = todayScheduleForm.getStepName();
-        return this;
-    }
+
 
     public TodayScheduleDTO(Schedule schedule) {
         this.id = schedule.getStudent().getId();

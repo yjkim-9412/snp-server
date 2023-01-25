@@ -3,7 +3,7 @@ import {Container} from "@mui/material/";
 import Header from "../main/Header";
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import CalendarMain from "../main/CalendarMain";
+import CalendarMain from "../today/CalendarMain";
 import {Box} from "@mui/material";
 
 
@@ -26,7 +26,6 @@ return(
             </Grid2>
         </Box>
         <Box>
-
         </Box>
     </Container>
     </ThemeProvider>

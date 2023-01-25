@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {FormControl, FormHelperText, InputLabel, Select, SelectChangeEvent, styled} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import {Box, Grid} from "@mui/material/";
-import {StudentFieldSelect} from "../../interface/StudentFieldType";
+import {StudentFieldSelect, StudentFieldSelectCourse} from "../../interface/StudentFieldType";
 
 const FormHelperTexts = styled(FormHelperText)`
   width: 100%;
@@ -10,14 +10,18 @@ const FormHelperTexts = styled(FormHelperText)`
   font-weight: 700 !important;
   color: #d32f2f !important;
 `;
-const Course:React.FC<StudentFieldSelect> = ({onChangeSelect, fieldErrorType}) => {
+const Course:React.FC<StudentFieldSelectCourse> = ({onChangeSelect, fieldErrorType,courseProps}) => {
     const [course, setCourse] = useState<string>('');
     const [ErrorText, setErrorText] = useState<string>('');
+    useEffect(() => {
+        setCourse(courseProps);
+    },[courseProps])
     useEffect(() => {
         if (fieldErrorType !== ''){
             setErrorText(fieldErrorType);
         }
     },[fieldErrorType])
+
 
     const onChange = (e: SelectChangeEvent) => {
         let name = e.target.name;
@@ -27,15 +31,7 @@ const Course:React.FC<StudentFieldSelect> = ({onChangeSelect, fieldErrorType}) =
         setErrorText('');
     }
     return(
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                marginTop:1
-            }}
-        >
-            <Grid container spacing={2}>
+
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
                         <InputLabel id="studyType">수업코스</InputLabel>
@@ -61,8 +57,6 @@ const Course:React.FC<StudentFieldSelect> = ({onChangeSelect, fieldErrorType}) =
                     </FormControl>
                     <FormHelperTexts>{ErrorText}</FormHelperTexts>
                 </Grid>
-            </Grid>
-        </Box>
     )
 }
 

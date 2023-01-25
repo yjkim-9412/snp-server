@@ -37,6 +37,7 @@ const Gender:React.FC<StudentFieldRadio> = ({onChangeRadio, studentValue, textTy
                 row
                 aria-labelledby="gender-label"
                 name="gender"
+                value={studentValue}
             >
                 <FormControlLabel value="여자" control={<Radio/>} label="여자" name={textType} onClick={(e) => onChangeRadio(e,"여자")}/>
                 <FormControlLabel value="남자" control={<Radio/>} label="남자" name={textType} onClick={(e) => onChangeRadio(e,"남자")}/>

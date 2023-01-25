@@ -25,15 +25,18 @@ const TextFields = styled(TextField)`
   color: #FF0000 !important;
 }
 `;
-const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErrorType}) => {
+const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErrorType,addressProps}) => {
     /**
      * useState
      */
     const [openPostcode, setOpenPostcode] = useState<boolean>(false);
-    const [address, setAddress] = useState({'city': '', 'street': ''})
+    const [address, setAddress] = useState('')
     const focusRef = useRef<HTMLDivElement>(null);
     const [isError, setIsError] = useState<boolean>(false);
     const [ErrorText, setErrorText] = useState<string>('');
+    useEffect(() => {
+        if (addressProps != null)setAddress(addressProps);
+    },[addressProps])
     useEffect(() => {
         setErrorText(fieldErrorType);
         if (fieldErrorType === '') {
@@ -49,7 +52,6 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
     const handle = {
         // 버튼 클릭 이벤트
         clickButton: () => {
-            console.log("setOpenPostcode");
             setOpenPostcode(current => !current);
             if (focusRef.current != null){
                 focusRef.current.focus();
@@ -58,11 +60,8 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
 
         // 주소 선택 이벤트
         selectAddress: (data: any) => {
-            setAddress({...address, city: data.sido + " " + data.sigungu, street: data.query});
-            console.log(`
-                주소: ${JSON.stringify(data)}
-            `)
-            onChangeAddress({city: data.sido + " " + data.sigungu, street: data.query});
+            setAddress(data.roadAddress);
+            onChangeAddress({address: data.roadAddress});
             setOpenPostcode(false);
             setErrorText('');
             setIsError(false);
@@ -80,7 +79,7 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
                 id="address"
                 name="address"
                 label="주소"
-                value={address.city + " " + address.street}
+                value={address}
                 aria-readonly={true}
                 error={isError}
             />
@@ -104,8 +103,8 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
                         </Button>
                     <DaumPostcode
 
-                        onComplete={handle.selectAddress}  // 값을 선택할 경우 실행되는 이벤트
-                        autoClose={false} // 값을 선택할 경우 사용되는 DOM을 제거하여 자동 닫힘 설정
+                        onComplete={handle.selectAddress}  // 값 선택할 경우 실행되는 이벤트
+                        autoClose={false} // 값 선택할 경우 닫힘 설정
                     />
                     </Box>
                 </Modal>

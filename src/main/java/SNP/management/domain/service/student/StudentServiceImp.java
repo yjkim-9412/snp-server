@@ -90,8 +90,7 @@ public class StudentServiceImp implements StudentService {
      */
     private void checkStudyType(StudentDTO studentDTO, Student student) {
         if (studentDTO.getStudyType() != null) {
-            Study study = studyRepository.getFirstStudy(studentDTO.getStudyType());
-            student.saveStudyCourse(study);
+            student.setStudy(studyRepository.getFirstStudy(studentDTO.getStudyType()));
         }
     }
 

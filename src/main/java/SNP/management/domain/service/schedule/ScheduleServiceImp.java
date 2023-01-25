@@ -63,8 +63,6 @@ public class ScheduleServiceImp implements ScheduleService{
     }
 
 
-
-
     /**
      * 기존시간표와 파라미터 시간표 비교후 업데이트
      */
@@ -94,6 +92,7 @@ public class ScheduleServiceImp implements ScheduleService{
             }
         }
     }
+    /**학생 수업코스 조회 후 저장*/
     @Override
     public List<TodayScheduleDTO> findAllByDay(int day) {
         return scheduleRepository.findAllByDay(DayOfWeek.values()[day]);

@@ -14,7 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "STUDENT")
 public class Student {
@@ -23,7 +23,7 @@ public class Student {
     private Long id;
 
     private String name;
-    private int age;
+    private Integer age;
     private String birth;
     private String phone;
     private String email;
@@ -94,23 +94,7 @@ public class Student {
         this.teacher = teacher;
     }
 
-    public Student changeStudent(StudentDTO studentDTO) {
-        this.id = studentDTO.getId();
-        this.name = studentDTO.getName();
-        this.age = studentDTO.getAge();
-        this.birth = studentDTO.getBirth();
-        this.phone = studentDTO.getPhone();
-        this.email = studentDTO.getEmail();
-        this.parentName = studentDTO.getParentName();
-        this.parentPhone = studentDTO.getParentPhone();
-        this.gender = studentDTO.getGender();
-        this.studyType = studentDTO.getStudyType();
-        this.address = studentDTO.getAddress();
-        this.grade = new Grade().setGrade(studentDTO);
-        this.skill = new Skill().setSkill(studentDTO);
-        this.date = studentDTO.getDate();
-
-        return this;
+    public void setStudy(Study study) {
+        this.study = study;
     }
-
 }
