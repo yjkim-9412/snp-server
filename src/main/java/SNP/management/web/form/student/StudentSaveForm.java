@@ -1,8 +1,7 @@
 package SNP.management.web.form.student;
 
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import SNP.management.domain.enumlist.GradeType;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;

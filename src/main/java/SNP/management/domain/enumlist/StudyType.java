@@ -1,4 +1,4 @@
-package SNP.management.domain.entity.study;
+package SNP.management.domain.enumlist;
 
 
 

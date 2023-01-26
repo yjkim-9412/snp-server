@@ -39,7 +39,7 @@ public class TeacherController {
 
         teacherService.findByLogin(new TeacherDTO().login(loginTeacher));
         HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_TEACHER, loginTeacher);
+        session.setAttribute(SessionConst.LOGIN_TEACHER, loginTeacher.getEmail());
 
         return "/main";
     }

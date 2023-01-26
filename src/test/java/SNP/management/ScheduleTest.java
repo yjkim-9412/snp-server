@@ -7,15 +7,15 @@ import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.study.Study;
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.enumlist.GradeType;
 import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.schedule.ScheduleDataJpa;
-import SNP.management.domain.repository.schedule.ScheduleRepositoryImp;
+import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.repository.teacher.TeacherRepository;
-import SNP.management.domain.service.schedule.ScheduleServiceImp;
+import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.service.student.StudentServiceImp;
 import SNP.management.web.form.student.ScheduleForm;
 import SNP.management.web.form.student.StudentSaveForm;
@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -45,9 +46,9 @@ public class ScheduleTest {
     @Autowired
     StudentRepositoryImp studentRepository;
     @Autowired
-    ScheduleServiceImp scheduleService;
+    ScheduleService scheduleService;
     @Autowired
-    ScheduleRepositoryImp scheduleRepository;
+    ScheduleRepository scheduleRepository;
     @Autowired
     ScheduleDataJpa scheduleDataJpa;
     @Autowired
@@ -126,11 +127,11 @@ public class ScheduleTest {
     }
     @Test
     void getScheduleByStudentId() {
-        //given
 
         //when
-
+        ScheduleDTO scheduleDTO = scheduleService.findByStudentId(42L);
         //then
+        assertThat(scheduleDTO.getScheduleMap().size()).isEqualTo(2);
 
     }
 }

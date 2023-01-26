@@ -6,8 +6,9 @@ import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.enumlist.GradeType;
 import SNP.management.web.form.student.StudentSaveForm;
 import SNP.management.web.form.student.StudentUpdateForm;
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -63,6 +64,7 @@ public class StudentDTO {
     }
 
     public StudentDTO(Student student) {
+
         this.id = student.getId();
         this.name = student.getName();
         this.age = student.getAge();
@@ -79,6 +81,7 @@ public class StudentDTO {
         this.readLv = student.getSkill().getReadLv();
         this.intLv = student.getSkill().getIntLv();
         this.date = student.getDate();
+        this.address = student.getAddress();
     }
 
     public StudentDTO FormToSaveDTO(StudentSaveForm studentSaveForm) {

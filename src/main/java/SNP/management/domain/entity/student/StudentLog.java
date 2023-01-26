@@ -1,6 +1,7 @@
 package SNP.management.domain.entity.student;
 
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.entity.BaseEntity;
+import SNP.management.domain.enumlist.StudyType;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.study.Study;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Table(name = "STUDY_LOG")
-public class StudentLog {
+public class StudentLog extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

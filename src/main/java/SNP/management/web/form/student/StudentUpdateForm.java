@@ -1,6 +1,6 @@
 package SNP.management.web.form.student;
 
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import SNP.management.domain.enumlist.GradeType;
 import lombok.Data;
 

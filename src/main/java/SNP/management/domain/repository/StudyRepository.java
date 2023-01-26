@@ -1,7 +1,7 @@
 package SNP.management.domain.repository;
 
 import SNP.management.domain.entity.study.Study;
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 

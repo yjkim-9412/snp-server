@@ -2,24 +2,100 @@ package SNP.management.domain.service.schedule;
 
 import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
+
 import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.enumlist.DayOfWeek;
+import SNP.management.domain.repository.schedule.ScheduleDataJpa;
+import SNP.management.domain.repository.schedule.ScheduleRepository;
+import SNP.management.domain.repository.student.StudentRepositoryImp;
+import SNP.management.domain.service.student.StudentServiceImp;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-public interface ScheduleService {
+@Service
+@Transactional
+@Slf4j
+@RequiredArgsConstructor
+/**
+ * 학생 날짜 수업조회는 RecordRepository 에 있습니다.
+ * 해당 ScheduleServiceImp 는 학생 수업 스케줄 추가
+ */
+public class ScheduleService {
+
+    private final StudentServiceImp studentService;
+    private final StudentRepositoryImp studentRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final ScheduleDataJpa scheduleDataJpa;
+
+    public ScheduleDTO getSchedule(Long id) {
+        Student student = studentRepository.findById(id).orElseThrow(NullPointerException::new);
+        return new ScheduleDTO().listToDTO(scheduleRepository.findClassesByStudentId(student.getId()));
+    }
+    public void createScheduleFor(Student student, ScheduleDTO scheduleDTO) {
+        for (Map.Entry<Integer, String> e : scheduleDTO.getScheduleMap().entrySet()) {
+            Schedule schedule = new Schedule().saveClass(e.getKey(), e.getValue(), student);
+            scheduleRepository.saveSchedule(schedule);
+        }
+    }
+
+    public void addSchedule(ScheduleDTO scheduleDTO) {
+        Optional<Student> studentOptional = studentRepository.findById(scheduleDTO.getId());
+        Student student = studentOptional.orElseThrow(NullPointerException::new);
+
+        //해당학생 시간표 조회
+        List<Schedule> scheduleByStudentId = scheduleRepository.findClassesByStudentId(student.getId());
+
+
+        if (scheduleByStudentId.isEmpty()){// 시간표가 없을때
+            log.info("classesByStudentId = {}", true);
+            createScheduleFor(student, scheduleDTO);
+        } else {// 시간표가 있을때 //기존 시간표와 파라미터 시간표 매치,검증
+            checkDuplicateAndSave(student, scheduleDTO, scheduleByStudentId);
+        }
+    }
+
 
     /**
-     * 테스트시 사용 그 이외에는 단독 사용 금지
+     * 기존시간표와 파라미터 시간표 비교후 업데이트
      */
-    public void createScheduleFor(Student student, ScheduleDTO scheduleDTO);
+    public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleByStudentId) {
+        for (Schedule schedule : scheduleByStudentId) {// 해당 학생 기존 시간표
+            for (Map.Entry<Integer, String> es : scheduleDTO.getScheduleMap().entrySet()){ // 파라미터 시간표
 
-    public void addSchedule(ScheduleDTO scheduleDTO);
+                if (schedule.getDayOfWeek().getDayInt() != es.getKey()
+                        && !schedule.getTime().equals(es.getValue())) { //서로 일치하는 시간표가 없을때
 
+                    scheduleRepository.saveSchedule(schedule);
 
-    public void checkDuplicateAndSave(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleByStudentId);
+                } else if (schedule.getDayOfWeek().getDayInt() == es.getKey()
+                        && !schedule.getTime().equals(es.getValue())) { // 요일만 일치할때
 
-    public ScheduleDTO getSchedule(Long id);
+                    Schedule changeTime = schedule.changeTime(es.getValue());
+                    scheduleRepository.saveSchedule(changeTime);
 
-    public List<TodayScheduleDTO> findAllByDay(int day);
+                } else if (schedule.getDayOfWeek().getDayInt() != es.getKey()
+                        && schedule.getTime().equals(es.getValue())) {// 시간만 일치할때.
+
+                    Schedule changeDayOfWeek = schedule.changeDayOfWeek(es.getKey());
+                    scheduleRepository.saveSchedule(changeDayOfWeek);
+                }
+
+            }
+        }
+    }
+    /**학생 수업코스 조회 후 저장*/
+    public List<TodayScheduleDTO> findAllByDay(int day) {
+        return scheduleRepository.findAllByDay(DayOfWeek.values()[day]);
+    }
+
+    public ScheduleDTO findByStudentId(Long id){
+       return new ScheduleDTO().listToDTO(scheduleDataJpa.findByStudentId(id));
+    }
 }

@@ -1,15 +1,13 @@
 package SNP.management;
 
-import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
 import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.DTO.TeacherDTO;
-import SNP.management.domain.entity.student.Schedule;
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import SNP.management.domain.enumlist.GradeType;
-import SNP.management.domain.repository.schedule.ScheduleRepositoryImp;
+import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.teacher.TeacherRepository;
-import SNP.management.domain.service.schedule.ScheduleServiceImp;
+import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.service.student.StudentServiceImp;
 import SNP.management.web.form.student.ScheduleForm;
 import SNP.management.web.form.student.StudentSaveForm;
@@ -21,8 +19,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -36,9 +32,9 @@ public class StudentTest {
     @Autowired
     StudentServiceImp studentService;
     @Autowired
-    ScheduleServiceImp scheduleService;
+    ScheduleService scheduleService;
     @Autowired
-    ScheduleRepositoryImp scheduleRepository;
+    ScheduleRepository scheduleRepository;
 
     @BeforeEach
     void before(){

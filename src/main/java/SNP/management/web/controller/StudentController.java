@@ -1,7 +1,7 @@
 package SNP.management.web.controller;
 
 import SNP.management.domain.DTO.ScheduleDTO;
-import SNP.management.domain.service.schedule.ScheduleServiceImp;
+import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.web.form.student.*;
 import SNP.management.web.resolver.BindingResolver;
 import SNP.management.domain.DTO.StudentDTO;
@@ -22,7 +22,7 @@ import java.util.List;
 public class StudentController {
 
     private final StudentServiceImp studentService;
-    private final ScheduleServiceImp scheduleService;
+    private final ScheduleService scheduleService;
     private final BindingResolver bindingResolver;
 
 
@@ -32,10 +32,10 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return bindingResolver.bindingAPI(bindingResult);
         }
-        studentService.save(new StudentDTO().FormToSaveDTO(studentSaveForm));
+        StudentDTO saved = studentService.save(new StudentDTO().FormToSaveDTO(studentSaveForm));
 
 
-        return "/students";
+        return saved.getId();
     }
 
     @GetMapping("/")

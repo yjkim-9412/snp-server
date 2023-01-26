@@ -2,10 +2,9 @@ package SNP.management.domain.service.student;
 
 import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
-import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
-import SNP.management.domain.repository.schedule.ScheduleRepositoryImp;
+import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.student.StudentRepositoryImp;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class StudentServiceImp implements StudentService {
 
     private final StudentRepositoryImp studentRepository;
     private final TeacherRepository teacherRepository;
-    private final ScheduleRepositoryImp scheduleRepository;
+    private final ScheduleRepository scheduleRepository;
     private final StudyDataJpa studyDataJpa;
     private final StudyRepository studyRepository;
 
@@ -46,7 +45,7 @@ public class StudentServiceImp implements StudentService {
 
             //엔티티 객체 생성
             Student student = new Student(studentDTO);
-            // 학생 체크
+            // 학생 스터디 체크
             checkStudyType(studentDTO, student);
             //학생저장후 DTO setId
             studentDTO.setId(studentRepository.save(student));

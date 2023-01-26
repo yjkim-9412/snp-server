@@ -20,7 +20,7 @@ public class BindingResolver {
      */
     public Map<String, String> bindingAPI(BindingResult bindingResult) {
 
-        log.info("검증 오류 발생 error={}", bindingResult);
+        log.debug("검증 오류 발생 error={}", bindingResult);
 
         Map<String, String> mapErrors = new ConcurrentHashMap<>();// 동시성 문제 ConcurrentHashMap
 

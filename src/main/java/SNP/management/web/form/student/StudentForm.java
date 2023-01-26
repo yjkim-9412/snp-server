@@ -1,8 +1,7 @@
 package SNP.management.web.form.student;
 
-import SNP.management.domain.DTO.ScheduleDTO;
 import SNP.management.domain.DTO.StudentDTO;
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import lombok.Data;
 
 @Data

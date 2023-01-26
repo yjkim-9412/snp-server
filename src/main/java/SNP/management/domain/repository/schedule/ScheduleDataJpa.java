@@ -17,4 +17,6 @@ public interface ScheduleDataJpa extends JpaRepository<Schedule, Long> {
             "join sc.student s "+
             "on sc.dayOfWeek= :dayOfWeek left join s.study st ")
     List<TodayScheduleDTO> findTodayScheduleDTO(@Param("dayOfWeek") DayOfWeek dayOfWeek);
+
+    List<Schedule> findByStudentId(Long id);
 }

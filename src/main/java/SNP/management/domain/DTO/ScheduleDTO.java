@@ -4,6 +4,7 @@ import SNP.management.domain.entity.student.Schedule;
 import SNP.management.web.form.student.ScheduleForm;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 @Data
 public class ScheduleDTO {
 
+    @NotNull
     private Long id;
     private Map<Integer, String> scheduleMap = new HashMap<>();
 
