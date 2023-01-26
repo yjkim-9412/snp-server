@@ -2,14 +2,14 @@ package SNP.management.domain.entity.student;
 
 
 import SNP.management.domain.DTO.StudentDTO;
+import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.study.Study;
-import SNP.management.domain.entity.study.StudyType;
+import SNP.management.domain.enumlist.StudyType;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -17,7 +17,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "STUDENT")
-public class Student {
+public class Student extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -84,8 +84,8 @@ public class Student {
         this.gender = studentDTO.getGender();
         this.studyType = studentDTO.getStudyType();
         this.address = studentDTO.getAddress();
-        this.grade = new Grade().setGrade(studentDTO);
-        this.skill = new Skill().setSkill(studentDTO);
+        this.grade.setGrade(studentDTO);
+        this.skill.setSkill(studentDTO);
         this.registration = studentDTO.getRegistration();
         this.date = studentDTO.getDate();
     }

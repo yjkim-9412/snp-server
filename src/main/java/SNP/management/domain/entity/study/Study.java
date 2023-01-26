@@ -1,5 +1,7 @@
 package SNP.management.domain.entity.study;
 
+import SNP.management.domain.entity.BaseEntity;
+import SNP.management.domain.enumlist.StudyType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +11,7 @@ import javax.persistence.*;
 @DiscriminatorColumn(name = "studyType", discriminatorType = DiscriminatorType.STRING)
 @Data
 @Table(name = "STUDY")
-public abstract class Study {
+public abstract class Study extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_id")

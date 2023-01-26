@@ -1,5 +1,6 @@
 package SNP.management.domain.entity.student;
 
+import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.enumlist.DayOfWeek;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter(AccessLevel.PRIVATE)
 @Table(name = "SCHEDULE")
-public class Schedule {
+public class Schedule extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

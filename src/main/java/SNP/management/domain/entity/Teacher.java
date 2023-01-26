@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Table(name = "TEACHER")
 @NoArgsConstructor
-public class Teacher {
+public class Teacher extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
