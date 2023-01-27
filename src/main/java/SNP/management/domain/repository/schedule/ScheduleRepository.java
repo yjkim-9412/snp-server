@@ -40,16 +40,11 @@ public class ScheduleRepository {
                 .innerJoin(schedule.student, student)
                 .where(schedule.student.id.eq(id))
                 .fetch();
-        log.info("after");
-        for (Schedule schedule1 : studentClassList) {
-            log.info("list={}", schedule1);
-        }
         return studentClassList;
     }
 
     public void saveSchedule(Schedule schedule) {
         em.persist(schedule);
-        em.flush();
     }
     public List<Schedule> findAllLast() {
         LocalDate date = LocalDate.now();

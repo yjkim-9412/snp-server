@@ -11,7 +11,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RestController
@@ -21,19 +23,24 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
     private final BindingResolver bindingResolver;
 
-    @PostMapping("/schedule")
-    public Object postSchedule(@RequestBody @Validated ScheduleDTO scheduleDTO, BindingResult bindingResult) {
-
+    @PostMapping("/schedule/{id}")
+    public Object postSchedule(@PathVariable Long id, @RequestBody @Validated HashMap<Integer, String> scheduleMap, BindingResult bindingResult) {
+        ScheduleDTO scheduleDTO = new ScheduleDTO().FormToDTO(scheduleMap);
         if (bindingResult.hasErrors()) {return bindingResolver.bindingAPI(bindingResult);}
+        else if (scheduleMap.size() > 3 || scheduleMap.isEmpty()) {
+            Map<String, String> mapErrors = new ConcurrentHashMap<>();
+            mapErrors.put("size", String.valueOf(scheduleMap.size()));
+            return mapErrors;
+        }
 
-        scheduleService.addSchedule(scheduleDTO);
+        scheduleService.addSchedule(scheduleDTO, id);
         return null;
     }
 
     @GetMapping("/schedule/{id}")
-    public ScheduleDTO getSchedule(@PathVariable Long id) {
+    public Map<Integer, String> getSchedule(@PathVariable Long id) {
 
-        return scheduleService.findByStudentId(id);
+        return scheduleService.findByStudentId(id).getScheduleMap();
     }
 
 }

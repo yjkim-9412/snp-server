@@ -4,21 +4,23 @@ import SNP.management.domain.entity.student.Schedule;
 import SNP.management.web.form.student.ScheduleForm;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 public class ScheduleDTO {
+    @NotEmpty
+    private Map<Integer, String> scheduleMap = new ConcurrentHashMap<>();
 
-    @NotNull
-    private Long id;
-    private Map<Integer, String> scheduleMap = new HashMap<>();
-
-    public ScheduleDTO FormToDTO(Long id, ScheduleForm scheduleForm) {
-        this.id = id;
+    public ScheduleDTO TestToDTO(ScheduleForm scheduleForm) {
         scheduleMap.putAll(scheduleForm.getSchedule());
+        return this;
+    }
+    public ScheduleDTO FormToDTO(Map<Integer, String> scheduleMap) {
+        this.scheduleMap.putAll(scheduleMap);
         return this;
     }
 

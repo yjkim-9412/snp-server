@@ -53,7 +53,7 @@ public class StudentTest {
         scheduleForm.setMap(0, "12:00");
         scheduleForm.setMap(3, "14:00");
         scheduleForm.setMap(5, "16:00");
-        scheduleService.addSchedule(new ScheduleDTO().FormToDTO(studentDTO.getId(),scheduleForm));
+        scheduleService.addSchedule(new ScheduleDTO().TestToDTO(scheduleForm),studentDTO.getId());
 
         em.flush();
         em.clear();

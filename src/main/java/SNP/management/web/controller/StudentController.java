@@ -57,15 +57,6 @@ public class StudentController {
         return "/student/form";
     }
 
-    @PostMapping("/info/{id}/schedule")
-    public void saveClasses (@PathVariable Long id, @RequestBody @Validated ScheduleForm scheduleForm, BindingResult bindingResult){
-        if (bindingResult.hasErrors()) {
-            bindingResolver.bindingAPI(bindingResult);
-        }
-        scheduleService.addSchedule(new ScheduleDTO().FormToDTO(id, scheduleForm));
-    }
-
-
     @GetMapping("/info/{id}")
     public StudentDTO getStudent(@PathVariable Long id) {
 

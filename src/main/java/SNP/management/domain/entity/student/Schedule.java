@@ -4,6 +4,7 @@ import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.enumlist.DayOfWeek;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter(AccessLevel.PRIVATE)
 @Table(name = "SCHEDULE")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Schedule extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +28,10 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    public Schedule saveClass(int day, String time, Student student) {
-        Schedule schedule = new Schedule();
-        schedule.setDayOfWeek(DayOfWeek.values()[day]);
-        schedule.setTime(time);
-        schedule.setStudent(student);
-        return schedule;
+    public Schedule (int day, String time, Student student) {
+        this.dayOfWeek = DayOfWeek.values()[day];
+        this.time = time;
+        this.student = student;
     }
 
 
@@ -43,5 +43,10 @@ public class Schedule extends BaseEntity {
     public Schedule changeDayOfWeek(int day) {
         this.dayOfWeek = DayOfWeek.values()[day];
         return this;
+    }
+
+    public void changeSchedule(Integer day, String time) {
+        this.dayOfWeek = DayOfWeek.values()[day];
+        this.time = time;
     }
 }
