@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import React, {useEffect, useState} from 'react';
+import {styled, createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
@@ -17,7 +17,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Button, Tooltip } from '@mui/material';
+import {Button, Tooltip} from '@mui/material';
 import {Outlet, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import CalendarMain from '../today/CalendarMain';
@@ -32,7 +32,7 @@ interface AppBarProps extends MuiAppBarProps {
 
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
+})<AppBarProps>(({theme, open}) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
@@ -48,8 +48,8 @@ const AppBar = styled(MuiAppBar, {
     }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
+    ({theme, open}) => ({
         '& .MuiDrawer-paper': {
             position: 'relative',
             whiteSpace: 'nowrap',
@@ -85,12 +85,13 @@ const DashboardContent = () => {
     const handleOpenUserMenu = async () => {
         sessionStorage.removeItem('lg');
         await axios.get('/api/logout')
+            .catch(() => navigate('/login'));
         navigate('/login');
     };
     return (
         <ThemeProvider theme={mdTheme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
+            <Box sx={{display: 'flex'}}>
+                <CssBaseline/>
 
                 <AppBar position="absolute" open={open}>
                     <Toolbar
@@ -106,10 +107,10 @@ const DashboardContent = () => {
                             onClick={toggleDrawer}
                             sx={{
                                 marginRight: '36px',
-                                ...(open && { display: 'none' }),
+                                ...(open && {display: 'none'}),
                             }}
                         >
-                            <MenuIcon />
+                            <MenuIcon/>
                         </IconButton>
                         <Typography
                             component="a"
@@ -119,7 +120,7 @@ const DashboardContent = () => {
                             href="/main"
                             sx={{
                                 mr: 2,
-                                display: { xs: 'none', md: 'flex' },
+                                display: {xs: 'none', md: 'flex'},
                                 fontFamily: 'monospace',
                                 fontWeight: 700,
                                 letterSpacing: '.3rem',
@@ -129,24 +130,25 @@ const DashboardContent = () => {
                         >
                             SNP
                         </Typography>
-                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                            <Button href="/student/register" sx={{ my: 2, color: 'white', display: 'block' }}>
+                        <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
+                            <Button href="/student/register" sx={{my: 2, color: 'white', display: 'block'}}>
                                 신규학생 등록
                             </Button>
-                            <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
+                            <Button href="/" sx={{my: 2, color: 'white', display: 'block'}}>
                                 수업자료 등록
                             </Button>
-                            <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
+                            <Button href="/" sx={{my: 2, color: 'white', display: 'block'}}>
                                 도서등록 조회
                             </Button>
-                            <Button href="/" sx={{ my: 2, color: 'white', display: 'block' }}>
+                            <Button href="/" sx={{my: 2, color: 'white', display: 'block'}}>
                                 수업교재 코드 등록
                             </Button>
 
                         </Box>
-                        <Box sx={{ flexGrow: 0 }}>
+                        <Box sx={{flexGrow: 0}}>
                             <Tooltip title="로그아웃 합니다">
-                                <Button onClick={handleOpenUserMenu} sx={{ my: 2, color: 'white', display: 'block' }}>로그아웃</Button>
+                                <Button onClick={handleOpenUserMenu}
+                                        sx={{my: 2, color: 'white', display: 'block'}}>로그아웃</Button>
                             </Tooltip>
                         </Box>
                     </Toolbar>
@@ -163,10 +165,10 @@ const DashboardContent = () => {
                         }}
                     >
                         <IconButton onClick={toggleDrawer}>
-                            <ChevronLeftIcon />
+                            <ChevronLeftIcon/>
                         </IconButton>
                     </Toolbar>
-                    <Divider />
+                    <Divider/>
                     <List component="nav">
                         <MainListItems/>
                     </List>
@@ -183,9 +185,9 @@ const DashboardContent = () => {
                         overflow: 'auto',
                     }}
                 >
-                    <Toolbar />
+                    <Toolbar/>
 
-                    <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+                    <Container maxWidth="xl" sx={{mt: 4, mb: 4}}>
                         <Outlet/>
                     </Container>
                 </Box>
@@ -195,5 +197,5 @@ const DashboardContent = () => {
 }
 
 export default function Dashboard() {
-    return <DashboardContent />;
+    return <DashboardContent/>;
 }

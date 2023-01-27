@@ -2,7 +2,6 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -44,10 +43,7 @@ const TextFields = styled(TextField)`
 
 
 type StudentType = {
-    "name": string, "age": string, "birth": string, "phone": string, 'email': string, 'parentName': string,
-    'parentPhone': string, 'gender': string, 'studyType': string, 'grade': string, 'gradeLv': string,
-    'city': string, 'street': string,
-    'speed': string, 'readLv': string, 'intLv': string
+    [student: string]: string;
 }
 
 const theme = createTheme();
@@ -97,97 +93,32 @@ export default function SignUpStudent() {
     const onChange = (e: PropsAction) => {
         let name: string = e.target.name;
         let value: string = e.target.value
-        switch (name) {
-            case "name":
-                setStudentSaveForm({...studentSaveForm, name: value});
-                break;
-            case "age":
-                setStudentSaveForm({...studentSaveForm, age: value});
-                setFieldError({...fieldError, age:''});
-                setAgeError(false);
-                break;
-            case "phone":
-                setStudentSaveForm({...studentSaveForm, phone: value});
-                break;
-            case "email":
-                setStudentSaveForm({...studentSaveForm, email: value});
-                break;
-            case "parentName":
-                setStudentSaveForm({...studentSaveForm, parentName: value});
-                break;
-            case "parentPhone":
-                setStudentSaveForm({...studentSaveForm, parentPhone: value});
-                break;
-            case "birth":
-                setStudentSaveForm({...studentSaveForm, birth: value});
-                break;
-            case "speed":
-                setStudentSaveForm({...studentSaveForm, speed: value});
-                break;
-            case "readLv":
-                setStudentSaveForm({...studentSaveForm, readLv: value});
-                break;
-            case "intLv":
-                setStudentSaveForm({...studentSaveForm, intLv: value});
-                break;
+        setStudentSaveForm({...studentSaveForm, [name]: value});
+        setFieldError({...fieldError,[name]:''});
+
+    }
+    const onChangeAge = (e: PropsAction) => {
+        let name: string = e.target.name;
+        let value: string = e.target.value
+        const errorMessage = "필수 값 입니다";
+        setStudentSaveForm({...studentSaveForm, [name]: value});
+        if (value === '' || value === null) {
+            setAgeError(true);
+            setFieldError({...fieldError,[name]:errorMessage});
+        }else {
+            setAgeError(false);
+            setFieldError({...fieldError,[name]:''});
         }
 
     }
 
     /** 빈값 텍스트필드 에러표시*/
     const setError = (e: string) => {
-        const errorMessage = "필수 값입니다";
-        switch (e) {
-            case "name":
-                setFieldError({...fieldError, name: errorMessage});
-                break;
-            case "age":
-                setFieldError({...fieldError, age: errorMessage});
-                setAgeError(true);
-                break;
-            case "gender":
-                setFieldError({...fieldError, gender: errorMessage});
-                break;
-            case "studyType":
-                setFieldError({...fieldError, studyType: errorMessage});
-                break;
-            case "phone":
-                setFieldError({...fieldError, phone: errorMessage});
-                break;
-            case "email":
-                setFieldError({...fieldError, email: errorMessage});
-                break;
-            case "parentName":
-                setFieldError({...fieldError, parentName: errorMessage});
-                break;
-            case "parentPhone":
-                setFieldError({...fieldError, parentPhone: errorMessage});
-                break;
-            case "birth":
-                setFieldError({...fieldError, birth: errorMessage});
-                break;
-            case "speed":
-                setFieldError({...fieldError, speed: errorMessage});
-                break;
-            case "readLv":
-                setFieldError({...fieldError, readLv: errorMessage});
-                break;
-            case "intLv":
-                setFieldError({...fieldError, intLv: errorMessage});
-                break;
-            case "city":
-                setFieldError({...fieldError, city: errorMessage});
-                break;
-            case "street":
-                setFieldError({...fieldError, city: errorMessage});
-                break;
-            case "grade":
-                setFieldError({...fieldError, grade: errorMessage});
-                break;
-            case "gradeLv":
-                setFieldError({...fieldError, grade: errorMessage});
-                break;
-        }
+        const errorMessage = "필수 값 입니다";
+        setFieldError({...fieldError, [e]: errorMessage})
+        if (e === 'age') {
+            setAgeError(true);
+            }
     }
 
     /** submit 이벤트 핸들러*/
@@ -201,7 +132,7 @@ export default function SignUpStudent() {
             }
         }
         await axios.post('/api/students/saveForm', studentSaveForm).then((res) => {
-                    navigate('/');
+                    navigate('/students/info/'+ res.data);
             }
         ).catch(error => console.log(error));
     }
@@ -253,7 +184,7 @@ export default function SignUpStudent() {
                                             name="age"
                                             label="나이"
                                             value={studentSaveForm.age}
-                                            onChange={onChange}
+                                            onChange={onChangeAge}
                                             error={ageError}
                                         />
                                     </Grid>
