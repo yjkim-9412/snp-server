@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "studyType", discriminatorType = DiscriminatorType.STRING)
 @Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "STUDY")
 public abstract class Study extends BaseEntity {
 
@@ -19,14 +20,16 @@ public abstract class Study extends BaseEntity {
     private int step;
     private String level;
     private String detail;
+    @Column(name = "number_of_days")
     private int numberOfDays;
     private int accumulation;
+    @Column(name = "ot")
     private boolean OT;
     private String introduce;
 
     private int stepCount;
 
-    @Column(name = "studyType",insertable = false,updatable = false)
+    @Column(name = "study_type")
     @Enumerated(EnumType.STRING)
     private StudyType studyType;
 

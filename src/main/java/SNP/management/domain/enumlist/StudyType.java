@@ -7,21 +7,18 @@ public enum StudyType {
     B_CLASS("B"),
     C_CLASS("C"),
     D_CLASS("D"),
-    A_CLASS_H("AH"),
-    B_CLASS_H("BH");
+    A_CLASS_H("수료A"),
+    B_CLASS_H("수료B");
 
-    private final String type;
+    private final String string;
 
-    StudyType(String type) {
-        this.type = type;
+    StudyType(String string) {
+        this.string = string;
     }
 
-    public String type() {
-        return type;
+    public String string() {
+        return string;
     }
-
-
-
 
 
 

@@ -57,20 +57,6 @@ public class Student extends BaseEntity {
 
     private Boolean registration;
 
-    public Student testStudent(String name, int age, String birth) {
-        this.name = name;
-        this.age = age;
-        this.birth = birth;
-        return this;
-    }
-
-    public Student testStudentType(String name, int age, String birth, StudyType studyType) {
-        this.name = name;
-        this.age = age;
-        this.birth = birth;
-        this.studyType = studyType;
-        return this;
-    }
 
     public Student(StudentDTO studentDTO) {
         this.id = studentDTO.getId();
@@ -88,10 +74,8 @@ public class Student extends BaseEntity {
         this.skill.setSkill(studentDTO);
         this.registration = studentDTO.getRegistration();
         this.date = studentDTO.getDate();
-    }
-
-    public void connectTeacher(Teacher teacher) {
-        this.teacher = teacher;
+        this.studyCount = studentDTO.getStudyCount() == null ? 0
+                : studentDTO.getStudyCount();
     }
 
     public void setStudy(Study study) {

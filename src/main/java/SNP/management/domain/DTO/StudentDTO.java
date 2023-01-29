@@ -2,6 +2,7 @@ package SNP.management.domain.DTO;
 
 
 
+import SNP.management.domain.entity.student.Grade;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.enumlist.GradeType;
 import SNP.management.web.form.student.StudentSaveForm;
@@ -14,7 +15,6 @@ import lombok.Data;
 @Data
 public class StudentDTO {
     private Long id;
-
     private String name;
     private Integer age;
     private String birth;
@@ -23,21 +23,19 @@ public class StudentDTO {
     private String parentName;
     private String parentPhone;
     private String gender;
-
     private StudyType studyType;
-
-    private String city;
-    private String street;
+    private String studyTypeToString;
     private GradeType grade;
+    private String gradeToString;
     private Integer gradeLv;
     private Integer speed;
     private Integer readLv;
     private Integer intLv;
-
     private String address;
-
     private Boolean registration;
     private String date;
+    private String stepName;
+    private Integer studyCount;
 
     public StudentDTO() {
     }
@@ -64,7 +62,6 @@ public class StudentDTO {
     }
 
     public StudentDTO(Student student) {
-
         this.id = student.getId();
         this.name = student.getName();
         this.age = student.getAge();
@@ -82,6 +79,14 @@ public class StudentDTO {
         this.intLv = student.getSkill().getIntLv();
         this.date = student.getDate();
         this.address = student.getAddress();
+        this.studyCount = student.getStudyCount();
+        this.registration = student.getRegistration();
+        this.studyTypeToString = this.studyType.string();
+        this.gradeToString = this.grade.string();
+    }
+
+    public void setStudy(Student student) {
+        this.stepName = student.getStudy().getDetail();
     }
 
     public StudentDTO FormToSaveDTO(StudentSaveForm studentSaveForm) {

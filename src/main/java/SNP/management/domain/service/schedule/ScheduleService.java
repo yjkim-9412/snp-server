@@ -8,11 +8,10 @@ import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.repository.schedule.ScheduleDataJpa;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
-import SNP.management.domain.repository.student.StudentRepositoryImp;
+import SNP.management.domain.repository.student.StudentRepository;
 import SNP.management.domain.service.student.StudentServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,7 +31,7 @@ import java.util.Optional;
 public class ScheduleService {
 
     private final StudentServiceImp studentService;
-    private final StudentRepositoryImp studentRepository;
+    private final StudentRepository studentRepository;
     private final ScheduleRepository scheduleRepository;
     private final ScheduleDataJpa scheduleDataJpa;
 

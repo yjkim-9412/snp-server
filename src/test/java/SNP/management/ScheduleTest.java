@@ -13,7 +13,7 @@ import SNP.management.domain.enumlist.GradeType;
 import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.schedule.ScheduleDataJpa;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
-import SNP.management.domain.repository.student.StudentRepositoryImp;
+import SNP.management.domain.repository.student.StudentRepository;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.service.student.StudentServiceImp;
@@ -43,7 +43,7 @@ public class ScheduleTest {
     @Autowired
     StudentServiceImp studentService;
     @Autowired
-    StudentRepositoryImp studentRepository;
+    StudentRepository studentRepository;
     @Autowired
     ScheduleService scheduleService;
     @Autowired

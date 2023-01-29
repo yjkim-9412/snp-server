@@ -3,8 +3,6 @@ package SNP.management.web.controller;
 import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.web.resolver.BindingResolver;
 import SNP.management.domain.DTO.ScheduleDTO;
-import SNP.management.domain.repository.student.StudentRepositoryImp;
-import SNP.management.domain.service.student.StudentServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;

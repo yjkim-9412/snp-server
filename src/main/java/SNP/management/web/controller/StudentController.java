@@ -38,13 +38,10 @@ public class StudentController {
         return saved.getId();
     }
 
-    @GetMapping("/")
-    public List<StudentForm> getStudentList() {
+    @GetMapping("/list")
+    public List<StudentDTO> getStudentList() {
 
-        List<StudentForm> studentForm = new ArrayList<>();
-        List<StudentDTO> students = studentService.findByAll();
-
-        return studentForm;
+        return studentService.findByAllAndStudy();
     }
     @PostMapping("/update")
     public Object updateStudent(@RequestBody @Validated StudentUpdateForm studentUpdateForm, BindingResult bindingResult) {

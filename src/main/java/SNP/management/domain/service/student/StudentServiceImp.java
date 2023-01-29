@@ -5,7 +5,7 @@ import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
-import SNP.management.domain.repository.student.StudentRepositoryImp;
+import SNP.management.domain.repository.student.StudentRepository;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,21 +19,19 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class StudentServiceImp implements StudentService {
+public class StudentServiceImp{
 
-    private final StudentRepositoryImp studentRepository;
+    private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
     private final ScheduleRepository scheduleRepository;
     private final StudyDataJpa studyDataJpa;
     private final StudyRepository studyRepository;
 
-    @Override
     public StudentDTO findById(Long id) {
         return new StudentDTO(studentRepository.findById(id).orElseThrow(NullPointerException::new));
     }
 
     //학생 저장 업데이트
-    @Override
     public StudentDTO save(StudentDTO studentDTO) {
 
 
@@ -57,7 +55,6 @@ public class StudentServiceImp implements StudentService {
 
     }
 
-    @Override
     public void update(StudentDTO studentDTO) {
         Student findByStudent = studentRepository.findById(studentDTO.getId()).orElseThrow(NullPointerException::new);
 
@@ -67,16 +64,18 @@ public class StudentServiceImp implements StudentService {
         studentDTO.setId(studentRepository.save(findByStudent));
     }
 
-    @Override
     public List<StudentDTO> findByAll() {
         return studentRepository.findByAll();
+    }
+
+    public List<StudentDTO> findByAllAndStudy() {
+        return studentRepository.findByAllAndStudy();
     }
 
     /**
      * 학생 이메일 중복 검사
      * @throws DuplicateKeyException 중복시 예외 발생
      */
-    @Override
     public void duplicate(StudentDTO studentDTO) {
         if (studentRepository.findByEmail(studentDTO.getEmail()).isPresent()) {
                 throw new DuplicateKeyException("학생 중복");
