@@ -7,6 +7,7 @@
 ---
  
  <h3>DB설계</h3><br>
+ <h5>Mysql</h5><br>
  <img src="https://user-images.githubusercontent.com/100066303/215316956-f8d504e9-04bd-4077-806e-0b039e1e5514.png"/>
 
 ---
