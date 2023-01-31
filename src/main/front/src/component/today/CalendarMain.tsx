@@ -8,6 +8,7 @@ import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import TodayStudent from "./TodayStudent";
 import { Container, Grid, Paper } from "@mui/material/";
 import { Box } from "@mui/material";
+import AppBarComp from "../AppBarComp";
 
 
 const isWeekend = (date: Dayjs) => {
@@ -29,9 +30,12 @@ const CalendarMain = () => {
                     sx={{
                         p: 2,
                         display: 'flex',
+                        flexDirection: 'column'
                     }}
                 >
+                    <AppBarComp typography='오늘 수업'/>
                     <Box display="flex" >
+                        <Grid item xs={12} sm={4}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <StaticDatePicker
                                 orientation="landscape"
@@ -49,14 +53,15 @@ const CalendarMain = () => {
                                 }}
                             />
                         </LocalizationProvider>
-                    </Box>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        </Grid>
+                        <Grid item xs={12} sm={8}>
                         {
                             dayOfWeek === undefined ?
                                 <TodayStudent dayOfWeek={0} />
                                 : <TodayStudent dayOfWeek={dayOfWeek} />
 
                         }
+                        </Grid>
                     </Box>
                 </Paper>
             </Grid>

@@ -84,7 +84,7 @@ const DashboardContent = () => {
     };
     const handleOpenUserMenu = async () => {
         sessionStorage.removeItem('lg');
-        await axios.get('/api/logout')
+         axios.get('/api/logout')
             .catch(() => navigate('/login'));
         navigate('/login');
     };

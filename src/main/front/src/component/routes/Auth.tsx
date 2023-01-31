@@ -39,40 +39,45 @@ const Auth: React.FC = () => {
     const [pwError, setPwError] = useState<string>('');
     const [loginError, setLoginError] = useState<string>('');
 
-    let TeacherLoginForm = {'email':email, 'pw':pw};
-    const changeEmail = (e: PropsAction) =>{
+    let TeacherLoginForm = {'email': email, 'pw': pw};
+    const changeEmail = (e: PropsAction) => {
         setEmail(e.target.value);
         if (!validator.isEmail(email)) {
             setEmailError("올바른 형식의 이메일이 아닙니다.")
-        }else {setEmailError('');}
+        } else {
+            setEmailError('');
+        }
     }
-    const changePw = (e: PropsAction) =>{
+    const changePw = (e: PropsAction) => {
         setPw(e.target.value);
         if (!schema.validate(pw)) {
             setPwError("올바른 형식의 비밀번호가 아닙니다.")
-        }else {setPwError('');}
+        } else {
+            setPwError('');
+        }
     }
 
-    const  onSubmitLogin  = async (e: React.BaseSyntheticEvent) => {
+    const onSubmitLogin = (e: React.BaseSyntheticEvent) => {
         e.preventDefault()
-        if (email === '' && pw === ''){
+        if (email === '' && pw === '') {
             setEmailError("올바른 형식의 이메일이 아닙니다.")
             return;
-        }else if (pw === ''){
+        } else if (pw === '') {
             setPwError("올바른 형식의 비밀번호가 아닙니다.")
             return;
         }
-        await axios.post('/api/login',TeacherLoginForm).then(res => {
+        axios.post('/api/login', TeacherLoginForm).then(res => {
             if (res.status === 200) {
                 sessionStorage.setItem('lg', email);
                 navigate('/main');
-            } else if (res.status === 401){
+            } else if (res.status === 401) {
                 setLoginError("비밀번호 또는 이메일주소가 맞지 않습니다.");
             }
-        }).catch(error => {console.log(error)
-        setLoginError("비밀번호 또는 이메일주소가 맞지 않습니다.")});
+        }).catch(error => {
+            console.log(error)
+            setLoginError("비밀번호 또는 이메일주소가 맞지 않습니다.")
+        });
     }
-
 
     return (
         <ThemeProvider theme={theme}>
@@ -89,7 +94,7 @@ const Auth: React.FC = () => {
                     <Typography component="h1" variant="h5">
                         로그인
                     </Typography>
-                    <Box component="form" noValidate  sx={{ mt: 3 }} onSubmit={onSubmitLogin}>
+                    <Box component="form" noValidate sx={{mt: 3}} onSubmit={onSubmitLogin}>
                         <FormControl component="fieldset" variant="standard">
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -103,7 +108,7 @@ const Auth: React.FC = () => {
                                         label="이메일 주소"
                                         value={email}
                                         onChange={changeEmail}
-                                        error={emailError!== ''}
+                                        error={emailError !== ''}
                                     />
                                     <FormHelperTexts>{emailError}</FormHelperTexts>
                                 </Grid>
@@ -117,7 +122,7 @@ const Auth: React.FC = () => {
                                         label="비밀번호 (숫자+영대소문자+특수문자 8자리 이상)"
                                         value={pw}
                                         onChange={changePw}
-                                        error={pwError!== ''}
+                                        error={pwError !== ''}
                                     />
                                     <FormHelperTexts>{pwError}</FormHelperTexts>
                                 </Grid>
@@ -126,7 +131,7 @@ const Auth: React.FC = () => {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+                                sx={{mt: 3, mb: 2}}
                                 size="large"
                             >
                                 로그인

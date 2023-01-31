@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Route, Routes, useNavigate} from "react-router-dom";
 import Auth from "./routes/Auth";
-import Home from "./routes/Home";
-import {Cookie} from "@mui/icons-material";
-import {useCookies} from "react-cookie";
 import StudentReCard from "./register/SignUpStudent";
 import Dashboard from './main/DashBord';
 import CalendarMain from "./today/CalendarMain";
 import Info from "./student/Info";
+import StudentList from "./student/StudentList";
 
 interface ChildLogin {
     isLoggedIn: Boolean,
@@ -15,7 +13,6 @@ interface ChildLogin {
 }
 const AppRouter: React.FC = () => {
     const navigate = useNavigate();
-
     useEffect(() => {
         if (!sessionStorage.getItem('lg')) {
             navigate('/login');
@@ -27,6 +24,7 @@ const AppRouter: React.FC = () => {
                 <Route path="/" element={<Dashboard />}>
                     <Route path="/main" element={<CalendarMain/>}/>
                     <Route path="/students/info/:id" element={<Info/>}/>
+                    <Route path="/students" element={<StudentList/>}/>
                 </Route>
                 <Route path="/login" element={<Auth  />}/>
                 <Route path="/student/register" element={<StudentReCard/>}/>

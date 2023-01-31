@@ -27,8 +27,8 @@ const Course:React.FC<StudentFieldSelectCourse> = ({onChangeSelect, fieldErrorTy
         let name = e.target.name;
         let value = e.target.value;
         onChangeSelect({name, value});
-        setCourse(value);
-        setErrorText('');
+        setCourse(prev => prev = value);
+        setErrorText(prev => prev ='');
     }
     return(
 

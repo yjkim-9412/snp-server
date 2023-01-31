@@ -71,13 +71,9 @@ export default function SignUpStudent() {
     }
     /**설렉트 onChange */
     const onChangeSelect = (e: { name: string, value: string }) => {
-        if (e.name === 'grade') {
-            setStudentSaveForm({...studentSaveForm, grade: e.value})
-        } else if (e.name === 'gradeLv') {
-            setStudentSaveForm({...studentSaveForm, gradeLv: e.value})
-        } else {
-            setStudentSaveForm({...studentSaveForm, studyType: e.value})
-        }
+        setStudentSaveForm((prevState) => ({
+            ...prevState,[e.name]:e.value
+        }))
     }
     /**예비등록생 핸들러 */
     const onChangeSelectBoolean = (e: { name: string, value: string }) => {
@@ -92,11 +88,13 @@ export default function SignUpStudent() {
     /**텍스트 onChange */
     const onChange = (e: PropsAction) => {
         let name: string = e.target.name;
-        let value: string = e.target.value
+        let value: string = e.target.value;
         setStudentSaveForm({...studentSaveForm, [name]: value});
         setFieldError({...fieldError,[name]:''});
 
     }
+
+    /**학생 나이 onChange*/
     const onChangeAge = (e: PropsAction) => {
         let name: string = e.target.name;
         let value: string = e.target.value
@@ -126,6 +124,8 @@ export default function SignUpStudent() {
         e.preventDefault();
         for (const entryElement of Object.entries(studentSaveForm)) {
             if (entryElement[1] === '' || entryElement[1] === null || entryElement[1] === undefined) {
+                console.log("entryElement[0] = " + entryElement[0]);
+
                 setSubmitError("필수 값을 입력해 주세요");
                  setError(entryElement[0])
                 return;

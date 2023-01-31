@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -13,42 +13,35 @@ import Divider from "@mui/material/Divider";
 
 
 
-const MainListItems = () => {
+const MainListItems:React.FC = () => {
     const navigate = useNavigate();
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
-    const handleListItemClick = (index: number) => {
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const handleListItemClick = (url: string, index:number) => {
         setSelectedIndex(index);
-        switch (index) {
-            case 0:
-                navigate('/main')
-                break;
-            case 1:
-                navigate('/')
-                break;
-        }
+        navigate(url);
     }
 
     return (
         <React.Fragment>
-            <ListItemButton selected={selectedIndex === 0} onClick={() => handleListItemClick(0)}>
+            <ListItemButton selected={selectedIndex === 0} onClick={() => handleListItemClick('/main',0)}>
                 <ListItemIcon>
                     <DashboardIcon/>
                 </ListItemIcon>
                 <ListItemText primary="오늘수업"/>
             </ListItemButton>
-            <ListItemButton selected={selectedIndex === 1} onClick={() => handleListItemClick(1)}>
+            <ListItemButton selected={selectedIndex === 1} onClick={() => handleListItemClick('/students',1)}>
                 <ListItemIcon>
                     <PeopleIcon/>
                 </ListItemIcon>
                 <ListItemText primary="학생목록"/>
             </ListItemButton>
-            <ListItemButton selected={selectedIndex === 2} onClick={() => handleListItemClick(2)}>
+            <ListItemButton selected={selectedIndex === 2} onClick={() => handleListItemClick('/',2)}>
                 <ListItemIcon>
                     <BarChartIcon/>
                 </ListItemIcon>
                 <ListItemText primary="학생통계"/>
             </ListItemButton >
-            <ListItemButton selected={selectedIndex === 3} onClick={() => handleListItemClick(3)}>
+            <ListItemButton selected={selectedIndex === 3} onClick={() => handleListItemClick('/',3)}>
                 <ListItemIcon>
                     <LayersIcon/>
                 </ListItemIcon>
@@ -58,13 +51,13 @@ const MainListItems = () => {
             <ListSubheader component="div" inset>
                 개인정보
             </ListSubheader>
-            <ListItemButton selected={selectedIndex === 4} onClick={() => handleListItemClick(4)}>
+            <ListItemButton selected={selectedIndex === 4} onClick={() => handleListItemClick('/',4)}>
                 <ListItemIcon>
                     <AssignmentIcon/>
                 </ListItemIcon>
                 <ListItemText primary="개인정보 수정"/>
             </ListItemButton>
-            <ListItemButton selected={selectedIndex === 5} onClick={() => handleListItemClick(5)}>
+            <ListItemButton selected={selectedIndex === 5} onClick={() => handleListItemClick('/',5)}>
                 <ListItemIcon>
                     <AssignmentIcon/>
                 </ListItemIcon>

@@ -22,6 +22,7 @@ import RegistrationCheck from "../register/RegistrationCheck";
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import Schedule from "./Schedule";
+import AppBarComp from "../AppBarComp";
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -41,10 +42,7 @@ const TextFields = styled(TextField)`
 `;
 
 type StudentType = {
-    "name": string, "age": string, "birth": string, "phone": string, 'email': string, 'parentName': string,
-    'parentPhone': string, 'gender': string, 'studyType': string, 'grade': string, 'gradeLv': string,
-    'city': string, 'street': string,
-    'speed': string, 'readLv': string, 'intLv': string
+    [student: string]: string;
 }
 
 const theme = createTheme();
@@ -72,7 +70,6 @@ export default function Info() {
         axios.get(`/api/students/info/${id}`)
             .then(res => {
                 setInfoForm(res.data);
-                console.log(res.data);
             })
     },[])
     /**성별 onClick */
@@ -98,101 +95,38 @@ export default function Info() {
     const onChangeAddress = (e: { address: string }) => {
         setInfoForm({...infoForm, address: e.address});
     }
+    /**학생 나이 onChange*/
+    const onChangeAge = (e: PropsAction) => {
+        let name: string = e.target.name;
+        let value: string = e.target.value
+        const errorMessage = "필수 값 입니다";
+        setInfoForm({...infoForm, [name]: value});
+        if (value === '' || value === null) {
+            setAgeError(true);
+            setFieldError({...fieldError,[name]:errorMessage});
+        }else {
+            setAgeError(false);
+            setFieldError({...fieldError,[name]:''});
+        }
+
+    }
 
     /**텍스트 onChange */
     const onChange = (e: PropsAction) => {
         let name: string = e.target.name;
         let value: string = e.target.value
-        switch (name) {
-            case "name":
-                setInfoForm({...infoForm, name: value});
-                break;
-            case "age":
-                setInfoForm({...infoForm, age: value});
-                setFieldError({...fieldError, age: ''});
-                setAgeError(false);
-                break;
-            case "phone":
-                setInfoForm({...infoForm, phone: value});
-                break;
-            case "email":
-                setInfoForm({...infoForm, email: value});
-                break;
-            case "parentName":
-                setInfoForm({...infoForm, parentName: value});
-                break;
-            case "parentPhone":
-                setInfoForm({...infoForm, parentPhone: value});
-                break;
-            case "birth":
-                setInfoForm({...infoForm, birth: value});
-                break;
-            case "speed":
-                setInfoForm({...infoForm, speed: value});
-                break;
-            case "readLv":
-                setInfoForm({...infoForm, readLv: value});
-                break;
-            case "intLv":
-                setInfoForm({...infoForm, intLv: value});
-                break;
-        }
+        setInfoForm({...infoForm, [name]: value});
+        setFieldError({...fieldError,[name]:''});
+
 
     }
 
     /** 빈값 텍스트필드 에러표시*/
     const setError = (e: string) => {
-        const errorMessage = "필수 값입니다";
-        switch (e) {
-            case "name":
-                setFieldError({...fieldError, name: errorMessage});
-                break;
-            case "age":
-                setFieldError({...fieldError, age: errorMessage});
-                setAgeError(true);
-                break;
-            case "gender":
-                setFieldError({...fieldError, gender: errorMessage});
-                break;
-            case "studyType":
-                setFieldError({...fieldError, studyType: errorMessage});
-                break;
-            case "phone":
-                setFieldError({...fieldError, phone: errorMessage});
-                break;
-            case "email":
-                setFieldError({...fieldError, email: errorMessage});
-                break;
-            case "parentName":
-                setFieldError({...fieldError, parentName: errorMessage});
-                break;
-            case "parentPhone":
-                setFieldError({...fieldError, parentPhone: errorMessage});
-                break;
-            case "birth":
-                setFieldError({...fieldError, birth: errorMessage});
-                break;
-            case "speed":
-                setFieldError({...fieldError, speed: errorMessage});
-                break;
-            case "readLv":
-                setFieldError({...fieldError, readLv: errorMessage});
-                break;
-            case "intLv":
-                setFieldError({...fieldError, intLv: errorMessage});
-                break;
-            case "city":
-                setFieldError({...fieldError, city: errorMessage});
-                break;
-            case "street":
-                setFieldError({...fieldError, city: errorMessage});
-                break;
-            case "grade":
-                setFieldError({...fieldError, grade: errorMessage});
-                break;
-            case "gradeLv":
-                setFieldError({...fieldError, grade: errorMessage});
-                break;
+        const errorMessage = "필수 값 입니다";
+        setFieldError({...fieldError, [e]: errorMessage})
+        if (e === 'age') {
+            setAgeError(true);
         }
     }
 
@@ -217,19 +151,7 @@ export default function Info() {
             <CssBaseline/>
             <Grid container spacing={3}>
                 <Grid  item md={8} lg={8}>
-                    <AppBar
-                        color="default"
-                        elevation={0}
-                        sx={{
-                            position: 'relative',
-                        }}
-                    >
-                        <Toolbar>
-                            <Typography component="h1" variant="h5">
-                                학생정보
-                            </Typography>
-                        </Toolbar>
-                    </AppBar>
+
                     <Paper
                         sx={{
                             p: 2,
@@ -237,6 +159,7 @@ export default function Info() {
                             flexDirection: 'column'
                         }}
                     >
+                        <AppBarComp typography={'학생 정보'}/>
 
                         <Box display="flex">
 
@@ -259,7 +182,7 @@ export default function Info() {
                                                 name="age"
                                                 label="나이"
                                                 value={infoForm.age}
-                                                onChange={onChange}
+                                                onChange={onChangeAge}
                                                 error={ageError}
                                             />
                                         </Grid>

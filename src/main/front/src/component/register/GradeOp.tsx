@@ -38,15 +38,17 @@ const GradeOp: React.FC<StudentFieldSelect> = ({onChangeSelect, fieldErrorType,g
             setGrade(value as string);
             if (value === 'MIDDLE' || value === 'HIGH') {
                 setRock('none');
-                setGradeLv('1');
+                setGradeLv(prev => prev = '1');
+                console.log("onchange")
                 onChangeSelect({name:'gradeLv', value:'1'});
             } else {
                 setRock('block');
             }
+            onChangeSelect({name, value});
         } else if (name === 'gradeLv') {
             setGradeLv(value as string);
+            onChangeSelect({name, value});
         }
-        onChangeSelect({name, value});
         setErrorText('');
         setIsError(false);
     }
