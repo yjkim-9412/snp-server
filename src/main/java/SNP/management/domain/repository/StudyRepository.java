@@ -27,9 +27,7 @@ public class StudyRepository {
                 .selectFrom(study)
                 .where(study.studyType.eq(studyType).and(study.step.eq(1)))
                 .fetchOne();
-        if (firstStep == null){
-            throw new NullPointerException("getFirstStudy 값이 없음");
-        }
+        if (firstStep == null){throw new NullPointerException("getFirstStudy 값이 없음");}
         return firstStep;
     }
 }

@@ -1,6 +1,7 @@
 package SNP.management.domain.entity;
 
 import SNP.management.domain.DTO.TeacherDTO;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "TEACHER")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Teacher extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,12 +22,23 @@ public class Teacher extends BaseEntity{
     private String pw;
 
 
-    public Teacher save(TeacherDTO teacherDTO) {
+    private void setTeacher(TeacherDTO teacherDTO) {
         this.name = teacherDTO.getName();
         this.phone = teacherDTO.getPhone();
         this.email = teacherDTO.getEmail();
-        this.pw = teacherDTO.getPw();;
-        return this;
+        this.pw = teacherDTO.getPw();
+    }
+    public void update(TeacherDTO teacherDTO) {
+        this.name = teacherDTO.getName();
+        this.phone = teacherDTO.getPhone();
+        this.email = teacherDTO.getEmail();
+        this.pw = teacherDTO.getPw();
+    }
+
+    public static Teacher createTeacher(TeacherDTO teacherDTO) {
+        Teacher teacher = new Teacher();
+        teacher.setTeacher(teacherDTO);
+        return teacher;
     }
 
     public Teacher login(TeacherDTO teacherDTO) {

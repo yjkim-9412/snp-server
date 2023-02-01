@@ -31,7 +31,6 @@ public class TeacherController {
     public Object loginTeacher(@RequestBody @Validated @Login TeacherLoginForm loginTeacher, BindingResult bindingResult, HttpServletRequest request) {
         if (bindingResult.hasErrors()){
             return bindingResolver.bindingAPI(bindingResult);
-
             }
         if (loginTeacher == null) {
             return "/";

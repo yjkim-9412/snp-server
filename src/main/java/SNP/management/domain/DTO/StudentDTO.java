@@ -129,4 +129,8 @@ public class StudentDTO {
         return this;
     }
 
+    public Boolean hasStudy() {
+        return this.getStudyType() != null;
+    }
+
 }

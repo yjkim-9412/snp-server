@@ -89,7 +89,7 @@ public class ScheduleTest {
         scheduleForm.setMap(2, "12:00");
         scheduleForm.setMap(3, "14:00");
         scheduleForm.setMap(5, "16:00");
-        scheduleService.addSchedule(new ScheduleDTO().TestToDTO(scheduleForm), studentDTO.getId());
+        scheduleService.saveSchedule(new ScheduleDTO().TestToDTO(scheduleForm), studentDTO.getId());
 
         em.flush();
         em.clear();

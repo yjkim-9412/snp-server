@@ -19,7 +19,7 @@ public class QuestionService {
     public void saveAll(List<QuestionDTO> questionDTOList, TextBook textBook) {
         List<Question> questions = new ArrayList<>();
         for (QuestionDTO questionDTO : questionDTOList) {
-            questions.add(Question.saveQuestion(questionDTO,textBook));
+            questions.add(Question.createQuestion(questionDTO,textBook));
         }
         questionDataJpa.saveAll(questions);
     }

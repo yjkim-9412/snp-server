@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -39,42 +38,64 @@ public class ScheduleService {
         Student student = studentRepository.findById(id).orElseThrow(NullPointerException::new);
         return new ScheduleDTO().listToDTO(scheduleRepository.findClassesByStudentId(student.getId()));
     }
-    public void createScheduleFor(Student student, ScheduleDTO scheduleDTO) {
+    public void createScheduleList(Student student, ScheduleDTO scheduleDTO) {
+        List<Schedule> scheduleList = new ArrayList<>();
         for (Map.Entry<Integer, String> e : scheduleDTO.getScheduleMap().entrySet()) {
-            Schedule schedule = new Schedule(e.getKey(), e.getValue(), student);
-            scheduleRepository.saveSchedule(schedule);
+            scheduleList.add(Schedule.createSchedule(e.getKey(), e.getValue(), student));
         }
+        scheduleDataJpa.saveAll(scheduleList);
     }
 
-    public void addSchedule(ScheduleDTO scheduleDTO, Long id) {
-        Optional<Student> studentOptional = studentRepository.findById(id);
-        Student student = studentOptional.orElseThrow(NullPointerException::new);
+    public void saveSchedule(ScheduleDTO scheduleDTO, Long id) {
+        Student student = studentRepository.findById(id).orElseThrow(NullPointerException::new);
 
         //해당학생 시간표 조회
         List<Schedule> scheduleList = scheduleRepository.findClassesByStudentId(student.getId());
 
-
         if (scheduleList.isEmpty()){// 시간표가 없을때
             log.info("scheduleList = {}", false);
-            createScheduleFor(student, scheduleDTO);
-        } else {// 시간표가 있을때 //기존 시간표와 파라미터 시간표 매치,검증
-            log.info("scheduleList = {}", true);
-            checkDuplicateAndSave(student, scheduleDTO, scheduleList);
+            createScheduleList(student, scheduleDTO);
+            return;
         }
+            log.info("scheduleList = {}", true);
+            checkDuplicateAndUpdate(student, scheduleDTO, scheduleList);
     }
 
 
     /**
      * 기존시간표와 파라미터 시간표 비교후 업데이트
      */
-    public void checkDuplicateAndSave(Student student,ScheduleDTO scheduleDTO, List<Schedule> scheduleList) {
+    public void checkDuplicateAndUpdate(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleList) {
         Map<Integer, String> scheduleMap = scheduleDTO.getScheduleMap();// 파라미터 시간표
-        List<Schedule> deleteList = new ArrayList<>();//제거 리스트 객체 생성
-        List<Schedule> addList = new ArrayList<>();//추가 리스트 객체 생성
 
-        // 파라미터 시간표
+        // 파라미터중복 되지 않는 시간표 filter.
+        List<Schedule> deleteList = DuplicateHandler(scheduleList, scheduleMap);
+
+        //기존에 없던 새로운 시간표 추가
+        List<Schedule> addList = createAddList(student, scheduleMap);
+
+        scheduleDataJpa.saveAll(addList);
+        scheduleDataJpa.deleteAll(deleteList);
+    }
+
+    private List<Schedule> createAddList(Student student, Map<Integer, String> scheduleMap) {
+
+        List<Schedule> addList = new ArrayList<>();
+
+        scheduleMap.forEach((key, value) -> addList.add(Schedule.createSchedule(key,value, student)));
+        return addList;
+    }
+    /**
+     * @param scheduleList 기존 시간표
+     * @param scheduleMap 파라미터 시간표
+     */
+    private List<Schedule> DuplicateHandler(List<Schedule> scheduleList, Map<Integer, String> scheduleMap) {
+        List<Schedule> deleteList = new ArrayList<>();//제거 리스트 객체 생성
+
         scheduleList.forEach(schedule -> {// 해당 학생 기존 시간표 List 루프
+
             int day = schedule.getDayOfWeek().getDayInt();// 해당 학생 기존 시간표 요일
+
             if (scheduleMap.containsKey(day)) {//요일 일치 할시에 시간 업데이트
                 schedule.changeSchedule(day, scheduleMap.get(day));
                 scheduleMap.remove(day);
@@ -82,11 +103,10 @@ public class ScheduleService {
                 deleteList.add(schedule);
             }
         });
-        // 기존 data 에 없던 요일 시간표 entity 생성
-        scheduleMap.forEach((key, value) -> addList.add(new Schedule(key,value,student)));
-        scheduleDataJpa.saveAll(addList);//새로운 시간표 추가
-        scheduleDataJpa.deleteAll(deleteList);// 파라미터와 일치 하지 않는 기존 시간표 제거.
+
+        return deleteList;
     }
+
     /**학생 수업코스 조회 후 저장*/
     public List<TodayScheduleDTO> findAllByDay(int day) {
         return scheduleRepository.findAllByDay(DayOfWeek.values()[day]);
@@ -94,5 +114,9 @@ public class ScheduleService {
 
     public ScheduleDTO findByStudentId(Long id){
        return new ScheduleDTO().listToDTO(scheduleDataJpa.findByStudentId(id));
+    }
+
+    public Boolean hasTodaySchedule(Long id, Integer today) {
+        return scheduleDataJpa.findByStudentIdAndDayOfWeek(id, DayOfWeek.values()[today]).isPresent();
     }
 }

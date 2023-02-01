@@ -28,12 +28,17 @@ public class Schedule extends BaseEntity {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    public Schedule (int day, String time, Student student) {
+    private void setSchedule (int day, String time, Student student) {
         this.dayOfWeek = DayOfWeek.values()[day];
         this.time = time;
         this.student = student;
     }
 
+    public static Schedule createSchedule(int day, String time, Student student) {
+        Schedule schedule = new Schedule();
+        schedule.setSchedule(day, time, student);
+        return schedule;
+    }
 
     public Schedule changeTime(String time) {
         this.time = time;

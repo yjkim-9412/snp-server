@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "TEXT_BOOK")
@@ -36,7 +38,8 @@ public class TextBook extends BaseEntity {
     @Column(name = "question_count")
     private Integer questionCount;
 
-
+    @OneToMany(mappedBy = "textBook",orphanRemoval = true)
+    private List<Question> questionList = new ArrayList<>();
 
     public void createCode() {
         if (this.id != null) {
@@ -52,5 +55,11 @@ public class TextBook extends BaseEntity {
         textBook.textBookType = textBookDTO.getTextBookType();
         textBook.numberOfCharacters = textBookDTO.getNumberOfCharacters();
         return textBook;
+    }
+
+    public void ChangeTextBook(TextBookDTO textBookDTO, Category category) {
+        this.category = category;
+        this.textBookType = textBookDTO.getTextBookType();
+        this.numberOfCharacters = textBookDTO.getNumberOfCharacters();
     }
 }

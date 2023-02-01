@@ -2,6 +2,7 @@ package SNP.management.domain.service.student;
 
 import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
+import SNP.management.domain.entity.student.StudentLog;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
@@ -26,6 +27,7 @@ public class StudentServiceImp{
     private final ScheduleRepository scheduleRepository;
     private final StudyDataJpa studyDataJpa;
     private final StudyRepository studyRepository;
+    private final StudentLogService studentLogService;
 
     public StudentDTO findById(Long id) {
         return new StudentDTO(studentRepository.findById(id).orElseThrow(NullPointerException::new));
@@ -34,7 +36,6 @@ public class StudentServiceImp{
     //학생 저장 업데이트
     public StudentDTO save(StudentDTO studentDTO) {
 
-
         // 존재 학생 없을시 새로 생성
         if (studentDTO.getId() == null) {
 
@@ -42,12 +43,16 @@ public class StudentServiceImp{
             duplicate(studentDTO);
 
             //엔티티 객체 생성
-            Student student = new Student(studentDTO);
-            // 학생 스터디 체크
-            checkStudyType(studentDTO, student);
+            Student student = Student.createStudent(studentDTO);
+
+            // 학생 스터디 저장
+            saveStudyTypeToStudent(studentDTO, student);
+
             //학생저장후 DTO setId
             studentDTO.setId(studentRepository.save(student));
 
+            //로그 저장
+            studentLogService.saveFirstLog(student);
         }else {//기존 학생 유무 검증
             update(studentDTO);
         }
@@ -58,10 +63,13 @@ public class StudentServiceImp{
     public void update(StudentDTO studentDTO) {
         Student findByStudent = studentRepository.findById(studentDTO.getId()).orElseThrow(NullPointerException::new);
 
-        checkStudyType(studentDTO, findByStudent);
+        saveStudyTypeToStudent(studentDTO, findByStudent);
 
         //학생 업데이트
         studentDTO.setId(studentRepository.save(findByStudent));
+
+        //로그 업데이트
+        studentLogService.StudentLogUpdater(studentDTO, findByStudent);
     }
 
     public List<StudentDTO> findByAll() {
@@ -86,9 +94,9 @@ public class StudentServiceImp{
      * null 아닐시 해당수업 코스 저장 1단계 저장
      * @param studentDTO getStudyType StudyType 객체 조회
      */
-    private void checkStudyType(StudentDTO studentDTO, Student student) {
+    private void saveStudyTypeToStudent(StudentDTO studentDTO, Student student) {
         if (studentDTO.getStudyType() != null) {
-            student.setStudy(studyRepository.getFirstStudy(studentDTO.getStudyType()));
+            student.setStudyToStudent(studyRepository.getFirstStudy(studentDTO.getStudyType()));
         }
     }
 

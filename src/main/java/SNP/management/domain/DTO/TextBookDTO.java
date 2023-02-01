@@ -19,10 +19,10 @@ public class TextBookDTO {
     private Integer categoryId;
     private String categoryName;
 
-    public TextBookDTO(TextBookType textBookType, String name, Integer numberOfCharacters, String categoryName) {
+    public TextBookDTO(TextBookType textBookType, String name, Integer numberOfCharacters, Integer categoryId) {
         this.textBookType = textBookType;
         this.name = name;
         this.numberOfCharacters = numberOfCharacters;
-        this.categoryName = categoryName;
+        this.categoryId= categoryId;
     }
 }

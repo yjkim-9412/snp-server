@@ -26,32 +26,26 @@ public class TeacherRepository {
 
     public Long save(TeacherDTO teacherDTO) {
         if (teacherDTO.getId() == null) {
-            Teacher save = new Teacher().save(teacherDTO);
+            Teacher save = Teacher.createTeacher(teacherDTO);
             em.persist(save);
             return save.getId();
-        }
-           em.persist( findById(teacherDTO.getId()).orElseThrow(NullPointerException::new));
-        return teacherDTO.getId();
+        } else {
+            throw new IllegalArgumentException("duplicate teacherId");}
     }
 
 
     public Optional<Teacher> findById(Long id) {
-        Teacher findTeacher = em.find(Teacher.class, id);
-        return Optional.ofNullable(findTeacher);
+        return Optional.ofNullable(em.find(Teacher.class, id));
     }
 
 
     public void update(TeacherDTO teacherDTO) {
-
-        Optional<Teacher> findTeacher = findById(teacherDTO.getId());
-        Teacher teacher = findTeacher.orElseThrow(IllegalAccessError::new);
-        teacher.save(teacherDTO);
-        em.persist(teacher);
+        Teacher teacher = findById(teacherDTO.getId()).orElseThrow(IllegalArgumentException::new);
+        teacher.update(teacherDTO);
     }
 
     public void delete(Long id) {
-        Optional<Teacher> findTeacher = findById(id);
-        em.remove(findTeacher.orElseThrow(IllegalAccessError::new));
+        em.remove(findById(id).orElseThrow(IllegalArgumentException::new));
     }
 
     public Optional<Teacher> findByLogin(TeacherDTO teacherDTO) {

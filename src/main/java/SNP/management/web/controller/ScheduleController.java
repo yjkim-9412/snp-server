@@ -31,7 +31,7 @@ public class ScheduleController {
             return mapErrors;
         }
 
-        scheduleService.addSchedule(scheduleDTO, id);
+        scheduleService.saveSchedule(scheduleDTO, id);
         return null;
     }
 

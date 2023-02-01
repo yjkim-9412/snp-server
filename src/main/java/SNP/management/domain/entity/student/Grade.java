@@ -21,15 +21,13 @@ public class Grade {
     @Column(nullable = true)
     private int gradeLv;
 
-    public Grade(GradeType grade, int gradeLv) {
-        this.grade = grade;
-        this.gradeLv = gradeLv;
 
-    }
-
-    public Grade setGrade(StudentDTO studentDTO) {
+    private Grade (StudentDTO studentDTO) {
         this.grade= studentDTO.getGrade();
         this.gradeLv = studentDTO.getGradeLv();
-        return this;
+    }
+
+    public static Grade createGrade(StudentDTO studentDTO) {
+        return new Grade(studentDTO);
     }
 }

@@ -2,12 +2,10 @@ package SNP.management.domain.DTO;
 
 import SNP.management.web.form.teacher.TeacherLoginForm;
 import SNP.management.domain.entity.Teacher;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class TeacherDTO {
     private Long id;
 

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 
 @Repository
-
 public class TextBookRepository {
 
     private final EntityManager em;
@@ -18,4 +17,6 @@ public class TextBookRepository {
         this.queryFactory = new JPAQueryFactory(em);
         this.em = em;
     }
+
+
 }

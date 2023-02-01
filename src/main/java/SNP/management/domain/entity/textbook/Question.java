@@ -30,7 +30,7 @@ public class Question extends BaseEntity {
 
     private boolean pattern;
 
-    public static Question saveQuestion(QuestionDTO questionDTO, TextBook textBook){
+    public static Question createQuestion(QuestionDTO questionDTO, TextBook textBook){
         Question question = new Question();
         question.setQuestion(questionDTO, textBook);
         return question;
@@ -40,6 +40,8 @@ public class Question extends BaseEntity {
         this.number =  questionDTO.getNumber() != null?  questionDTO.getNumber() : 0;
         this.pattern = questionDTO.getPattern();
         this.questionType = questionDTO.getQuestionType();
+        this.textBook.getQuestionList().add(this);
+
     }
 
 }

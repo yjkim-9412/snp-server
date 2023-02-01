@@ -29,23 +29,17 @@ public class ScheduleRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-
-
     public List<Schedule> findClassesByStudentId(Long id ) {
         log.info("before id = {}",id);
 
-        List<Schedule> studentClassList = queryFactory
+        return queryFactory
                 .select(schedule)
                 .from(schedule)
                 .innerJoin(schedule.student, student)
                 .where(schedule.student.id.eq(id))
                 .fetch();
-        return studentClassList;
     }
 
-    public void saveSchedule(Schedule schedule) {
-        em.persist(schedule);
-    }
     public List<Schedule> findAllLast() {
         LocalDate date = LocalDate.now();
         DayOfWeek dayOfWeek = DayOfWeek.values()[date.getDayOfWeek().getValue()];

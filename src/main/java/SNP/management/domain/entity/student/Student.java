@@ -58,7 +58,7 @@ public class Student extends BaseEntity {
     private Boolean registration;
 
 
-    public Student(StudentDTO studentDTO) {
+    private void setStudent(StudentDTO studentDTO) {
         this.id = studentDTO.getId();
         this.name = studentDTO.getName();
         this.age = studentDTO.getAge();
@@ -70,15 +70,26 @@ public class Student extends BaseEntity {
         this.gender = studentDTO.getGender();
         this.studyType = studentDTO.getStudyType();
         this.address = studentDTO.getAddress();
-        this.grade.setGrade(studentDTO);
-        this.skill.setSkill(studentDTO);
+        this.grade = Grade.createGrade(studentDTO);
+        this.skill = Skill.createSkill(studentDTO);
         this.registration = studentDTO.getRegistration();
         this.date = studentDTO.getDate();
         this.studyCount = studentDTO.getStudyCount() == null ? 0
                 : studentDTO.getStudyCount();
     }
 
-    public void setStudy(Study study) {
+    public static Student createStudent(StudentDTO studentDTO) {
+        Student student = new Student();
+        student.setStudent(studentDTO);
+        return student;
+    }
+
+    public void setStudyToStudent(Study study) {
         this.study = study;
     }
+
+    public boolean hasStudy(){
+        return this.getStudy() != null;
+    }
+
 }

@@ -26,11 +26,13 @@ public class Skill {
         this.readLv = readLv;
         this.intLv = intLv;
     }
-
-    public Skill setSkill(StudentDTO studentDTO) {
+    private Skill (StudentDTO studentDTO) {
         this.speed = studentDTO.getSpeed();
         this.readLv = studentDTO.getReadLv();
         this.intLv = studentDTO.getIntLv();
-        return this;
+    }
+
+    public static Skill createSkill(StudentDTO studentDTO) {
+        return new Skill(studentDTO);
     }
 }

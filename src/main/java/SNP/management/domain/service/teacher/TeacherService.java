@@ -18,9 +18,7 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
 
     public TeacherDTO findByLogin(TeacherDTO teacherDTO) {
-
-        Optional<Teacher> findTeacher = teacherRepository.findByLogin(teacherDTO);
-        Teacher teacher = findTeacher.orElseThrow(LoginException::new);
+        Teacher teacher = teacherRepository.findByLogin(teacherDTO).orElseThrow(LoginException::new);
         teacherDTO.teacherToDTO(teacher);
         return teacherDTO;
     }

@@ -31,20 +31,13 @@ public class StudentRepository {
 
     public Long save(Student student) {
         em.persist(student);
-        em.flush();
         return student.getId();
     }
+
     public Optional<Student> findById(Long id) {
         return Optional.ofNullable(em.find(Student.class, id));
     }
 
-    public List<Student> findAllByName(String name) {
-        List<Student> students = queryFactory
-                .selectFrom(student)
-                .where(student.name.eq(name))
-                .fetch();
-        return students;
-    }
 
     public Optional<Student> findByEmail(String email) {
         Student student = queryFactory.selectFrom(QStudent.student)
@@ -76,10 +69,6 @@ public class StudentRepository {
             listDTO.add(studentDTO);
         }
         return listDTO;
-    }
-
-    public void delete(Student student) {
-        em.remove(student);
     }
 
 }

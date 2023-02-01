@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -25,27 +24,37 @@ public class TextBookService {
     private final CategoryDataJpa categoryDataJpa;
     private final QuestionService questionService;
 
-    public Long saveTextBookAndQuestion(TextBookDTO textBookDTO, List<QuestionDTO> QuestionDTOList) {
-        Category category = categoryDataJpa.findByName(textBookDTO.getCategoryName()).orElseThrow(NullPointerException::new);
+    public Long saveWithQuestion(TextBookDTO textBookDTO, List<QuestionDTO> QuestionDTOList) {
 
-        TextBook textBook = TextBook.createTextBook(textBookDTO, category);
-
-        textBookDataJpa.save(textBook);// 저장후 id값 사용위해 객체 생성
-
-        textBook.createCode();// index 를 위한 교재 코드 생성
+        TextBook textBook = save(textBookDTO);
 
         questionService.saveAll(QuestionDTOList, textBook); // 교재에 해당하는 문제 저장
+
         return textBook.getId();
     }
 
-    public Long saveTextBook(TextBookDTO textBookDTO) {
-        Category category = categoryDataJpa.findByName(textBookDTO.getCategoryName()).orElseThrow(NullPointerException::new);
+    /**
+     * 카테고리 조회 및 추가후 TextBook 저장
+     * @param textBookDTO 카테고리명 textBookDTO.getCategoryName()
+     * @return TextBook
+     */
+    public TextBook save(TextBookDTO textBookDTO) {
+        Category category = categoryDataJpa.findById(textBookDTO.getCategoryId())
+                .orElseThrow(IllegalArgumentException::new);
 
         TextBook textBook = TextBook.createTextBook(textBookDTO, category);
 
         textBookDataJpa.save(textBook);
 
-        return textBook.getId();
+        return textBook;
+    }
+
+    public void update(TextBookDTO textBookDTO) {
+        TextBook textBookFindById = textBookDataJpa.findById(textBookDTO.getId())
+                .orElseThrow(IllegalArgumentException::new);
+
+        textBookFindById.ChangeTextBook(textBookDTO,
+                categoryDataJpa.findById(textBookDTO.getCategoryId()).orElseThrow(IllegalArgumentException::new));
     }
 
 
