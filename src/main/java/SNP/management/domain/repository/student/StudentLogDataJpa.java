@@ -9,5 +9,4 @@ import java.util.Optional;
 public interface StudentLogDataJpa extends JpaRepository<StudentLog,Long> {
 
 
-
 }

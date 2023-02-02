@@ -11,5 +11,7 @@ public interface TextBookDataJpa extends JpaRepository<TextBook, Long> {
     @Query("SELECT t FROM TextBook t JOIN FETCH t.questionList")
     public Optional<TextBook> findByIdWithQuestion(Long id);
 
+    public Optional<TextBook> findByCode(String code);
+
 
 }

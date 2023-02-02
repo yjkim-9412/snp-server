@@ -6,6 +6,7 @@ import SNP.management.domain.entity.student.StudentLog;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
+import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentRepository;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +24,12 @@ import java.util.List;
 public class StudentServiceImp{
 
     private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
-    private final ScheduleRepository scheduleRepository;
-    private final StudyDataJpa studyDataJpa;
+    private final StudentDataJpa studentDataJpa;
     private final StudyRepository studyRepository;
     private final StudentLogService studentLogService;
 
     public StudentDTO findById(Long id) {
-        return new StudentDTO(studentRepository.findById(id).orElseThrow(NullPointerException::new));
+        return new StudentDTO(getStudentById(id));
     }
 
     //학생 저장 업데이트
@@ -61,7 +60,7 @@ public class StudentServiceImp{
     }
 
     public void update(StudentDTO studentDTO) {
-        Student findByStudent = studentRepository.findById(studentDTO.getId()).orElseThrow(NullPointerException::new);
+        Student findByStudent = getStudentById(studentDTO.getId());
 
         saveStudyTypeToStudent(studentDTO, findByStudent);
 
@@ -98,6 +97,15 @@ public class StudentServiceImp{
         if (studentDTO.getStudyType() != null) {
             student.setStudyToStudent(studyRepository.getFirstStudy(studentDTO.getStudyType()));
         }
+    }
+
+    /**
+     * Optional 처리 후 Student return
+     * @param id 학생Id
+     * @return Student
+     */
+    public Student getStudentById(Long id) {
+        return  studentDataJpa.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 
 

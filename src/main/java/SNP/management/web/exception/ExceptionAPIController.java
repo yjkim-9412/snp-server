@@ -1,5 +1,8 @@
 package SNP.management.web.exception;
 
+import SNP.management.domain.exceptionlist.LoginException;
+import SNP.management.domain.exceptionlist.ScheduleException;
+import SNP.management.domain.exceptionlist.SessionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -15,6 +18,12 @@ public class ExceptionAPIController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
     public ErrorResultForm ErrorIllegalArgument(IllegalArgumentException e) {
+        log.error("[exceptionHandler]", e);
+        return new ErrorResultForm("BAD_TYPE", e.getMessage());
+    }
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler
+    public ErrorResultForm IllegalSchedule(ScheduleException e) {
         log.error("[exceptionHandler]", e);
         return new ErrorResultForm("BAD_TYPE", e.getMessage());
     }

@@ -1,5 +1,6 @@
 package SNP.management.domain.service.textbook;
 
+import SNP.management.domain.DTO.LogDTO;
 import SNP.management.domain.DTO.QuestionDTO;
 import SNP.management.domain.DTO.TextBookDTO;
 import SNP.management.domain.entity.Category;
@@ -19,18 +20,18 @@ import java.util.List;
 @Transactional
 public class TextBookService {
 
-    private final TextBookRepository textBookRepository;
     private final TextBookDataJpa textBookDataJpa;
     private final CategoryDataJpa categoryDataJpa;
     private final QuestionService questionService;
 
-    public Long saveWithQuestion(TextBookDTO textBookDTO, List<QuestionDTO> QuestionDTOList) {
+    public TextBookDTO saveWithQuestion(TextBookDTO textBookDTO, List<QuestionDTO> questionDTOList) {
 
         TextBook textBook = save(textBookDTO);
-
-        questionService.saveAll(QuestionDTOList, textBook); // 교재에 해당하는 문제 저장
-
-        return textBook.getId();
+        textBook.createCode();
+        questionService.saveAll(questionDTOList, textBook); // 교재에 해당하는 문제 저장
+        textBook.createQuestionCount(questionDTOList.size());
+        textBookDTO.changeTextBookDTO(textBook);
+        return textBookDTO;
     }
 
     /**
@@ -58,5 +59,12 @@ public class TextBookService {
     }
 
 
+    public TextBook getTextBookByCode(String code) {
+        return textBookDataJpa.findByCode(code).orElseThrow(IllegalArgumentException::new);
+    }
+
+    public TextBookDTO getTextBookByCodeDTOForm(String code) {
+        return TextBookDTO.createDTO(textBookDataJpa.findByCode(code).orElseThrow(IllegalArgumentException::new));
+    }
 
 }

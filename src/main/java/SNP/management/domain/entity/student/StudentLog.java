@@ -31,9 +31,6 @@ public class StudentLog extends BaseEntity {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "schedules_id")
-    private Schedule schedule;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "study_id")
@@ -66,9 +63,8 @@ public class StudentLog extends BaseEntity {
     @OneToMany(mappedBy = "studentLog")
     private List<QuestionLog> questionLog = new ArrayList<>();
 
-    private StudentLog(Student student, Schedule schedule, Study study,TextBook textBook, LogDTO logDTO ) {
+    private StudentLog(Student student, Study study,TextBook textBook, LogDTO logDTO ) {
         this.student = student;
-        this.schedule = schedule;
         this.study = study;
         this.concentration = logDTO.getConcentration();
         this.concentrationAnswer = logDTO.getConcentrationAnswer();
@@ -80,6 +76,8 @@ public class StudentLog extends BaseEntity {
         this.studyType = student.getStudyType();
         this.studyCount = logDTO.getStudyCount() == null? 0 : logDTO.getStudyCount();
         this.textBook = textBook;
+        this.processingTime = logDTO.getProcessingTime();
+        this.readCount = logDTO.getReadCount();
     }
     private StudentLog(Student student) {
         this.student = student;
@@ -88,13 +86,16 @@ public class StudentLog extends BaseEntity {
         this.studyCount = 0;
 
     }
+
     public void changeStudyCount(Integer studyCount){
         this.studyCount = studyCount;
     }
 
-    public static StudentLog createStudentLog(Student student, Schedule schedule, Study study, TextBook textBook , LogDTO logDTO ){
-        return new StudentLog(student, schedule, study,textBook, logDTO);
+    public static StudentLog createStudentLog(Student student, Study study, TextBook textBook , LogDTO logDTO ){
+        return new StudentLog(student, study,textBook, logDTO);
     }
+
+
     public static StudentLog createFirstStudentLog(Student student){
         return new StudentLog(student);
     }

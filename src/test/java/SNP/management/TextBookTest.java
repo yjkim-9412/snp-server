@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -69,20 +70,22 @@ public class TextBookTest {
     @Test
     void saveTextBookAndQuestion() {
         //given
-        Integer categoryId = 6;
+        Integer categoryId = 9;
 
-        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300,categoryId);
+        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "과학의 발상", 1000,categoryId);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-
-        boolean testBoolean = true;
-        for (int i = 0; i < 10; i++) {
-            questionDTOList.add(new QuestionDTO(QuestionType.ANALYTICAL,i, testBoolean));
+        QuestionType[] questionType = {QuestionType.CREATIVITY,QuestionType.CRITICISM,QuestionType.REASONING,
+                QuestionType.ANALYTICAL, QuestionType.CRITICISM, QuestionType.LOGICAL, QuestionType.CREATIVITY,
+                QuestionType.UNDERSTANDING, QuestionType.CREATIVITY, QuestionType.LOGICAL,};
+        boolean testBoolean = false;
+        for (int i = 1; i <= 10; i++) {
+            questionDTOList.add(new QuestionDTO(questionType[i-1], i, testBoolean));
             testBoolean = !testBoolean;
         }
 
         //when
-        Long id = textBookService.saveWithQuestion(textBookDTO, questionDTOList);
-        List<Question> resultList = questionDataJpa.findByTextBookId(id);
+        TextBookDTO textBookDTOResult = textBookService.saveWithQuestion(textBookDTO, questionDTOList);
+        List<Question> resultList = questionDataJpa.findByTextBookId(textBookDTOResult.getId());
 
         //then
         assertThat(resultList.size()).isEqualTo(questionDTOList.size());
@@ -144,7 +147,8 @@ public class TextBookTest {
             questionDTOList.add(new QuestionDTO(QuestionType.ANALYTICAL,i, testBoolean));
             testBoolean = !testBoolean;
         }
-        Long id = textBookService.saveWithQuestion(textBookDTO, questionDTOList);
+        TextBookDTO textBookDTOResult = textBookService.saveWithQuestion(textBookDTO, questionDTOList);
+        Long id = textBookDTOResult.getId();
         em.flush();
         em.clear();
 

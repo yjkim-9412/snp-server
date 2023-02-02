@@ -1,6 +1,5 @@
 package SNP.management;
 
-import SNP.management.web.exception.SessionException;
 import SNP.management.web.resolver.SessionConst;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @EnableJpaAuditing

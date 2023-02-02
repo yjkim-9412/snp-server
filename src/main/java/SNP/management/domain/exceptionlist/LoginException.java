@@ -1,4 +1,4 @@
-package SNP.management.web.exception;
+package SNP.management.domain.exceptionlist;
 
 public class LoginException extends NullPointerException{
     public LoginException() {

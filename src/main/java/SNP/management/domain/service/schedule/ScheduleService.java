@@ -8,6 +8,7 @@ import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.repository.schedule.ScheduleDataJpa;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
+import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentRepository;
 import SNP.management.domain.service.student.StudentServiceImp;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +30,13 @@ import java.util.Map;
  */
 public class ScheduleService {
 
-    private final StudentServiceImp studentService;
-    private final StudentRepository studentRepository;
     private final ScheduleRepository scheduleRepository;
     private final ScheduleDataJpa scheduleDataJpa;
 
+    private final StudentDataJpa studentDataJpa;
+
     public ScheduleDTO getSchedule(Long id) {
-        Student student = studentRepository.findById(id).orElseThrow(NullPointerException::new);
+        Student student = studentDataJpa.findById(id).orElseThrow(IllegalArgumentException::new);
         return new ScheduleDTO().listToDTO(scheduleRepository.findClassesByStudentId(student.getId()));
     }
     public void createScheduleList(Student student, ScheduleDTO scheduleDTO) {
@@ -47,7 +48,7 @@ public class ScheduleService {
     }
 
     public void saveSchedule(ScheduleDTO scheduleDTO, Long id) {
-        Student student = studentRepository.findById(id).orElseThrow(NullPointerException::new);
+        Student student = studentDataJpa.findById(id).orElseThrow(IllegalArgumentException::new);
 
         //해당학생 시간표 조회
         List<Schedule> scheduleList = scheduleRepository.findClassesByStudentId(student.getId());

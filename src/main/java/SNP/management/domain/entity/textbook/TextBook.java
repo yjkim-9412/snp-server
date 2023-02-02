@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "TEXT_BOOK")
+@Table(name = "TEXT_BOOK", indexes = @Index(name = "idx_code", columnList = "code"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Slf4j
 public class TextBook extends BaseEntity {
@@ -28,6 +28,7 @@ public class TextBook extends BaseEntity {
     private Category category;
 
     private String code;
+    private String name;
 
     @Column(name = "text_book_type")
     @Enumerated(EnumType.STRING)
@@ -54,6 +55,7 @@ public class TextBook extends BaseEntity {
         textBook.category = category;
         textBook.textBookType = textBookDTO.getTextBookType();
         textBook.numberOfCharacters = textBookDTO.getNumberOfCharacters();
+        textBook.name = textBookDTO.getName();
         return textBook;
     }
 
@@ -61,5 +63,8 @@ public class TextBook extends BaseEntity {
         this.category = category;
         this.textBookType = textBookDTO.getTextBookType();
         this.numberOfCharacters = textBookDTO.getNumberOfCharacters();
+    }
+    public void createQuestionCount(Integer questionSize){
+        this.questionCount = questionSize;
     }
 }
