@@ -1,5 +1,7 @@
 package SNP.management.domain.repository.textbook;
 
+import SNP.management.domain.DTO.QTextBookDTO;
+import SNP.management.domain.DTO.TextBookDTO;
 import SNP.management.domain.entity.textbook.QQuestion;
 import SNP.management.domain.entity.textbook.QTextBook;
 import SNP.management.domain.entity.textbook.TextBook;
@@ -26,7 +28,12 @@ public class TextBookRepository {
         this.em = em;
     }
 
-
+    public List<TextBookDTO> findAllDTOType() {
+        return queryFactory.select(new QTextBookDTO(textBook.id, textBook.code, textBook.textBookType, textBook.name,
+                        textBook.numberOfCharacters, textBook.questionCount, textBook.category.id, textBook.category.name))
+                .from(textBook)
+                .fetch();
+    }
 
 
 

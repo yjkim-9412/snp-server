@@ -26,6 +26,15 @@ public class QuestionService {
         }
         questionDataJpa.saveAll(questions);
     }
+    
+    public List<QuestionDTO> findAllByTextBookId(Long textBookId) {
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+        List<Question> questionList = questionDataJpa.findByTextBookId(textBookId);
+        for (Question question : questionList) {
+            questionDTOList.add(QuestionDTO.createQuestionDTO(question));
+        }
+        return questionDTOList;
+    }
 
 
 

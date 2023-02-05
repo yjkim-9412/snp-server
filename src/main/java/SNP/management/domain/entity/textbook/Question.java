@@ -2,6 +2,7 @@ package SNP.management.domain.entity.textbook;
 
 import SNP.management.domain.DTO.QuestionDTO;
 import SNP.management.domain.entity.BaseEntity;
+import SNP.management.domain.enumlist.AnswerType;
 import SNP.management.domain.enumlist.QuestionType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,9 +27,11 @@ public class Question extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
 
-    private int number;
+    private Integer number;
 
-    private boolean pattern;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "answer_type")
+    private AnswerType answerType;
 
     public static Question createQuestion(QuestionDTO questionDTO, TextBook textBook){
         Question question = new Question();
@@ -38,10 +41,17 @@ public class Question extends BaseEntity {
     private void setQuestion(QuestionDTO questionDTO, TextBook textBook){
         this.textBook = textBook;
         this.number =  questionDTO.getNumber() != null?  questionDTO.getNumber() : 0;
-        this.pattern = questionDTO.getPattern();
+        this.answerType = questionDTO.getAnswerType();
         this.questionType = questionDTO.getQuestionType();
         this.textBook.getQuestionList().add(this);
 
+    }
+
+    public void changeQuestion(QuestionDTO questionDTO, TextBook textBook) {
+        this.textBook = textBook;
+        this.questionType = questionDTO.getQuestionType();
+        this.number = questionDTO.getNumber();
+        this.answerType = questionDTO.getAnswerType();
     }
 
 }

@@ -40,7 +40,9 @@ public class LogDTO {
     private Map<Integer, Integer> answerMap;
 
     public void eyeBallCalculator() {
-        this.rapidEyeball *= EYE_BALL_A_FULL + (EYE_BALL_A * eyeBallCount.getCount());
+        if (this.rapidEyeball != null) {
+            this.rapidEyeball *= EYE_BALL_A_FULL + (EYE_BALL_A * eyeBallCount.getCount());}
+        else {this.rapidEyeball = 0;}
     }
 
     public LogDTO(Long studentId, String studyDetail, Integer studyCount, Integer concentration, Boolean concentrationAnswer, Integer rapidEyeball, EyeBall eyeBallCount, Integer figureOne, Integer figureTwo, String textBookCode, Double intelligibility, Integer processingTime, Integer readCount, String memo, StudyType studyType, Integer dayOfWeek, Map<Integer, Integer> answerMap) {

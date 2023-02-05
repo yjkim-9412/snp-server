@@ -13,12 +13,10 @@ import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.student.QuestionLogDataJpa;
 import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentLogDataJpa;
-import SNP.management.domain.repository.student.StudentRepository;
 import SNP.management.domain.repository.textbook.QuestionDataJpa;
 import SNP.management.domain.repository.textbook.TextBookDataJpa;
 import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.exceptionlist.ScheduleException;
-import SNP.management.domain.service.textbook.TextBookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -81,6 +79,7 @@ public class StudentLogService {
         StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLog(student, study, textBook, logDTO));
 
         questionLogSaveAll(logDTO, textBook, studentLog);
+        student.changeStudyStatus(studentLog);
     }
 
     private void questionLogSaveAll(LogDTO logDTO, TextBook textBook, StudentLog studentLog) {

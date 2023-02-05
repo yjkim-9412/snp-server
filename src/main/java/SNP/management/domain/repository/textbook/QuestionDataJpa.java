@@ -12,4 +12,6 @@ import java.util.List;
 public interface QuestionDataJpa extends JpaRepository<Question, Long> {
     public List<Question> findByTextBookId(Long id);
 
+    public List<Question> findByTextBookIdOrderByNumberAsc(Long id);
+
 }

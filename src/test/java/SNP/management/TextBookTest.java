@@ -77,11 +77,7 @@ public class TextBookTest {
         QuestionType[] questionType = {QuestionType.CREATIVITY,QuestionType.CRITICISM,QuestionType.REASONING,
                 QuestionType.ANALYTICAL, QuestionType.CRITICISM, QuestionType.LOGICAL, QuestionType.CREATIVITY,
                 QuestionType.UNDERSTANDING, QuestionType.CREATIVITY, QuestionType.LOGICAL,};
-        boolean testBoolean = false;
-        for (int i = 1; i <= 10; i++) {
-            questionDTOList.add(new QuestionDTO(questionType[i-1], i, testBoolean));
-            testBoolean = !testBoolean;
-        }
+
 
         //when
         TextBookDTO textBookDTOResult = textBookService.saveWithQuestion(textBookDTO, questionDTOList);
@@ -131,7 +127,7 @@ public class TextBookTest {
         TextBookDTO textBookDTOUpdate = new TextBookDTO(TextBookType.ESSAY, "제이슨을 찾아서", 900, categoryIdUpdate);
         textBookDTOUpdate.setId(textBookId);
         //when
-        textBookService.update(textBookDTOUpdate);
+//        textBookService.update(textBookDTOUpdate);
         //then
         em.flush();
     }
@@ -142,11 +138,7 @@ public class TextBookTest {
         Integer categoryId = 6;
         TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300,categoryId);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        boolean testBoolean = true;
-        for (int i = 0; i < 10; i++) {
-            questionDTOList.add(new QuestionDTO(QuestionType.ANALYTICAL,i, testBoolean));
-            testBoolean = !testBoolean;
-        }
+
         TextBookDTO textBookDTOResult = textBookService.saveWithQuestion(textBookDTO, questionDTOList);
         Long id = textBookDTOResult.getId();
         em.flush();

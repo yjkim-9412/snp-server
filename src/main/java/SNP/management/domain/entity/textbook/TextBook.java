@@ -61,10 +61,14 @@ public class TextBook extends BaseEntity {
 
     public void ChangeTextBook(TextBookDTO textBookDTO, Category category) {
         this.category = category;
+        this.name = textBookDTO.getName();
         this.textBookType = textBookDTO.getTextBookType();
         this.numberOfCharacters = textBookDTO.getNumberOfCharacters();
+        this.questionCount = textBookDTO.getQuestionCount();
     }
     public void createQuestionCount(Integer questionSize){
         this.questionCount = questionSize;
     }
+
+
 }
