@@ -20,6 +20,7 @@
     "@types/react-dom": "^18.0.10",
     "@types/react-redux": "^7.1.25",
     "@types/validator": "^13.7.10",
+    "autosuggest-highlight": "^3.3.4",
     "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
     "dayjs": "^1.11.7",
@@ -64,5 +65,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/autosuggest-highlight": "^3.2.0"
   }
 }

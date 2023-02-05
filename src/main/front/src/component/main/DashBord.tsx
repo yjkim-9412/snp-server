@@ -9,18 +9,12 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import {Button, Tooltip} from '@mui/material';
 import {Outlet, useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import CalendarMain from '../today/CalendarMain';
 import MainListItems from "./ListItem";
 
 
@@ -131,18 +125,21 @@ const DashboardContent = () => {
                             SNP
                         </Typography>
                         <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                            <Button href="/student/register" sx={{my: 2, color: 'white', display: 'block'}}>
+                            <Tooltip title="신규학생 등록">
+                            <Button onClick={()=>{navigate("/student/register" )}} sx={{my: 2, color: 'white', display: 'block'}}>
                                 신규학생 등록
                             </Button>
-                            <Button href="/" sx={{my: 2, color: 'white', display: 'block'}}>
-                                수업자료 등록
+                            </Tooltip>
+                            <Tooltip title="수업교재">
+                            <Button onClick={()=>{navigate("/textbook")}} sx={{my: 2, color: 'white', display: 'block'}}>
+                                수업교재
                             </Button>
-                            <Button href="/" sx={{my: 2, color: 'white', display: 'block'}}>
+                            </Tooltip>
+                            <Tooltip title="도서등록 조회">
+                            <Button onClick={()=>{navigate("/main")}} sx={{my: 2, color: 'white', display: 'block'}}>
                                 도서등록 조회
                             </Button>
-                            <Button href="/" sx={{my: 2, color: 'white', display: 'block'}}>
-                                수업교재 코드 등록
-                            </Button>
+                            </Tooltip>
 
                         </Box>
                         <Box sx={{flexGrow: 0}}>

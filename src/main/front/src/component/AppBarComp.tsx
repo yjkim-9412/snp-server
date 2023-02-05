@@ -13,13 +13,14 @@ const AppBarComp:React.FC<TypographyProps> = ({typography}) =>{
     return(
         <AppBar
             color="default"
-            elevation={0}
+            elevation={1}
             sx={{
                 position: 'relative',
+                marginBottom:1
             }}
         >
             <Toolbar>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h6" >
                     {typography}
                 </Typography>
             </Toolbar>

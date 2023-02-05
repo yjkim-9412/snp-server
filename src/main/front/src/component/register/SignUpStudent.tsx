@@ -53,16 +53,16 @@ export default function SignUpStudent() {
     const [submitError, setSubmitError] = useState<string>('');
     const [ageError, setAgeError] = useState<boolean>(false);
     const [fieldError, setFieldError] = useState<StudentType>({
-        "name": '', "age": '', "birth": '', "phone": '', 'email': '', 'parentName': '',
-        'parentPhone': '', 'gender': '', 'studyType': '', 'grade': '', 'gradeLv': '',
-        'city': '', 'street': '',
-        'speed': '0', 'readLv': '0', 'intLv': '0'
+        name: '', age: '', birth: '', phone: '', email: '', parentName: '',
+        parentPhone: '', gender: '', studyType: '', grade: '', gradeLv: '',
+        city: '', street: '',
+        speed: '0', readLv: '0', intLv: '0'
     });
     const [studentSaveForm, setStudentSaveForm] = useState({
-        "name": '', "age": '', "birth": '', "phone": '', 'email': '', 'parentName': '',
-        'parentPhone': '', 'gender': '', 'studyType': '', 'grade': '', 'gradeLv': '',
-        'address':'', 'registration': 'false',
-        'speed': '0', 'readLv': '0', 'intLv': '0'
+        name: '', age: '', birth: '', phone: '', email: '', parentName: '',
+        parentPhone: '', gender: '', studyType: '', grade: '', gradeLv: '',
+        address:'', registration: 'false',
+        speed: '0', readLv: '0', intLv: '0'
     });
 
     /**성별 onClick */

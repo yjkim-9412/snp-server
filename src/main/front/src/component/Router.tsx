@@ -6,6 +6,7 @@ import Dashboard from './main/DashBord';
 import CalendarMain from "./today/CalendarMain";
 import Info from "./student/Info";
 import StudentList from "./student/StudentList";
+import TextBook from "./textbook/TextBook";
 
 interface ChildLogin {
     isLoggedIn: Boolean,
@@ -25,6 +26,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/main" element={<CalendarMain/>}/>
                     <Route path="/students/info/:id" element={<Info/>}/>
                     <Route path="/students" element={<StudentList/>}/>
+                    <Route path="/textbook" element={<TextBook/>}/>
                 </Route>
                 <Route path="/login" element={<Auth  />}/>
                 <Route path="/student/register" element={<StudentReCard/>}/>
