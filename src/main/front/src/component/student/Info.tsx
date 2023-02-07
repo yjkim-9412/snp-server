@@ -23,6 +23,8 @@ import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import Schedule from "./Schedule";
 import AppBarComp from "../AppBarComp";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {StudentType} from "../../interface/StudentFieldType";
 
 
 const FormHelperTexts = styled(FormHelperText)`
@@ -41,37 +43,58 @@ const TextFields = styled(TextField)`
 }
 `;
 
-type StudentType = {
-    [student: string]: string;
-}
+
 
 const theme = createTheme();
+type InfoPropsType = {
+    idProps?:string
+    studentInfoProps?:StudentType
+}
 
-export default function Info() {
+const Info:React.FC<InfoPropsType> = ({idProps,studentInfoProps}) => {
     const navigate = useNavigate();
     const {id} = useParams();
+    const colorType = ['green', 'red'];
+    const [color, setColor] = useState(colorType[0]);
+    const [isLoading, setIsLoading] = useState(false);
     const [submitError, setSubmitError] = useState<string>('');
     const [ageError, setAgeError] = useState<boolean>(false);
-    const [fieldError, setFieldError] = useState<StudentType>({
-        "name": '', "age": '', "birth": '', "phone": '', 'email': '', 'parentName': '',
-        'parentPhone': '', 'gender': '', 'studyType': '', 'grade': '', 'gradeLv': '',
-        'city': '', 'street': '',
-        'speed': '0', 'readLv': '0', 'intLv': '0'
+    const [successMes, setSuccessMes] = useState('');
+    const [fieldError, setFieldError] = useState({
+        name: '', age: '', birth: '', phone: '', email: '', parentName: '',
+        parentPhone: '', gender: '', studyType: '', grade: '', gradeLv: ''
+        ,registration: 'false',address:'',id:'',date:'',
+        speed: '0', readLv: '0', intLv: '0'
     });
     const [infoForm, setInfoForm] = useState({
-        "name": '', "age": '', "birth": '', "phone": '', 'email': '', 'parentName': '',
-        'parentPhone': '', 'gender': '', 'studyType': '', 'grade': '', 'gradeLv': '',
-        'address': '', 'registration': 'false',
-        'speed': '0', 'readLv': '0', 'intLv': '0'
+        name: '', age: '', birth: '', phone: '', email: '', parentName: '',
+        parentPhone: '', gender: '', studyType: '', grade: '', gradeLv: '',
+        address:'', registration: '',
+        speed: '0', readLv: '0', intLv: '0'
     });
     const [schedule, setSchedule] = useState();
     /**학생정보 받아오기 */
     useEffect(() => {
-        axios.get(`/api/students/info/${id}`)
+        if (id !== undefined){
+            getInfo(id);
+        }else {
+            if (studentInfoProps !== undefined){
+                setInfoForm(studentInfoProps)
+            }
+        }
+    }, [])
+    const getInfo = (idValue?:string) => {
+        axios.get(`/api/students/info/${idValue}`)
             .then(res => {
                 setInfoForm(res.data);
             })
-    },[])
+            .catch(error => {
+                if (error.response.status === 401) {
+                    window.alert('로그인 세션이 만료 되었습니다.');
+                    navigate('/login')
+                }
+            })
+    }
     /**성별 onClick */
     const onClick = (e: React.MouseEvent<HTMLLabelElement, MouseEvent>, param: string) => {
         setInfoForm({...infoForm, gender: param});
@@ -103,10 +126,10 @@ export default function Info() {
         setInfoForm({...infoForm, [name]: value});
         if (value === '' || value === null) {
             setAgeError(true);
-            setFieldError({...fieldError,[name]:errorMessage});
-        }else {
+            setFieldError({...fieldError, [name]: errorMessage});
+        } else {
             setAgeError(false);
-            setFieldError({...fieldError,[name]:''});
+            setFieldError({...fieldError, [name]: ''});
         }
 
     }
@@ -116,7 +139,7 @@ export default function Info() {
         let name: string = e.target.name;
         let value: string = e.target.value
         setInfoForm({...infoForm, [name]: value});
-        setFieldError({...fieldError,[name]:''});
+        setFieldError({...fieldError, [name]: ''});
 
 
     }
@@ -133,25 +156,36 @@ export default function Info() {
     /** submit 이벤트 핸들러*/
     const onSubmitStudent = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setIsLoading(true);
         for (const entryElement of Object.entries(infoForm)) {
             if (entryElement[1] === '' || entryElement[1] === null || entryElement[1] === undefined) {
+                console.log(entryElement[0]);
                 setSubmitError("필수 값을 입력해 주세요");
                 setError(entryElement[0])
+                setIsLoading(false);
                 return;
             }
         }
-        await axios.post('/api/students/saveForm', infoForm).then((res) => {
-                navigate('/');
-            }
-        ).catch(error => console.log(error));
+        await axios.post('/api/students/saveForm', infoForm)
+            .then(()=> {
+                setSuccessMes("수정완료");
+            })
+            .catch(error => {
+                console.log(error)
+                if (error.response.status === 401){
+                    navigate('/login');
+                }
+                setSuccessMes("수정실패");
+            }).finally(() => {
+                setIsLoading(false)
+            });
     }
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
             <Grid container spacing={3}>
-                <Grid  item md={8} lg={8}>
-
+                <Grid item md={8} lg={8}>
                     <Paper
                         sx={{
                             p: 2,
@@ -203,9 +237,10 @@ export default function Info() {
                                                 <Grid container spacing={1}>
                                                     {/**수업코스*/}
                                                     <Course onChangeSelect={onChangeSelect}
-                                                            fieldErrorType={fieldError.studyType} courseProps={infoForm.studyType}/>
+                                                            fieldErrorType={fieldError.studyType}
+                                                            courseProps={infoForm.studyType}/>
                                                     {/**예비등록 여부*/}
-                                                    <RegistrationCheck onChangeSelect={onChangeSelectBoolean}/>
+                                                    <RegistrationCheck onChangeSelect={onChangeSelectBoolean} registrationProps={infoForm.registration}/>
                                                 </Grid>
                                             </Box>
                                         </Grid>
@@ -229,11 +264,12 @@ export default function Info() {
                                         </Grid>
                                         <Grid item xs={12} sm={12}>
                                             <GradeOp onChangeSelect={onChangeSelect} fieldErrorType={fieldError.grade}
-                                            gradeLvProps={infoForm.gradeLv} gradeProps={infoForm.grade}/>
+                                                     gradeLvProps={infoForm.gradeLv} gradeProps={infoForm.grade}/>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <AddressByKakao onChangeAddress={onChangeAddress}
-                                                            fieldErrorType={fieldError.city} addressProps={infoForm.address}/>
+                                                            fieldErrorType={fieldError.address}
+                                                            addressProps={infoForm.address}/>
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
                                             {/**학부모*/}
@@ -259,14 +295,18 @@ export default function Info() {
                                     </Grid>
                                     <Grid container spacing={1}>
                                         <Grid item xs={1} sm={1}>
-                                            <Button
-                                                type="submit"
-                                                fullWidth
-                                                variant="contained"
-                                                sx={{mt: 3, mb: 2}}
-                                            >
-                                                수정
-                                            </Button>
+                                                <LoadingButton
+                                                    type="submit"
+                                                    fullWidth
+                                                    variant="contained"
+                                                    sx={{mt: 1, mb: 2}}
+                                                    loading={isLoading}
+                                                >
+                                                    수정
+                                                </LoadingButton>
+                                        </Grid>
+                                        <Grid item xs={1} sm={1} sx={{float:"right"}}>
+                                            <FormHelperText sx={{marginLeft:2,marginTop: 2, color: {color}}}>{successMes}</FormHelperText>
                                         </Grid>
                                     </Grid>
                                 </FormControl>
@@ -276,9 +316,11 @@ export default function Info() {
                     </Paper>
                 </Grid>
                 <Grid item xs={12} md={4} lg={4}>
-                    <Schedule studentId={id}/>
+                    <Schedule studentId={id === undefined? idProps : id}/>
                 </Grid>
             </Grid>
         </ThemeProvider>
     );
 }
+
+export default Info;

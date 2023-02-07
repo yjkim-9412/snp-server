@@ -10,11 +10,14 @@ const FormHelperTexts = styled(FormHelperText)`
   font-weight: 700 !important;
   color: #d32f2f !important;
 `;
-const RegistrationCheck:React.FC<StudentFieldSelectBoolean> = ({onChangeSelect}) => {
+type RegistrationProps = {
+    registrationProps: string
+}
+const RegistrationCheck:React.FC<StudentFieldSelectBoolean & RegistrationProps> = ({onChangeSelect, registrationProps}) => {
     const [registration, setRegistration] = useState<string>('false');
     useEffect(() => {
-
-    },[])
+        setRegistration(registrationProps);
+    },[registrationProps])
     const onChange = (e: SelectChangeEvent) => {
         let name = e.target.name;
         let value = e.target.value;

@@ -15,15 +15,11 @@ type QuestionNumberType = {
 }
 const QuestionSelector:React.FC<QuestionType> = ({num,questionSize,onChangeQuestion, getQuestionValue}) => {
     const [isDisable, setIsDisable] = useState(true);
-    const [questionValue, setQuestionValue] = useState({questionType:'LOGICAL',answerType:'SHORT'});
+    const [questionValue, setQuestionValue] = useState({questionType:'NONE',answerType:'SHORT'});
     useEffect(() => {
         let numSize = num;
         if (numSize <= questionSize || num === 1) {
             setIsDisable(false);
-            if (getQuestionValue === undefined) {
-                setQuestionValue({...questionValue,questionType: 'LOGICAL', answerType: 'SHORT'})
-            }
-
         } else if (numSize > questionSize){
             setIsDisable(true);
             setQuestionValue({...questionValue,questionType: '', answerType: ''})
@@ -74,7 +70,7 @@ const QuestionSelector:React.FC<QuestionType> = ({num,questionSize,onChangeQuest
                         sx={{minWidth: 120}}
                         disabled={isDisable}
                     >
-                        <MenuItem disabled={true} value=''>유형선택</MenuItem>
+                        <MenuItem value='NONE'>유형선택</MenuItem>
                         <MenuItem value='LOGICAL'>논리력</MenuItem>
                         <MenuItem value='CRITICISM'>비판력</MenuItem>
                         <MenuItem value="ANALYTICAL">분석력</MenuItem>

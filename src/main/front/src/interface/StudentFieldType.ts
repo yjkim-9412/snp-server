@@ -43,3 +43,27 @@ export interface StudentFieldSkill {
     studentReadLv: string
     studentInt: string
 }
+export interface StudentType {
+    id: string,
+    name:string,
+    age: string,
+    birth: string,
+    phone: string,
+    email: string,
+    parentName: string,
+    parentPhone: string,
+    gender: string,
+    studyType: string,
+    studyTypeToString: string,
+    grade: string,
+    gradeToString: string,
+    gradeLv: string,
+    speed: string,
+    readLv: string,
+    intLv: string,
+    address: string,
+    registration: string,
+    date: string,
+    stepName: string,
+    studyCount:string
+}

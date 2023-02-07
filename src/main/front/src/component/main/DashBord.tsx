@@ -183,7 +183,6 @@ const DashboardContent = () => {
                     }}
                 >
                     <Toolbar/>
-
                     <Container maxWidth="xl" sx={{mt: 4, mb: 4}}>
                         <Outlet/>
                     </Container>

@@ -9,11 +9,9 @@ import {
 } from '@mui/x-data-grid';
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {Pagination} from "@mui/material";
 import {Link} from "react-router-dom";
 import CustomNoRowsOverlay from "../CustomNoRowsOverlay";
 import CustomPagination from "../CustomPagination";
-import Box from "@mui/material/Box";
 import LocalizedTextsMap from "../../LocalizedTextsMap";
 
 

@@ -27,7 +27,7 @@ const TextBook = () => {
     const [rows, setRows] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const dataGridRef = useRef<HTMLDivElement | null>(null);
-    const [questionValue, setQuestionValue] = useState<QuestionNumberType>([{number:1, questionType:'LOGICAL',answerType:'SHORT'}]);
+    const [questionValue, setQuestionValue] = useState<QuestionNumberType>([{number:1, questionType:'NONE',answerType:'SHORT'}]);
 
     const [questionCount, SetQuestionCount] = useState(1);
     const [textBookForm, setTextBookForm] = useState<TexBookType>({
@@ -44,6 +44,10 @@ const TextBook = () => {
         {field: 'info', headerName: '정보', width: 150, renderCell: (params) => (
                 <Button onClick={() => getInfo(params.row.code)}>정보</Button>
             )},
+        {field: 'delete', headerName: '삭제', width: 150, renderCell: (params) => (
+                <Button onClick={() => deleteTextBook(params.row.code)}>삭제</Button>
+            )}
+
 
     ];
     const getInfo = (code:any) => {
@@ -61,14 +65,25 @@ const TextBook = () => {
                 }
             })
     }
-
+    const deleteTextBook = (code:any) => {
+        if (window.confirm(`${code}교재를 삭제 하시겠습니까?`)){
+            axios.delete(`/api/textbooks/delete/${code}`)
+                .catch(error => {
+                    if (error.status === 401) {
+                        navigate('/login');
+                    }
+                })
+        }else {
+            return;
+        }
+    }
     const countMinus = (count:number) => {
         setQuestionValue(questionValue.filter(item => item.number <= count));
         SetQuestionCount(count)
     }
     const countPlus = (count:number) => {
         setQuestionValue(prevState => {
-            return [...prevState, {number:count, questionType:'LOGICAL', answerType:'SHORT'}];
+            return [...prevState, {number:count, questionType:'NONE', answerType:'SHORT'}];
         });
         SetQuestionCount(count)
     }
@@ -102,9 +117,7 @@ const TextBook = () => {
         setQuestionValue([]);
         setQuestionValue([{number: 1, questionType: 'LOGICAL', answerType: 'SHORT'}]);
     }
-    const deleteTextBook = () => {
 
-    }
 
     return (
         <Grid container spacing={3}>

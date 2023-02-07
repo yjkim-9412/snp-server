@@ -41,11 +41,11 @@ const MainListItems:React.FC = () => {
                 </ListItemIcon>
                 <ListItemText primary="학생통계"/>
             </ListItemButton >
-            <ListItemButton selected={selectedIndex === 3} onClick={() => handleListItemClick('/',3)}>
+            <ListItemButton selected={selectedIndex === 3} onClick={() => handleListItemClick('/lesson',3)}>
                 <ListItemIcon>
                     <LayersIcon/>
                 </ListItemIcon>
-                <ListItemText primary="가정통신문"/>
+                <ListItemText primary="수업등록"/>
             </ListItemButton>
             <Divider sx={{my: 1}}/>
             <ListSubheader component="div" inset>

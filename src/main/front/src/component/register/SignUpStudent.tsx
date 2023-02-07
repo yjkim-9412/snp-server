@@ -55,7 +55,7 @@ export default function SignUpStudent() {
     const [fieldError, setFieldError] = useState<StudentType>({
         name: '', age: '', birth: '', phone: '', email: '', parentName: '',
         parentPhone: '', gender: '', studyType: '', grade: '', gradeLv: '',
-        city: '', street: '',
+        address: '', street: '',
         speed: '0', readLv: '0', intLv: '0'
     });
     const [studentSaveForm, setStudentSaveForm] = useState({
@@ -206,7 +206,7 @@ export default function SignUpStudent() {
                                         {/**수업코스*/}
                                         <Course onChangeSelect={onChangeSelect} fieldErrorType={fieldError.studyType} courseProps={studentSaveForm.studyType}/>
                                         {/**예비등록 여부*/}
-                                        <RegistrationCheck onChangeSelect={onChangeSelectBoolean}/>
+                                        <RegistrationCheck onChangeSelect={onChangeSelectBoolean} registrationProps={studentSaveForm.registration}/>
                                             </Grid>
                                         </Box>
                                     </Grid>
@@ -233,7 +233,7 @@ export default function SignUpStudent() {
                                                  gradeProps={studentSaveForm.grade} gradeLvProps={studentSaveForm.gradeLv}/>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <AddressByKakao onChangeAddress={onChangeAddress} fieldErrorType={fieldError.city}
+                                        <AddressByKakao onChangeAddress={onChangeAddress} fieldErrorType={fieldError.address}
                                         addressProps={studentSaveForm.address}/>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>

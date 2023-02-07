@@ -36,7 +36,7 @@ const Schedule: React.FC<StudentId> = ({studentId}) => {
     });
     useEffect(() => {
         setIsLoading(true);
-        axios.get('/api/schedule/' + studentId)
+        axios.get(`/api/schedule/${studentId}`)
             .then(res => {
                 setDaySchedule(res.data);
                 Object.entries(res.data).map(([day, time]) => {

@@ -5,7 +5,6 @@ import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import { Autocomplete } from '@mui/material'
 import {TextField} from "@mui/material/";
-import PropsAction from "../../interface/PropsAction";
 
 
 type onChangeParent = {
@@ -14,20 +13,22 @@ type onChangeParent = {
     getCategoryId:string
 }
 type CategoryType = {
-    id: string, name: string
+   name: string
 }[];
 const CategoryList: React.FC<onChangeParent> = ({onChangeValue,getCategory,getCategoryId}) => {
     const [categoryMap, setCategoryMap] = useState<CategoryType>([]);
-    const [categoryValue, setCategoryValue] = useState({id:'1', name:""});
+    const [categoryValue, setCategoryValue] = useState({name:'SF건축'});
     const navigate = useNavigate();
     const onChange = (e: string) => {
         onChangeValue('categoryName', e);
-        setCategoryValue({...categoryValue,name: e});
+        setCategoryValue({...categoryValue, name: e});
     }
     useEffect(() => {
-        setCategoryValue((prevState) => ({
-            ...prevState,name:getCategory, id: getCategoryId
-        }));
+        if (getCategory === undefined || getCategory === '') {
+            setCategoryValue({...categoryValue, name: ''});
+        }else {
+            setCategoryValue({...categoryValue, name: getCategory});
+        }
     },[getCategory])
 
     useEffect(() => {
@@ -49,9 +50,8 @@ const CategoryList: React.FC<onChangeParent> = ({onChangeValue,getCategory,getCa
                 disablePortal
                 id="categoryId"
                 options={categoryMap}
-                isOptionEqualToValue={(option,value) => option.id === value.id}
+                isOptionEqualToValue={(option,value) => option.name === value.name}
                 value={categoryValue}
-                defaultValue={{id:'1',name:"SF명작"}}
                 onInputChange={(event, newInputValue) => {
                     onChange(newInputValue);
                 }}

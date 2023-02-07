@@ -25,7 +25,7 @@ const TextFields = styled(TextField)`
   color: #FF0000 !important;
 }
 `;
-const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErrorType,addressProps}) => {
+const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress, fieldErrorType,addressProps}) => {
     /**
      * useState
      */
@@ -39,7 +39,7 @@ const AddressByKakao: React.FC<StudentFieldAddress> = ({onChangeAddress,fieldErr
     },[addressProps])
     useEffect(() => {
         setErrorText(fieldErrorType);
-        if (fieldErrorType === '') {
+        if (fieldErrorType === '' || undefined) {
             setIsError(false);
         }else {
             setIsError(true);
