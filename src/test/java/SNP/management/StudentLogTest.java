@@ -27,12 +27,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -133,7 +131,7 @@ public class StudentLogTest {
 
         //then
         assertThat(todayStudy.getStudyDetail()).isEqualTo("학습능력검사");
-        assertThat(todayStudy.getStudyCount()).isEqualTo(1);
+        assertThat(todayStudy.getCurrentStudyCount()).isEqualTo(1);
     }
 
     @Test
@@ -148,7 +146,7 @@ public class StudentLogTest {
             score--;
         }
         StudyDTO todayStudy = studyService.getTodayStudy(studentId, today);
-        LogDTO logDTO = new LogDTO(studentId,todayStudy.getStudyDetail(),todayStudy.getStudyCount(),30, false, 2, EyeBall.B,
+        LogDTO logDTO = new LogDTO(studentId,todayStudy.getStudyDetail(),todayStudy.getCurrentStudyCount(),30, false, 2, EyeBall.B,
                 120,150, "B61", 65.5, 1300, 989, "memo", StudyType.A_CLASS, today, map);
 
         //when

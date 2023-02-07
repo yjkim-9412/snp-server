@@ -2,14 +2,12 @@ package SNP.management.domain.DTO;
 
 
 
-import SNP.management.domain.entity.student.Grade;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.enumlist.GradeType;
 import SNP.management.web.form.student.StudentSaveForm;
 import SNP.management.web.form.student.StudentUpdateForm;
 import SNP.management.domain.enumlist.StudyType;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
@@ -72,7 +70,7 @@ public class StudentDTO {
         this.parentPhone = student.getParentPhone();
         this.gender = student.getGender();
         this.studyType = student.getStudyType();
-        this.grade = student.getGrade().getGrade();
+        this.grade = student.getGrade().getGradeType();
         this.gradeLv = student.getGrade().getGradeLv();
         this.speed = student.getSkill().getSpeed();
         this.readLv = student.getSkill().getReadLv();
@@ -83,13 +81,17 @@ public class StudentDTO {
         this.registration = student.getRegistration();
         this.studyTypeToString = this.studyType.string();
         this.gradeToString = this.grade.string();
+        this.stepName = student.getStudy().getDetail();
     }
-
+    public static StudentDTO createStudentDTO(Student student){
+        return new StudentDTO(student);
+    }
     public void setStudy(Student student) {
         this.stepName = student.getStudy().getDetail();
     }
 
     public StudentDTO FormToSaveDTO(StudentSaveForm studentSaveForm) {
+        this.id = studentSaveForm.getId();
         this.name = studentSaveForm.getName();
         this.age = studentSaveForm.getAge();
         this.birth = studentSaveForm.getBirth();

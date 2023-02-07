@@ -1,6 +1,7 @@
 package SNP.management.domain.enumlist;
 
 public enum QuestionType {
+    NONE("유형없음"),
     UNDERSTANDING("이해력"),
     LOGICAL("논리력"),
     CRITICISM("비판력"),

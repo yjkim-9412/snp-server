@@ -1,5 +1,6 @@
 package SNP.management.domain.service;
 
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.DTO.StudyDTO;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.student.StudentLog;
@@ -43,7 +44,9 @@ public class StudyService {
         StudentLog studentLog = studentLogRepository.findLastDateByStudentIdAndStudyType(student).orElseThrow(IllegalArgumentException::new);
         Study study = studentLog.getStudy();
         if (study != null) {
-            return StudyDTO.createStudyDTO(student.getId(), compareWithLog(study, studentLog), studentLog);
+            StudyDTO studyDTO = StudyDTO.createStudyDTO(student.getId(), compareWithLog(study, studentLog), studentLog);
+            studyDTO.setStudentInfo(StudentDTO.createStudentDTO(student));
+            return studyDTO;
         }
         throw new NullPointerException("studentLog.study is Null");
     }

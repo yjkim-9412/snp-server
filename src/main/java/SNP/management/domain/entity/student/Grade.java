@@ -17,13 +17,14 @@ import javax.persistence.Enumerated;
 public class Grade {
 
     @Enumerated(EnumType.STRING)
-    private GradeType grade;
+    @Column(name ="grade")
+    private GradeType gradeType;
     @Column(nullable = true)
-    private int gradeLv;
+    private Integer gradeLv;
 
 
     private Grade (StudentDTO studentDTO) {
-        this.grade= studentDTO.getGrade();
+        this.gradeType = studentDTO.getGrade();
         this.gradeLv = studentDTO.getGradeLv();
     }
 

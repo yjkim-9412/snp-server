@@ -1,5 +1,6 @@
 package SNP.management.domain.service.schedule;
 
+import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
 
@@ -108,10 +109,11 @@ public class ScheduleService {
         return deleteList;
     }
 
-    /**학생 수업코스 조회 후 저장*/
     public List<TodayScheduleDTO> findAllByDay(int day) {
         return scheduleRepository.findAllByDay(DayOfWeek.values()[day]);
     }
+
+
 
     public ScheduleDTO findByStudentId(Long id){
        return new ScheduleDTO().listToDTO(scheduleDataJpa.findByStudentId(id));

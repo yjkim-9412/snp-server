@@ -82,7 +82,7 @@ public class StudentLog extends BaseEntity {
     private StudentLog(Student student) {
         this.student = student;
         this.study = student.getStudy();
-        this.studyType = student.getStudy().getStudyType();
+        this.studyType = student.getStudyType();
         this.studyCount = 0;
 
     }

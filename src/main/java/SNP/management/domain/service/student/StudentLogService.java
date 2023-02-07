@@ -10,6 +10,7 @@ import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.entity.textbook.Question;
 import SNP.management.domain.entity.textbook.TextBook;
 import SNP.management.domain.repository.StudyDataJpa;
+import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.student.QuestionLogDataJpa;
 import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentLogDataJpa;
@@ -38,18 +39,22 @@ public class StudentLogService {
     private final TextBookDataJpa textBookDataJpa;
     private final QuestionDataJpa questionDataJpa;
     private final ScheduleService scheduleService;
+    private final StudyRepository studyRepository;
 
 
 
     public void saveFirstLog(Student student) {
         if (student.hasStudy()) {
-            studentLogDataJpa.save(StudentLog.createFirstStudentLog(student));
+            student.changeStudy(studyRepository.getFirstStudy(student.getStudyType()));
+            StudentLog studentLog = studentLogDataJpa.save(StudentLog.createFirstStudentLog(student));
+            log.info("studentLog.getStudyType() = {}",studentLog.getStudyType());
         }
     }
 
     public void StudentLogUpdater(StudentDTO studentDTO, Student student) {
         if (isUpdate(studentDTO, student)) {
             log.info("LogUpdate = {}", true);
+            student.changeStudyType(studentDTO.getStudyType());
             saveFirstLog(student);
         }
     }
@@ -58,12 +63,16 @@ public class StudentLogService {
         if (scheduleService.hasTodaySchedule(logDTO.getStudentId(), today)) {
             logDTO.eyeBallCalculator();
             createStudentLog(logDTO);
-            return;
+        }else {
+            throw new ScheduleException(ScheduleException.NONE_SCHEDULE);
         }
-        throw new ScheduleException(ScheduleException.NONE_SCHEDULE);
     }
 
     private boolean isUpdate(StudentDTO studentDTO, Student student) {
+        log.info("student.getStudyType() = {}",student.getStudyType());
+        log.info("studentDTO.getStudyType() = {}",studentDTO.getStudyType());
+        log.info("isUpdate = {}",!studentDTO.getStudyType().equals(student.getStudyType()) && studentDTO.getStudyType() != null);
+
         return !studentDTO.getStudyType().equals(student.getStudyType()) && studentDTO.getStudyType() != null;
     }
 

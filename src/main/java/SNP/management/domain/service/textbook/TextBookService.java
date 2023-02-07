@@ -70,6 +70,12 @@ public class TextBookService {
         updateTextbookQuestion(questionDTOList, textBookFindById);
     }
 
+    public void deleteTextBookAndQuestion(String code) {
+        TextBook textBook = textBookDataJpa.findByCode(code).orElseThrow(IllegalArgumentException::new);
+        questionDataJpa.deleteByTextBookId(textBook.getId());
+        textBookDataJpa.delete(textBook);
+    }
+
     private void updateTextbookQuestion(List<QuestionDTO> questionDTOList, TextBook textBookFindById) {
         List<Question> questionList = questionDataJpa.findByTextBookIdOrderByNumberAsc(textBookFindById.getId());
 

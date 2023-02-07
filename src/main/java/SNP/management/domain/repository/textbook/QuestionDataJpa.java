@@ -14,4 +14,7 @@ public interface QuestionDataJpa extends JpaRepository<Question, Long> {
 
     public List<Question> findByTextBookIdOrderByNumberAsc(Long id);
 
+    @Modifying(flushAutomatically = true,clearAutomatically = true)
+    public void deleteByTextBookId(@Param("id") Long id);
+
 }

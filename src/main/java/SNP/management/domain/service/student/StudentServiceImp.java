@@ -2,13 +2,9 @@ package SNP.management.domain.service.student;
 
 import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.student.Student;
-import SNP.management.domain.entity.student.StudentLog;
-import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
-import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentRepository;
-import SNP.management.domain.repository.teacher.TeacherRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -29,7 +25,7 @@ public class StudentServiceImp{
     private final StudentLogService studentLogService;
 
     public StudentDTO findById(Long id) {
-        return new StudentDTO(getStudentById(id));
+    return new StudentDTO(getStudentById(id));
     }
 
     //학생 저장 업데이트
@@ -62,13 +58,12 @@ public class StudentServiceImp{
     public void update(StudentDTO studentDTO) {
         Student findByStudent = getStudentById(studentDTO.getId());
 
-        saveStudyTypeToStudent(studentDTO, findByStudent);
-
-        //학생 업데이트
-        studentDTO.setId(studentRepository.save(findByStudent));
-
         //로그 업데이트
         studentLogService.StudentLogUpdater(studentDTO, findByStudent);
+
+        //학생 업데이트
+        findByStudent.changeStudent(studentDTO);
+
     }
 
     public List<StudentDTO> findByAll() {
@@ -94,8 +89,8 @@ public class StudentServiceImp{
      * @param studentDTO getStudyType StudyType 객체 조회
      */
     private void saveStudyTypeToStudent(StudentDTO studentDTO, Student student) {
-        if (studentDTO.getStudyType() != null) {
-            student.setStudyToStudent(studyRepository.getFirstStudy(studentDTO.getStudyType()));
+        if (studentDTO.getStudyType() != null && studentDTO.getStudyType() != student.getStudyType()) {
+            student.changeStudy(studyRepository.getFirstStudy(studentDTO.getStudyType()));
         }
     }
 
@@ -104,7 +99,7 @@ public class StudentServiceImp{
      * @param id 학생Id
      * @return Student
      */
-    public Student getStudentById(Long id) {
+    private Student getStudentById(Long id) {
         return  studentDataJpa.findById(id).orElseThrow(IllegalArgumentException::new);
     }
 

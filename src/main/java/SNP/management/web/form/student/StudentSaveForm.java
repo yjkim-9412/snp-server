@@ -16,6 +16,7 @@ import static SNP.management.web.resolver.ValidationConst.*;
 @NoArgsConstructor
 public class StudentSaveForm {
 
+    private Long id;
     @NotBlank(message = NOT_BLANK_NAME)
     private String name;
 

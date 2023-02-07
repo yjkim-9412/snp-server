@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface ScheduleDataJpa extends JpaRepository<Schedule, Long> {
 
-    @Query("select new SNP.management.domain.DTO.TodayScheduleDTO(s.id, sc.time, s.name, s.parentPhone, st.detail) " +
+    @Query("select new SNP.management.domain.DTO.TodayScheduleDTO(s.id, sc.time, s.name, s.parentPhone, st.detail,s.grade) " +
             "from Schedule sc " +
             "join sc.student s "+
             "on sc.dayOfWeek= :dayOfWeek left join s.study st ")

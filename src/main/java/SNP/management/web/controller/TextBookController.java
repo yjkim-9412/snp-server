@@ -51,4 +51,8 @@ public class TextBookController {
         TextBookDTO textBookDTO = textBookService.findByCodeDTO(code);
         return new TextBookForm(textBookDTO,questionService.findAllByTextBookId(textBookDTO.getId()));
     }
+    @DeleteMapping("/delete/{code}")
+    public void delete(@PathVariable("code") String code) {
+        textBookService.deleteTextBookAndQuestion(code);
+    }
 }

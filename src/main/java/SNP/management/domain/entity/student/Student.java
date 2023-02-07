@@ -7,7 +7,6 @@ import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.enumlist.StudyType;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -59,7 +58,6 @@ public class Student extends BaseEntity {
 
 
     private void setStudent(StudentDTO studentDTO) {
-        this.id = studentDTO.getId();
         this.name = studentDTO.getName();
         this.age = studentDTO.getAge();
         this.birth = studentDTO.getBirth();
@@ -73,7 +71,6 @@ public class Student extends BaseEntity {
         this.grade = Grade.createGrade(studentDTO);
         this.skill = Skill.createSkill(studentDTO);
         this.registration = studentDTO.getRegistration();
-        this.date = studentDTO.getDate();
         this.studyCount = studentDTO.getStudyCount() == null ? 0
                 : studentDTO.getStudyCount();
     }
@@ -84,8 +81,14 @@ public class Student extends BaseEntity {
         return student;
     }
 
-    public void setStudyToStudent(Study study) {
+    public void changeStudent(StudentDTO studentDTO) {
+        this.setStudent(studentDTO);
+    }
+
+    public void changeStudy(Study study) {
         this.study = study;
+        this.studyType = study.getStudyType();
+        this.studyCount = 1;
     }
 
     public boolean hasStudy(){
@@ -93,8 +96,11 @@ public class Student extends BaseEntity {
     }
 
     public void changeStudyStatus(StudentLog studentLog) {
-        this.study = studentLog.getStudy();
         this.studyCount = studentLog.getStudyCount();
         this.studyType = studentLog.getStudyType();
+    }
+
+    public void changeStudyType(StudyType studyType) {
+        this.studyType = studyType;
     }
 }
