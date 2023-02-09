@@ -12,7 +12,17 @@ import java.util.Optional;
 
 public interface StudyDataJpa extends JpaRepository<Study, Long> {
 
-    Optional<Study> findByDetailAndStudyTypeAndNumberOfDaysLessThanEqual(String detail, StudyType studyType, Integer count);
+    @Query("SELECT st FROM Study st " +
+            "WHERE st.detail = :detail AND st.studyType = :studyType " +
+            "AND st.numberOfDays >= :count")
+    Optional<Study> findByDetailAndStudyTypeAndNumberAndCount(@Param("detail") String detail,
+            @Param("studyType")  StudyType studyType,@Param("count")  Integer count);
+
+    @Query("SELECT st FROM Study st " +
+            "WHERE st.detail = :detail AND st.studyType = :studyType " +
+            "AND st.numberOfDays > :count")
+    Optional<Study> findByDetailAndStudyTypeAndNumberAndLessCount(@Param("detail") String detail,
+                                                              @Param("studyType")  StudyType studyType,@Param("count")  Integer count);
 
     Optional<Study> findByStep(Integer step);
 

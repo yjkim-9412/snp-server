@@ -33,13 +33,14 @@ public class TextBookDTO {
     private TextBookDTO(TextBook textBook) {
         this.id = textBook.getId();
         this.code = textBook.getCode();
-        this.classification = textBook.getTextBookType().getString();
         this.name = textBook.getName();
         this.numberOfCharacters = textBook.getNumberOfCharacters();
         this.questionCount = textBook.getQuestionCount();
         this.categoryName = textBook.getCategory().getName();
         this.categoryId = textBook.getCategory().getId();
         this.textBookType = textBook.getTextBookType();
+        this.classification =  this.textBookType.getString();
+
     }
 
     public void changeTextBookDTO(TextBook textBook) {

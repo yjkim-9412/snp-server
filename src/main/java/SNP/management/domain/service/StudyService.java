@@ -13,12 +13,14 @@ import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.exceptionlist.ScheduleException;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class StudyService {
 
     private final ScheduleService scheduleService;
@@ -76,15 +78,23 @@ public class StudyService {
     }
 
     public Study getStudyNumberOfDays(String detail, StudyType studyType, int nextStudyCount) {
-        return studyDataJpa.findByDetailAndStudyTypeAndNumberOfDaysLessThanEqual(
+        log.info("nextStudyCount = {}", nextStudyCount);
+
+        return studyDataJpa.findByDetailAndStudyTypeAndNumberAndCount(
                         detail, studyType, nextStudyCount)
                 .orElseThrow(IllegalArgumentException::new);
     }
 
     public boolean isNextStep(Study study, StudentLog studentLog) throws IllegalArgumentException {
+        log.info("studentLog.getStudyCount() ={}",studentLog.getStudyCount());
+        log.info("study.getNumberOfDays() ={}",study.getNumberOfDays());
+
         if (studentLog.getStudyCount() < study.getNumberOfDays()) {
+            log.info("isNextStep ={}",false);
             return false;
         } else if (studentLog.getStudyCount() >= studentLog.getStudy().getNumberOfDays()) {
+            log.info("isNextStep ={}",true);
+
             return true;
         }
         throw new IllegalArgumentException("Illegal StudyCount");

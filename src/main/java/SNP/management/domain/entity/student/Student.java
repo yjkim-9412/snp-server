@@ -31,6 +31,7 @@ public class Student extends BaseEntity {
     private String gender;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "study_type")
     private StudyType studyType;
 
     private String address;

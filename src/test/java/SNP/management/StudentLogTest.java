@@ -66,13 +66,13 @@ public class StudentLogTest {
     @BeforeEach
     void beforeEach() {
         session.setAttribute(SessionConst.LOGIN_TEACHER,"xxt1205@gmail.com");
-        Long studentId = 11L;
-        int today = 1;
-        Student student = studentDataJpa.findByIdAndStudy(studentId)
-                .orElseThrow(IllegalArgumentException::new);
-        StudentLog studentLog = StudentLog.createFirstStudentLog(student);
-        studentLogDataJpa.save(studentLog);
-        STUDENT_ID = studentId;
+//        Long studentId = 11L;
+//        int today = 1;
+//        Student student = studentDataJpa.findByIdAndStudy(studentId)
+//                .orElseThrow(IllegalArgumentException::new);
+//        StudentLog studentLog = StudentLog.createFirstStudentLog(student);
+//        studentLogDataJpa.save(studentLog);
+//        STUDENT_ID = studentId;
     }
 
     @Test
@@ -93,7 +93,7 @@ public class StudentLogTest {
         //then
         if (studentLog.getStudy() != null) {
             if (studentLog.getStudyCount() < studentLog.getStudy().getNumberOfDays()) {
-                Optional<Study> result = studyDataJpa.findByDetailAndStudyTypeAndNumberOfDaysLessThanEqual(
+                Optional<Study> result = studyDataJpa.findByDetailAndStudyTypeAndNumberAndLessCount(
                         studentLog.getStudy().getDetail(), studentLog.getStudyType(), studentLog.getStudyCount() + 1
                 );
                 assertThat(result.get()).isNotNull();
@@ -124,14 +124,14 @@ public class StudentLogTest {
     @Test
     void getToDoService() {
         //given
-        Long studentId = STUDENT_ID;
-        int today = 1;
+        Long studentId = 68L;
+        int today = 4;
         //when
         StudyDTO todayStudy = studyService.getTodayStudy(studentId, today);
 
         //then
-        assertThat(todayStudy.getStudyDetail()).isEqualTo("학습능력검사");
-        assertThat(todayStudy.getCurrentStudyCount()).isEqualTo(1);
+        assertThat(todayStudy.getStudyDetail()).isEqualTo("2:2 (중)");
+        assertThat(todayStudy.getCurrentStudyCount()).isEqualTo(3);
     }
 
     @Test

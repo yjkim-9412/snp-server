@@ -62,6 +62,7 @@ public class StudentLogService {
     public void saveTodayLog(LogDTO logDTO, Integer today) {
         if (scheduleService.hasTodaySchedule(logDTO.getStudentId(), today)) {
             logDTO.eyeBallCalculator();
+            logDTO.processingTimeCalculator();
             createStudentLog(logDTO);
         }else {
             throw new ScheduleException(ScheduleException.NONE_SCHEDULE);
@@ -79,7 +80,7 @@ public class StudentLogService {
     private void createStudentLog(LogDTO logDTO) {
         Student student = studentDataJpa.findById(logDTO.getStudentId()).orElseThrow(IllegalArgumentException::new);
 
-        Study study = studyDataJpa.findByDetailAndStudyTypeAndNumberOfDaysLessThanEqual(
+        Study study = studyDataJpa.findByDetailAndStudyTypeAndNumberAndCount(
                         logDTO.getStudyDetail(), logDTO.getStudyType(), logDTO.getStudyCount())
                 .orElseThrow(IllegalArgumentException::new);
 

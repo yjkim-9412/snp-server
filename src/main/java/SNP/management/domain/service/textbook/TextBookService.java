@@ -132,4 +132,13 @@ public class TextBookService {
         return TextBookDTO.createDTO(textBook);
     }
 
+    public List<TextBookDTO> findByName(String name) {
+        List<TextBookDTO> textBookDTOList = new ArrayList<>();
+        List<TextBook> textBookList = textBookDataJpa.findAllByNameLike(name);
+        for (TextBook textBook : textBookList) {
+            textBookDTOList.add(TextBookDTO.createDTO(textBook));
+        }
+        return textBookDTOList;
+    }
+
 }

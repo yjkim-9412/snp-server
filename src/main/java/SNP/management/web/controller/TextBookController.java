@@ -51,6 +51,17 @@ public class TextBookController {
         TextBookDTO textBookDTO = textBookService.findByCodeDTO(code);
         return new TextBookForm(textBookDTO,questionService.findAllByTextBookId(textBookDTO.getId()));
     }
+    @GetMapping("/code/{code}")
+    public Object findCode(@PathVariable("code") String code ) {
+        return textBookService.findByCodeDTO(code);
+    }
+    @GetMapping("/name/{name}")
+    public Object findName(@PathVariable("name")  String name ) {
+        if (name.length() < 2) {
+            throw new IllegalArgumentException("최소 2글자 이상");
+        }
+        return textBookService.findByName(name);
+    }
     @DeleteMapping("/delete/{code}")
     public void delete(@PathVariable("code") String code) {
         textBookService.deleteTextBookAndQuestion(code);
