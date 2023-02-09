@@ -162,7 +162,7 @@ const Lesson: React.FC = () => {
                 </Paper>
             </Grid>
             <Grid item xs={12} sm={9}>
-                <LessonRegister dayOfStudy={dayOfStudy} dayCount={dayOfStudy.currentStudyCount} study={studyList}/>
+                <LessonRegister dayOfStudy={dayOfStudy} dayCount={dayOfStudy.currentStudyCount} study={studyList} getDay={daySelect}/>
             </Grid>
 
         </Grid>

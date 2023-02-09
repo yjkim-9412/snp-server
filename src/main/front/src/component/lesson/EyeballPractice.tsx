@@ -3,7 +3,7 @@ import {Paper, styled} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import PropsAction from "../../interface/PropsAction";
 import Typography from "@mui/material/Typography";
-import {Grid} from "@mui/material/";
+import {FormHelperText, Grid} from "@mui/material/";
 
 const TextFields = styled(TextField)`
    input::-webkit-outer-spin-button,
@@ -25,15 +25,20 @@ const EyeballPractice:React.FC<ConcentrationFieldType> = ({getRapidEyeball,
                                                               getEyeBallCount,onChange}) => {
     const [eyeball, setEyeball] = useState({rapidEyeball:'',eyeBallCount:'' });
 
-    const [errorField, setErrorField] = useState({rapidEyeball:'',eyeBallCount:'' });
+    const [errorField, setErrorField] = useState('');
 
     const onChangeField = (e: PropsAction) => {
         let value = e.target.value
+
         let name = e.target.name
+        if (name === 'rapidEyeball' && value.length > 1) {
+            setErrorField('최대 9');
+            return
+        }
         if (value === ''){
-            setErrorField({...errorField,[name]: '필수 값'});
+            setErrorField('필수 값');
         }else {
-            setErrorField({...errorField,[name]: ''});
+            setErrorField( '');
         }
         setEyeball({...eyeball,[name]:value})
         onChange(name, value);
@@ -51,16 +56,22 @@ const EyeballPractice:React.FC<ConcentrationFieldType> = ({getRapidEyeball,
     return(
         <Paper
             sx={{
-            display: 'flex',
-        }}>
-            <Grid item xs={12} >
-            <Typography sx={{p:1, fontSize:12}}>안구 훈련</Typography>
+                display: 'flex',
+                flexDirection: 'column',
+                p:1
+            }}>
+            <Grid item xs={12} sx={{marginBottom:1}}>
+
+            <Typography sx={{p:1, fontSize:12,float:'left'}}>안구 훈련</Typography>
+            <FormHelperText sx={{color:'red', marginTop:1}}>{errorField}</FormHelperText>
+            </Grid>
+            <Grid item xs={12} sx={{marginBottom:1}}>
             <TextFields size='small' type='number' name='rapidEyeball' label='전체완료 수' variant="outlined"
-                        sx={{width:100,marginLeft:1,marginRight:1}} helperText={errorField.rapidEyeball} error={errorField.rapidEyeball !== ''}
+                        sx={{width:100,marginLeft:1,marginRight:1 }} error={errorField !== ''}
                         value={eyeball.rapidEyeball} focused onChange={onChangeField}
             />
             <TextFields size='small' name='eyeBallCount' label='중간완료' variant="outlined"
-                        sx={{width:100,marginLeft:1,marginRight:1}} helperText={errorField.eyeBallCount} error={errorField.eyeBallCount !== ''}
+                        sx={{width:100,marginLeft:1,marginRight:1}} error={errorField !== ''}
                         value={eyeball.eyeBallCount} focused onChange={onChangeField}
             />
             </Grid>

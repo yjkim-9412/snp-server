@@ -50,6 +50,7 @@ const InfoModal:React.FC<InfoType> = ({studentInfo}) => {
                         variant="contained"
                         onClick={clickButton}
                         endIcon={<SendIcon />}
+                        sx={{marginTop:3}}
                     >
                         학생정보
                     </Button>
