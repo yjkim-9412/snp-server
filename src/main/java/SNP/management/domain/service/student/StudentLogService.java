@@ -14,6 +14,7 @@ import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.student.QuestionLogDataJpa;
 import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentLogDataJpa;
+import SNP.management.domain.repository.student.StudentLogRepository;
 import SNP.management.domain.repository.textbook.QuestionDataJpa;
 import SNP.management.domain.repository.textbook.TextBookDataJpa;
 import SNP.management.domain.service.schedule.ScheduleService;
@@ -41,6 +42,8 @@ public class StudentLogService {
     private final ScheduleService scheduleService;
     private final StudyRepository studyRepository;
 
+    private final StudentLogRepository studentLogRepository;
+
 
 
     public void saveFirstLog(Student student) {
@@ -61,12 +64,21 @@ public class StudentLogService {
 
     public void saveTodayLog(LogDTO logDTO, Integer today) {
         if (scheduleService.hasTodaySchedule(logDTO.getStudentId(), today)) {
-            logDTO.eyeBallCalculator();
-            logDTO.processingTimeCalculator();
-            createStudentLog(logDTO);
+            logDTO.combineProcessingTime();
+                createStudentLog(logDTO);
         }else {
             throw new ScheduleException(ScheduleException.NONE_SCHEDULE);
         }
+    }
+
+    public List<LogDTO> findAllByStudentId (Long studentId) {
+        List<LogDTO> logDTOList = new ArrayList<>();
+        List<StudentLog> studentLogList = studentLogRepository.findFetchAllByStudentId(studentId);
+
+        for (StudentLog studentLog : studentLogList) {
+            logDTOList.add(LogDTO.createLogDTOByStudentLog(studentLog));
+        }
+        return logDTOList;
     }
 
     private boolean isUpdate(StudentDTO studentDTO, Student student) {
@@ -84,12 +96,15 @@ public class StudentLogService {
                         logDTO.getStudyDetail(), logDTO.getStudyType(), logDTO.getStudyCount())
                 .orElseThrow(IllegalArgumentException::new);
 
-        TextBook textBook = textBookDataJpa.findByCode(logDTO.getTextBookCode()).orElseThrow(IllegalArgumentException::new);
-
-        StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLog(student, study, textBook, logDTO));
-
-        questionLogSaveAll(logDTO, textBook, studentLog);
-        student.changeStudyStatus(studentLog);
+        if (logDTO.hasTextBookCode()) {
+            TextBook textBook = textBookDataJpa.findByCode(logDTO.getTextBookCode()).orElseThrow(IllegalArgumentException::new);
+            StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLog(student, study, textBook, logDTO));
+            questionLogSaveAll(logDTO, textBook, studentLog);
+            student.changeStudyStatus(studentLog);
+        }else {
+            StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLogNoneTextBook(student, study, logDTO));
+            student.changeStudyStatus(studentLog);
+        }
     }
 
     private void questionLogSaveAll(LogDTO logDTO, TextBook textBook, StudentLog studentLog) {
@@ -104,14 +119,20 @@ public class StudentLogService {
 
     private void createQuestionLogList(List<Question> questionList, Map<Integer, Integer> answerMap, StudentLog studentLog) {
         List<QuestionLog> questionLogList = new ArrayList<>();
+        double totalQuestionScore = questionList.size() * 10;
+        double totalStudentScore = 0;
         for (int i = 0; i < questionList.size(); i++) {
-            questionLogList.add(QuestionLog.createQuestionLog(questionList.get(i), studentLog, answerMap.get(i + 1)));
+            Integer score = answerMap.get(i + 1);
+            questionLogList.add(QuestionLog.createQuestionLog(questionList.get(i), studentLog, score));
+            totalStudentScore += score;
         }
+        studentLog.intelligibilityCalculator(totalQuestionScore, totalStudentScore);
         questionLogDataJpa.saveAll(questionLogList);
     }
 
     private boolean isSizeEqual(List<Question> questionList, Map<Integer, Integer> answerMap) {
         return questionList.size() == answerMap.size();
     }
+
 
 }

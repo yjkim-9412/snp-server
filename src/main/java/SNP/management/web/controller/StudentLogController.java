@@ -49,4 +49,9 @@ public class StudentLogController {
         studentLogService.saveTodayLog(logDTO,day);
         return null;
     }
+    @GetMapping("/list/{id}")
+    public Object getStudentLog(@PathVariable Long id) {
+        return studentLogService.findAllByStudentId(id);
+    }
+
 }

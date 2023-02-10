@@ -22,12 +22,13 @@ import SNP.management.web.resolver.SessionConst;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,8 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 public class StudentLogTest {
     
-    @Autowired
-    EntityManager em;
+
     @Autowired
     StudentLogDataJpa studentLogDataJpa;
     @Autowired
@@ -66,7 +66,7 @@ public class StudentLogTest {
     @BeforeEach
     void beforeEach() {
         session.setAttribute(SessionConst.LOGIN_TEACHER,"xxt1205@gmail.com");
-//        Long studentId = 11L;
+//        Long studentId = 55L;
 //        int today = 1;
 //        Student student = studentDataJpa.findByIdAndStudy(studentId)
 //                .orElseThrow(IllegalArgumentException::new);
@@ -147,11 +147,40 @@ public class StudentLogTest {
         }
         StudyDTO todayStudy = studyService.getTodayStudy(studentId, today);
         LogDTO logDTO = new LogDTO(studentId,todayStudy.getStudyDetail(),todayStudy.getCurrentStudyCount(),30, false, 2, EyeBall.B,
-                120,150, "B61", 65.5, 1300, 989, "memo", StudyType.A_CLASS, today, map);
+                120,150, "B65", 65.5, 1300, 989, "memo", StudyType.A_CLASS, today, map);
 
         //when
         studentLogService.saveTodayLog(logDTO, today);
-        em.flush();
+        //then
+
+    }
+
+    @Test
+    void getLogDTOListByStudentId() {
+        //given
+        Long studentId = 68L;
+
+        //when
+        List<LogDTO> resultList = studentLogService.findAllByStudentId(studentId);
+
+        //then
+        assertThat(resultList).extracting("studentId",Long.class)
+                .contains(studentId);
+        for (LogDTO logDTO : resultList) {
+            System.out.println("logDTO.toString() = " + logDTO.toString());
+        }
+    }
+
+    @Test
+     void intelligibilityCalculator() {
+        //given
+        double totalQuestionScore = 80;
+        double totalStudentScore = 33;
+
+        //when
+        double result =totalStudentScore / totalQuestionScore * 100;
+        System.out.println("result = " + Math.round(result * 100.0) / 100.0);
+        System.out.println("(totalStudentScore / totalQuestionScore) * 100 = " + (totalStudentScore / totalQuestionScore) * 100);
         //then
 
     }

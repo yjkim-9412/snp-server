@@ -99,6 +99,7 @@ public class Student extends BaseEntity {
     public void changeStudyStatus(StudentLog studentLog) {
         this.studyCount = studentLog.getStudyCount();
         this.studyType = studentLog.getStudyType();
+        this.study = studentLog.getStudy();
     }
 
     public void changeStudyType(StudyType studyType) {
