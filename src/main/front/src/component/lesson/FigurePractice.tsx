@@ -36,8 +36,11 @@ const FigurePractice:React.FC<FigureFieldType> = ({num,getFigureClear,getFigure,
         if (name === 'clearScore' && value.length > 1) {
             setErrorField('최대 9');
             return
+        } else if (name === 'score' && value.length > 4) {
+            setErrorField('최대 9999');
+            return;
         }
-        setFigure({...figure, [name]:value})
+        setFigure({...figure, [name]:value});
 
         if (value === ''){
             setErrorField('필수 값');

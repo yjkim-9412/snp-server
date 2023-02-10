@@ -67,7 +67,7 @@ const ConcentrationField: React.FC<ConcentrationFieldType> = ({name, getValue, a
             }}>
             <Grid item xs={12}  >
                 <Typography sx={{p:1, fontSize:12,float:'left'}}>정신집중 훈련</Typography>
-                <FormHelperText sx={{color:'red', marginTop:1}}>{errorField}</FormHelperText>
+                <FormHelperText sx={{color:'red'}}>{errorField}</FormHelperText>
             </Grid>
             <Grid item xs={12}>
                 <TextFields size='small' type='number' name={name} label='정신집중' variant="outlined"

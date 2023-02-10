@@ -1,11 +1,10 @@
 import React, {useRef} from 'react';
 import {
     DataGrid,
-    GridColDef, GridFilterForm, GridFooter, GridFooterContainer,
+    GridColDef,
     gridPageCountSelector,
-    gridPageSelector, GridToolbar, GridToolbarContainer, GridToolbarExport,
-    useGridApiContext,
-    useGridSelector
+    gridPageSelector, GridToolbar
+
 } from '@mui/x-data-grid';
 import {useEffect, useState} from "react";
 import axios from "axios";
@@ -19,6 +18,7 @@ import {FormControl, Grid, InputLabel, Paper, Select, SelectChangeEvent} from "@
 import MenuItem from "@mui/material/MenuItem";
 import LessonRegister from "./LessonRegister";
 import {StudentType} from "../../interface/StudentFieldType";
+import AppBarComp from "../AppBarComp";
 
 
 type StudentList = {
@@ -44,7 +44,33 @@ type DayOfStudyType = {
     studentInfo?: StudentType,
     studyTypeString: string,
 }
-
+type logType = {
+    concentration:string,
+    concentrationAnswer:string,
+    createDate:string,
+    dayOfWeek:string,
+    eyeBallCount:string,
+    figureOne:string,
+    figureOneClear:string,
+    figureTwo:string,
+    figureTwoClear:string,
+    id:string,
+    intelligibilityReadOnly:string,
+    memo:string,
+    processingMin:string,
+    processingSec:string,
+    processingTime:string,
+    rapidEyeball:string,
+    readCount:string,
+    studentId:string,
+    studyCount:string,
+    studyDetail:string,
+    studyType:string,
+    textBookCode:string,
+    textBookName:string,
+    textBookType:string,
+    textBookTypeString:string
+}
 const Lesson: React.FC = () => {
     dayjs.locale('ko');
     const [value, setValue] = React.useState<Dayjs | null>(dayjs());
@@ -62,10 +88,16 @@ const Lesson: React.FC = () => {
     const [studyList, setStudyList] = useState(['']);
 
     const navigate = useNavigate();
-    const [rows, setRows] = useState<readonly StudentList[]>([]);
+    const [studentRows, setStudentRows] = useState<readonly StudentList[]>([]);
+    const [studentName, setStudentName] = useState('');
+
+    const [logRows, setLogRows] = useState<logType[]>([]);
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLogLoading, setIsLogLoading] = useState<boolean>(false);
+
     const dataGridRef = useRef<HTMLDivElement | null>(null);
-    const columns: GridColDef[] = [
+    const dayOfStudyColumns: GridColDef[] = [
         {
             field: 'grade', headerName: '구분', width: 80, renderCell: (params) => (
                 `${params.row.grade} ${params.row.gradeLv}`
@@ -74,7 +106,7 @@ const Lesson: React.FC = () => {
         {
             field: 'studentName', headerName: '학생이름', width: 85, align: "right", renderCell: (params) => (
                 <Button fullWidth onClick={() => {
-                    getStudentStudy(params.row.id)
+                    getStudentStudy(params.row.id, params.row.studentName)
                 }}>
                     {params.row.studentName}</Button>
             )
@@ -82,36 +114,74 @@ const Lesson: React.FC = () => {
         {field: 'stepName', headerName: '수업단계', width: 110},
 
     ];
+    const logColumns: GridColDef[] =[
+        {field: 'createDate', headerName: '수업일자', width: 110},
+        {field: 'studyDetail', headerName: '수업단계', width: 110},
+        {field: 'studyCount', headerName: '일수', width: 50},
+        {field: 'concentration', headerName: '정신집중', width: 90, renderCell: (params) => (
+        `${params.row.concentration} - ${params.row.concentrationAnswer === true? 'O':'X'}`
+    )},
+        {field: 'eyeball', headerName: '안구훈련', width: 90, renderCell: (params) => (
+                `${params.row.rapidEyeball} - ${params.row.eyeBallCount}`
+            )},
+        {field: 'figureOne', headerName: '도형1차', width: 90, renderCell: (params) => (
+                `${params.row.figureOneClear} - ${params.row.figureOne}`
+            )},
+        {field: 'figureTwo', headerName: '도형2차', width: 90, renderCell: (params) => (
+                `${params.row.figureTwoClear} - ${params.row.figureTwo}`
+            )},
+        {field: 'textBookTypeString', headerName: '교재종류', width: 90},
+        {field: 'textBookName', headerName: '교재제목', width: 200},
+        {field: 'readCount', headerName: '글자수', width: 90},
+        {field: 'intelligibilityReadOnly', headerName: '이해도', width: 90},
+        {field: 'processingTime', headerName: '처리시간', width: 110, renderCell: (params) => (
+                `${params.row.processingMin}분 ${params.row.processingSec}초`
+            )},
+        {field: 'memo', headerName: '수업메모', width: 300},
+
+    ]
     const onChangeDay = (e: SelectChangeEvent) => {
         let day = parseInt(e.target.value);
         setDaySelect(day);
     }
-    const getStudentStudy = (id: string) => {
+    const getStudentStudy = (id: string, name:string) => {
         axios.get(`/api/lesson/${id}`, {params: {daySelect}})
             .then(res => {
                 setDayOfStudy(res.data.dayOfStudy);
                 setStudyList(res.data.studyDetailList);
+                setStudentName(name);
             }).catch(error => {
-            console.log(error)
             if (error.response && error.response.status === 401) {
                 navigate('/login');
             }
         });
+        getLogData(id);
     }
-
+    const getLogData = (id:string) => {
+        setIsLogLoading(true);
+        axios.get(`/api/lesson/list/${id}`)
+            .then(res => {
+                setLogRows(res.data);
+                setIsLogLoading(false);
+            }).catch(error => {
+            if (error.response.status === 401) {
+                navigate('/login');
+            }
+        })
+    }
     useEffect(() => {
         setIsLoading(true);
         axios.get(`/api/schedule/day/${daySelect}`)
             .then(res => {
-                setRows(res.data);
+                setStudentRows(res.data);
                 setIsLoading(false);
             }).catch(error => {
-            console.log(error)
             if (error.response.status === 401) {
                 navigate('/login');
             }
         });
     }, [daySelect])
+
 
     return (
         <Grid container spacing={2}>
@@ -123,8 +193,9 @@ const Lesson: React.FC = () => {
                         flexDirection: 'column'
                     }}
                 >
-                    <FormControl size="small">
-                        <InputLabel id="day">요일</InputLabel>
+                    <AppBarComp typography={'수업 학생'}/>
+                    <FormControl size="small" sx={{marginTop:1}}>
+                        <InputLabel id="day" >요일</InputLabel>
                         <Select
                             id="day"
                             value={daySelect.toString()}
@@ -142,11 +213,11 @@ const Lesson: React.FC = () => {
                             <MenuItem value='6'>토요일</MenuItem>
                         </Select>
                     </FormControl>
-                    <div style={{height: 830, width: '100%'}} ref={dataGridRef}>
+                    <div style={{height: 1152, width: '100%'}} ref={dataGridRef}>
 
                         <DataGrid
-                            rows={rows}
-                            columns={columns}
+                            rows={studentRows}
+                            columns={dayOfStudyColumns}
                             pageSize={10}
                             rowsPerPageOptions={[20]}
                             components={{
@@ -161,10 +232,42 @@ const Lesson: React.FC = () => {
                     </div>
                 </Paper>
             </Grid>
-            <Grid item xs={12} sm={9}>
+            <Grid item xs={12} sm={9} >
+                <Grid item xs={12}  >
                 <LessonRegister dayOfStudy={dayOfStudy} dayCount={dayOfStudy.currentStudyCount} study={studyList} getDay={daySelect}/>
-            </Grid>
+                </Grid>
+                <Grid item xs={12}  sx={{marginTop:2}}>
+                    <Paper
+                        sx={{
+                            p: 2,
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}
+                    >
+                        <AppBarComp typography={studentName + " 수업자료"}/>
+                        <div style={{height: 508, width: '100%'}} ref={dataGridRef}>
 
+                            <DataGrid
+                                rows={logRows}
+                                columns={logColumns}
+                                pageSize={10}
+                                rowsPerPageOptions={[20]}
+                                components={{
+                                    NoRowsOverlay: (() => <CustomNoRowsOverlay noList={'학생 기록이 없습니다.'}/>),
+                                    Pagination: CustomPagination,
+                                    Toolbar: GridToolbar
+                                }}
+                                loading={isLogLoading}
+                                hideFooterSelectedRowCount={true}
+                                localeText={LocalizedTextsMap}
+                            />
+                        </div>
+                    </Paper>
+                </Grid>
+            </Grid>
+            <Grid item xs={12} sm={9} >
+
+            </Grid>
         </Grid>
     )
 }

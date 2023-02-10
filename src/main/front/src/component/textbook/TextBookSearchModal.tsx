@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useState} from 'react';
 import Box from "@mui/material/Box";
 import {
     Button,
@@ -13,12 +13,10 @@ import {
     TableRow
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import Info from "../student/Info";
 import TextField from "@mui/material/TextField";
 import PropsAction from "../../interface/PropsAction";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Title} from "@mui/icons-material";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -40,9 +38,7 @@ const TextFields = styled(TextField)`
   color: #FF0000 !important;
 }
 `;
-type rowType = {
-   textBook: TextBookType
-}[]
+
 type TextBookType = {
     id:string,
     code: string,
@@ -64,7 +60,7 @@ const TextBookSearchModal:React.FC<TextBookSearchModalType> = ({onChange, onChan
     const [openInfo, setOpenInfo] = useState<boolean>(false);
     const [modalErrorCode, setModalErrorCode] = useState('');
     const [modalErrorName, setModalErrorName] = useState('');
-
+    const [isEmpty, setIsEmpty] = useState(false);
     const [searchCode, setSearchCode] = useState('');
     const [searchName, setSearchName] = useState('');
     const [rows, setRows] = useState<TextBookType[]>([]);
@@ -108,7 +104,6 @@ const TextBookSearchModal:React.FC<TextBookSearchModalType> = ({onChange, onChan
     }
     const clickButton = () => {
         setOpenInfo(current => !current);
-        rows.length=0;
         setModalErrorName('')
         setModalErrorCode('');
         setSearchCode('');
@@ -143,8 +138,13 @@ const TextBookSearchModal:React.FC<TextBookSearchModalType> = ({onChange, onChan
         rows.length = 0;
         axios.get(`/api/textbooks/name/${searchName}`)
             .then(res => {
-                console.log(res.data)
-                setRows(res.data);
+                let resValue = res.data;
+                setRows(resValue);
+                if (resValue.length === 0) {
+                    setIsEmpty(true)
+                }else {
+                    setIsEmpty(false);
+                }
             })
             .catch(error => {
                 if (error.response.status === 401) {
@@ -164,11 +164,7 @@ const TextBookSearchModal:React.FC<TextBookSearchModalType> = ({onChange, onChan
             <Box sx={{display: 'flex'}}>
                 <Grid item xs={12}>
 
-                    {
-                        modalErrorCode !== '' ? <FormHelperText sx={{color: 'red'}}>
-                                교재 정보가 없습니다.</FormHelperText>
-                            : <></>
-                    }
+
                 </Grid>
             </Box>
             <Modal open={openInfo}>
@@ -203,30 +199,35 @@ const TextBookSearchModal:React.FC<TextBookSearchModalType> = ({onChange, onChan
                         </Button>
                     </Grid>
                     <Grid>
-                        <Table size="small" >
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>분류</TableCell>
-                                    <TableCell>코드</TableCell>
-                                    <TableCell>제목</TableCell>
-                                    <TableCell>문제수</TableCell>
-                                    <TableCell>교재선택</TableCell>
+                        {
+                            isEmpty ? <FormHelperText sx={{color: 'red'}}>
+                                    교재 정보가 없습니다.</FormHelperText>
+                                : <Table size="small" >
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>분류</TableCell>
+                                            <TableCell>코드</TableCell>
+                                            <TableCell>제목</TableCell>
+                                            <TableCell>문제수</TableCell>
+                                            <TableCell>교재선택</TableCell>
 
-                                    {/*<TableCell align="right">Sale Amount</TableCell>*/}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows.map(item => {
-                                    return <TableRow key={item.id}>
-                                        <TableCell>{item.classification}</TableCell>
-                                        <TableCell >{item.code}</TableCell>
-                                        <TableCell>{item.name}</TableCell>
-                                        <TableCell>{item.questionCount}</TableCell>
-                                        <TableCell>{item.id !== ''? <Button onClick={()=>onClickSearch(item)}>선택</Button> : ''}</TableCell>
-                                    </TableRow>
-                                })}
-                            </TableBody>
-                        </Table>
+                                            {/*<TableCell align="right">Sale Amount</TableCell>*/}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {rows.map(item => {
+                                            return <TableRow key={item.id}>
+                                                <TableCell>{item.classification}</TableCell>
+                                                <TableCell >{item.code}</TableCell>
+                                                <TableCell>{item.name}</TableCell>
+                                                <TableCell>{item.questionCount}</TableCell>
+                                                <TableCell>{item.id !== ''? <Button onClick={()=>onClickSearch(item)}>선택</Button> : ''}</TableCell>
+                                            </TableRow>
+                                        })}
+                                    </TableBody>
+                                </Table>
+                        }
+
                     </Grid>
                     <Button
                         variant="contained"

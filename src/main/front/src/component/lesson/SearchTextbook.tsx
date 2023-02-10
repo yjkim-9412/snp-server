@@ -14,18 +14,22 @@ type  SearchTextbookType = {
     getScore?: answerType,
     onChangeAnswer: (name: string, value: string) => void
     getMin:string,
-    getSec:string
+    getSec:string,
+    getTextBookCode:string
+    getQuestionCount:number;
 }
 type answerType = {
     [answer: string]: string;
 }
 
-const SearchTextbook: React.FC<SearchTextbookType> = ({onChange, onChangeNumber, getScore, onChangeAnswer,getSec,getMin}) => {
+const SearchTextbook: React.FC<SearchTextbookType> = ({onChange, onChangeNumber, getScore, onChangeAnswer,getSec
+                                                          ,getMin,getTextBookCode, getQuestionCount}) => {
+    const answerForm = {
+        1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: ''
+    };
     const [code, setCode] = useState('');
     const [textBook, setTextBook] = useState({code: '', detail: '', name: ''});
-    const [answer, setAnswer] = useState<answerType>({
-        1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: ''
-    });
+    const [answer, setAnswer] = useState<answerType>(answerForm);
     const [questionCount, setQuestionCount] = useState(0);
     const [readCount, setReadCount] = useState('');
     const [processingTime, setProcessingTime] = useState({processingMin: '', processingSec: ''});
@@ -72,15 +76,23 @@ const SearchTextbook: React.FC<SearchTextbookType> = ({onChange, onChangeNumber,
         }
     }, [getScore])
     useEffect(() => {
-        if (getMin !== '') {
             setProcessingTime({...processingTime,processingMin: getMin})
-        }
     },[getMin])
     useEffect(() => {
-        if (getSec !== '') {
             setProcessingTime({...processingTime,processingSec: getSec})
-        }
     },[getSec])
+    useEffect(() => {
+        setTextBook({...textBook,code:getTextBookCode, name: '', detail:''});
+        setProcessingTime({...processingTime,processingMin: '', processingSec: ''})
+        setReadCount('')
+        setProcessTimeError('')
+        setReadCountError('');
+    },[getTextBookCode])
+    useEffect(() => {
+        if (getQuestionCount === 0) {
+            setQuestionCount(getQuestionCount);
+        }
+    },[getQuestionCount])
 
     return (
         <>
