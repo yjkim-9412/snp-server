@@ -1,6 +1,5 @@
 package SNP.management.domain.service.schedule;
 
-import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
 
@@ -10,8 +9,6 @@ import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.repository.schedule.ScheduleDataJpa;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.student.StudentDataJpa;
-import SNP.management.domain.repository.student.StudentRepository;
-import SNP.management.domain.service.student.StudentServiceImp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,10 +33,7 @@ public class ScheduleService {
 
     private final StudentDataJpa studentDataJpa;
 
-    public ScheduleDTO getSchedule(Long id) {
-        Student student = studentDataJpa.findById(id).orElseThrow(IllegalArgumentException::new);
-        return new ScheduleDTO().listToDTO(scheduleRepository.findClassesByStudentId(student.getId()));
-    }
+
     public void createScheduleList(Student student, ScheduleDTO scheduleDTO) {
         List<Schedule> scheduleList = new ArrayList<>();
         for (Map.Entry<Integer, String> e : scheduleDTO.getScheduleMap().entrySet()) {
@@ -67,7 +61,7 @@ public class ScheduleService {
     /**
      * 기존시간표와 파라미터 시간표 비교후 업데이트
      */
-    public void checkDuplicateAndUpdate(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleList) {
+    private void checkDuplicateAndUpdate(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleList) {
         Map<Integer, String> scheduleMap = scheduleDTO.getScheduleMap();// 파라미터 시간표
 
         // 파라미터중복 되지 않는 시간표 filter.
@@ -109,17 +103,4 @@ public class ScheduleService {
         return deleteList;
     }
 
-    public List<TodayScheduleDTO> findAllByDay(int day) {
-        return scheduleRepository.findAllByDay(DayOfWeek.values()[day]);
-    }
-
-
-
-    public ScheduleDTO findByStudentId(Long id){
-       return new ScheduleDTO().listToDTO(scheduleDataJpa.findByStudentId(id));
-    }
-
-    public Boolean hasTodaySchedule(Long id, Integer today) {
-        return scheduleDataJpa.findByStudentIdAndDayOfWeek(id, DayOfWeek.values()[today]).isPresent();
-    }
 }

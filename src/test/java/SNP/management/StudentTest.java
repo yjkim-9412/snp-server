@@ -8,7 +8,7 @@ import SNP.management.domain.enumlist.GradeType;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.teacher.TeacherRepository;
 import SNP.management.domain.service.schedule.ScheduleService;
-import SNP.management.domain.service.student.StudentServiceImp;
+import SNP.management.domain.service.student.StudentService;
 import SNP.management.web.form.student.ScheduleForm;
 import SNP.management.web.form.student.StudentSaveForm;
 import SNP.management.web.resolver.SessionConst;
@@ -32,7 +32,7 @@ public class StudentTest {
     @Autowired
     TeacherRepository teacherRepository;
     @Autowired
-    StudentServiceImp studentService;
+    StudentService studentService;
     @Autowired
     ScheduleService scheduleService;
     @Autowired

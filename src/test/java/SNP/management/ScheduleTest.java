@@ -15,8 +15,9 @@ import SNP.management.domain.repository.schedule.ScheduleDataJpa;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.student.StudentRepository;
 import SNP.management.domain.repository.teacher.TeacherRepository;
+import SNP.management.domain.service.schedule.RequestScheduleService;
 import SNP.management.domain.service.schedule.ScheduleService;
-import SNP.management.domain.service.student.StudentServiceImp;
+import SNP.management.domain.service.student.StudentService;
 import SNP.management.web.form.student.ScheduleForm;
 import SNP.management.web.form.student.StudentSaveForm;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ public class ScheduleTest {
     @Autowired
     TeacherRepository teacherRepository;
     @Autowired
-    StudentServiceImp studentService;
+    StudentService studentService;
     @Autowired
     StudentRepository studentRepository;
     @Autowired
@@ -52,6 +53,9 @@ public class ScheduleTest {
     ScheduleDataJpa scheduleDataJpa;
     @Autowired
     StudyRepository studyRepository;
+
+    @Autowired
+    RequestScheduleService requestScheduleService;
 
     @BeforeEach
     void before(){
@@ -128,7 +132,7 @@ public class ScheduleTest {
     void getScheduleByStudentId() {
 
         //when
-        ScheduleDTO scheduleDTO = scheduleService.findByStudentId(42L);
+        ScheduleDTO scheduleDTO = requestScheduleService.findByStudentId(42L);
         //then
         assertThat(scheduleDTO.getScheduleMap().size()).isEqualTo(2);
 

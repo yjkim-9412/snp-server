@@ -24,7 +24,7 @@ public class BindingResolver {
 
         log.debug("검증 오류 발생 error={}", bindingResult);
 
-        Map<String, String> mapErrors = new ConcurrentHashMap<>();// 동시성 문제 ConcurrentHashMap
+        Map<String, String> mapErrors = new ConcurrentHashMap<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
             mapErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }

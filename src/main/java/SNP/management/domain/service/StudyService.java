@@ -9,6 +9,7 @@ import SNP.management.domain.enumlist.StudyType;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentLogRepository;
+import SNP.management.domain.service.schedule.RequestScheduleService;
 import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.exceptionlist.ScheduleException;
 
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class StudyService {
 
-    private final ScheduleService scheduleService;
+    private final RequestScheduleService requestScheduleService;
     private final StudyDataJpa studyDataJpa;
     private final StudentDataJpa studentDataJpa;
     private final StudentLogRepository studentLogRepository;
@@ -35,7 +36,7 @@ public class StudyService {
      * @return StudyDTO
      */
     public StudyDTO getTodayStudy(Long id, Integer today) {
-        if (scheduleService.hasTodaySchedule(id, today)) {
+        if (requestScheduleService.hasTodaySchedule(id, today)) {
             return todayStudyHandler(id);
         }
         throw new IllegalArgumentException(ScheduleException.NONE_SCHEDULE);

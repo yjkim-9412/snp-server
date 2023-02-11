@@ -1,6 +1,7 @@
 package SNP.management.web.controller;
 
 import SNP.management.domain.DTO.TodayScheduleDTO;
+import SNP.management.domain.service.schedule.RequestScheduleService;
 import SNP.management.domain.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +15,13 @@ import java.util.List;
 @RequestMapping("/api")
 public class MainController {
 
-    private final ScheduleService scheduleService;
+    private final RequestScheduleService requestScheduleService;
 
     @GetMapping("/main/{dayOfWeek}")
     public List<TodayScheduleDTO> getMain(@PathVariable int dayOfWeek) {
 
 
-        return scheduleService.findAllByDay(dayOfWeek);
+        return requestScheduleService.findAllByDay(dayOfWeek);
     }
 
 }
