@@ -22,10 +22,6 @@ import java.util.Map;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
-/**
- * 학생 날짜 수업조회는 RecordRepository 에 있습니다.
- * 해당 ScheduleServiceImp 는 학생 수업 스케줄 추가
- */
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
@@ -64,22 +60,22 @@ public class ScheduleService {
     private void checkDuplicateAndUpdate(Student student, ScheduleDTO scheduleDTO, List<Schedule> scheduleList) {
         Map<Integer, String> scheduleMap = scheduleDTO.getScheduleMap();// 파라미터 시간표
 
-        // 파라미터중복 되지 않는 시간표 filter.
+        // 파라미터중복 되지 않는 시간표 filter 후 제거목록 리턴.
         List<Schedule> deleteList = DuplicateHandler(scheduleList, scheduleMap);
 
         //기존에 없던 새로운 시간표 추가
-        List<Schedule> addList = createAddList(student, scheduleMap);
+        addNewSchedule(student, scheduleMap);
 
-        scheduleDataJpa.saveAll(addList);
         scheduleDataJpa.deleteAll(deleteList);
     }
 
-    private List<Schedule> createAddList(Student student, Map<Integer, String> scheduleMap) {
+    private void addNewSchedule(Student student, Map<Integer, String> scheduleMap) {
 
         List<Schedule> addList = new ArrayList<>();
 
         scheduleMap.forEach((key, value) -> addList.add(Schedule.createSchedule(key,value, student)));
-        return addList;
+        scheduleDataJpa.saveAll(addList);
+
     }
     /**
      * @param scheduleList 기존 시간표
