@@ -6,6 +6,6 @@
 
 ---
 
-<a href=“https://languid-throat-6e5.notion.site/SNP-70-004e4072cd504a79b9a7ea4a5ccdbbb4”>
+<a href=“https://languid-throat-6e5.notion.site/SNP-70-004e4072cd504a79b9a7ea4a5ccdbbb4”>포트폴리오 이동</a>
 
 ---
