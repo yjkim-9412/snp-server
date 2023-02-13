@@ -5,9 +5,7 @@
 <div>실제 릴리즈 and 서비스가 목표인 학생관리 프로젝트입니다.</div>
 
 ---
- 
- <h3>DB설계</h3><br>
- <h5>ERD: AWS RDS Mysql</h5><br>
- <img src="https://user-images.githubusercontent.com/100066303/215316956-f8d504e9-04bd-4077-806e-0b039e1e5514.png"/>
+
+<a href=“https://languid-throat-6e5.notion.site/SNP-70-004e4072cd504a79b9a7ea4a5ccdbbb4”>
 
 ---
