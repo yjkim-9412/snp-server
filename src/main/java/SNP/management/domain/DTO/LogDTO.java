@@ -20,7 +20,7 @@ import java.util.Map;
 @NoArgsConstructor
 @ToString
 public class LogDTO {
-    private final static int MIN = 60;
+
 
     private Long id;
     @NotNull
@@ -31,8 +31,8 @@ public class LogDTO {
     private Boolean concentrationAnswer;
     @Digits(integer = 10,fraction = 0)
     private Integer rapidEyeball;
-
     private EyeBall eyeBallCount;
+    private Integer eyeballTotal;
     private Integer figureOne;
 
     @Digits(integer = 10,fraction = 0)
@@ -62,9 +62,6 @@ public class LogDTO {
     private Map<Integer, Integer> answerMap;
 
 
-    public void combineProcessingTime() {
-        this.processingTime = (this.processingMin * MIN) + this.processingSec;
-    }
 
     private LogDTO(StudentLog studentLog){
         this.id = studentLog.getId();

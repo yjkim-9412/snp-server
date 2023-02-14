@@ -2,18 +2,15 @@ package SNP.management.domain.entity.student;
 
 import SNP.management.domain.DTO.LogDTO;
 import SNP.management.domain.entity.BaseEntity;
-import SNP.management.domain.entity.textbook.Question;
 import SNP.management.domain.entity.textbook.TextBook;
 import SNP.management.domain.enumlist.EyeBall;
 import SNP.management.domain.enumlist.StudyType;
-import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.study.Study;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +19,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "STUDENT_LOG")
 public class StudentLog extends BaseEntity {
+    private final static int MIN = 60;
+    private final static int EYEBALL_SIZE = EyeBall.values().length;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +47,8 @@ public class StudentLog extends BaseEntity {
     @Column(name = "eyeball_count")
     @Enumerated(EnumType.STRING)
     private EyeBall eyeBallCount;
+    @Column(name = "eyeball_total")
+    private Integer eyeballTotal;
     @Column(name = "figure_one")
     private Integer figureOne;
     @Column(name = "figure_one_clear")
@@ -85,18 +86,20 @@ public class StudentLog extends BaseEntity {
         this.concentrationAnswer = logDTO.getConcentrationAnswer();
         this.rapidEyeball = logDTO.getRapidEyeball();
         this.eyeBallCount = logDTO.getEyeBallCount();
+        this.eyeballTotal = logDTO.getEyeballTotal();
         this.figureOne = logDTO.getFigureOne();
         this.figureOneClear = logDTO.getFigureOneClear();
         this.figureTwo = logDTO.getFigureTwo();
         this.figureTwoClear = logDTO.getFigureTwoClear();
         this.memo = logDTO.getMemo();
         this.studyType = student.getStudyType();
-        this.studyCount = logDTO.getStudyCount() == null? 0 : logDTO.getStudyCount();
+        this.studyCount = logDTO.getStudyCount();
         this.textBook = textBook;
-        this.processingTime = logDTO.getProcessingTime();
         this.processingMin = logDTO.getProcessingMin();
         this.processingSec = logDTO.getProcessingSec();
         this.readCount = logDTO.getReadCount();
+        sumPractice();
+
     }
 
 
@@ -106,14 +109,33 @@ public class StudentLog extends BaseEntity {
         this.study = study;
         this.concentration = logDTO.getConcentration();
         this.concentrationAnswer = logDTO.getConcentrationAnswer();
-        this.rapidEyeball = logDTO.getRapidEyeball();
+        this.rapidEyeball = logDTO.getRapidEyeball() == null? 0 : logDTO.getRapidEyeball();
+        this.eyeBallCount = logDTO.getEyeBallCount();
+        this.eyeballTotal = logDTO.getEyeballTotal();
         this.figureOne = logDTO.getFigureOne();
         this.figureTwo = logDTO.getFigureTwo();
         this.memo = logDTO.getMemo();
         this.studyType = student.getStudyType();
         this.studyCount = logDTO.getStudyCount() == null? 0 : logDTO.getStudyCount();
-        this.processingTime = logDTO.getProcessingTime();
         this.readCount = logDTO.getReadCount();
+        sumEyeBall();
+    }
+    private void sumPractice() {
+        sumProcessingTime();
+        sumEyeBall();
+    }
+    private void sumProcessingTime() {
+        this.processingTime = (this.processingMin * MIN) + this.processingSec;
+    }
+    private void sumEyeBall() {
+        if (hasEyeballScore()) {
+            this.eyeballTotal = (this.rapidEyeball * EYEBALL_SIZE) + this.eyeBallCount.count();
+        } else {
+            this.eyeballTotal = 0;
+        }
+    }
+    public boolean hasEyeballScore() {
+        return this.eyeBallCount != null;
     }
 
     public void intelligibilityCalculator (double totalQuestionScore, double totalStudentScore) {

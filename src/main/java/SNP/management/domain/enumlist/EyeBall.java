@@ -1,6 +1,7 @@
 package SNP.management.domain.enumlist;
 
 public enum EyeBall {
+    NONE(0),
     A(1),
     B(2),
     C(3),
@@ -19,7 +20,7 @@ public enum EyeBall {
         this.count = count;
     }
 
-    public int getCount() {
+    public int count() {
         return count;
     }
 }

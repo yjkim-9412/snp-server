@@ -1,15 +1,15 @@
 package SNP.management.domain.repository.student;
 
-import SNP.management.domain.entity.student.QStudent;
+import SNP.management.domain.DTO.chart.*;
 import SNP.management.domain.entity.student.QStudentLog;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.student.StudentLog;
-import SNP.management.domain.entity.textbook.QTextBook;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ public class StudentLogRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public Optional<StudentLog> findLastDateByStudentIdAndStudyType(Student studentParam){
+    public Optional<StudentLog> findLastDateByStudentIdAndStudyType(Student studentParam) {
         QStudentLog studentLogSub = new QStudentLog("studentLogSub");
         StudentLog studentLog = queryFactory.selectFrom(QStudentLog.studentLog)
                 .join(QStudentLog.studentLog.study, study).fetchJoin()
@@ -51,6 +51,28 @@ public class StudentLogRepository {
                 .where(studentLog.student.id.eq(studentId))
                 .orderBy(studentLog.createDate.desc())
                 .fetch();
+
+    }
+
+    public List<StepChartDTO> findProcessingTimeByStudentIdGroupByDetail(Long studentId) {
+        return queryFactory.select(new QStepChartDTO(studentLog.processingTime.avg().castToNum(Integer.class), studentLog.study.detail))
+                .from(studentLog)
+                .join(studentLog.study, study)
+                .where(studentLog.student.id.eq(studentId))
+                .groupBy(studentLog.study.id)
+                .fetch();
+    }
+
+    public List<DayChartDTO> findDayChartByStudentId(Long studentId) {
+        List<DayChartDTO> dayChartDTOList = new ArrayList<>();
+        List<StudentLog> logList = queryFactory.selectFrom(studentLog)
+                .where(studentLog.student.id.eq(studentId))
+                .orderBy(studentLog.createDate.desc())
+                .fetch();
+        for (StudentLog studentLog : logList) {
+            dayChartDTOList.add(DayChartDTO.createDayChartDTO(studentLog));
+        }
+        return dayChartDTOList;
 
     }
 }

@@ -9,7 +9,6 @@ import SNP.management.domain.entity.student.StudentLog;
 import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.entity.textbook.Question;
 import SNP.management.domain.entity.textbook.TextBook;
-import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.student.QuestionLogDataJpa;
@@ -19,7 +18,6 @@ import SNP.management.domain.repository.student.StudentLogRepository;
 import SNP.management.domain.repository.textbook.QuestionDataJpa;
 import SNP.management.domain.repository.textbook.TextBookDataJpa;
 import SNP.management.domain.service.schedule.RequestScheduleService;
-import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.exceptionlist.ScheduleException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,28 +46,26 @@ public class StudentLogService {
     private final StudentLogRepository studentLogRepository;
 
 
-
     protected void saveFirstLog(Student student) {
-            student.changeStudy(studyRepository.getFirstStudy(student.getStudyType()));
-            StudentLog studentLog = studentLogDataJpa.save(StudentLog.createFirstStudentLog(student));
-            log.info("studentLog.getStudyType() = {}",studentLog.getStudyType());
+        student.changeStudy(studyRepository.getFirstStudy(student.getStudyType()));
+        StudentLog studentLog = studentLogDataJpa.save(StudentLog.createFirstStudentLog(student));
+        log.info("studentLog.getStudyType() = {}", studentLog.getStudyType());
     }
 
     public void studentLogUpdater(StudentDTO studentDTO, Student student) {
-            student.changeStudyType(studentDTO.getStudyType());
-            saveFirstLog(student);
+        student.changeStudyType(studentDTO.getStudyType());
+        saveFirstLog(student);
     }
 
     public void saveTodayLog(LogDTO logDTO, Integer today) {
         if (requestScheduleService.hasTodaySchedule(logDTO.getStudentId(), today)) {
-            logDTO.combineProcessingTime();
-                createStudentLog(logDTO);
-        }else {
+            createStudentLog(logDTO);
+        } else {
             throw new ScheduleException(ScheduleException.NONE_SCHEDULE);
         }
     }
 
-    public List<LogDTO> findAllByStudentId (Long studentId) {
+    public List<LogDTO> findAllByStudentId(Long studentId) {
         List<LogDTO> logDTOList = new ArrayList<>();
         List<StudentLog> studentLogList = studentLogRepository.findFetchAllByStudentId(studentId);
 
@@ -77,14 +73,6 @@ public class StudentLogService {
             logDTOList.add(LogDTO.createLogDTOByStudentLog(studentLog));
         }
         return logDTOList;
-    }
-
-    private boolean isUpdate(StudentDTO studentDTO, Student student) {
-        log.info("student.getStudyType() = {}",student.getStudyType());
-        log.info("studentDTO.getStudyType() = {}",studentDTO.getStudyType());
-        log.info("isUpdate = {}",!studentDTO.getStudyType().equals(student.getStudyType()) && studentDTO.getStudyType() != null);
-
-        return !studentDTO.getStudyType().equals(student.getStudyType()) && studentDTO.getStudyType() != null;
     }
 
     private void createStudentLog(LogDTO logDTO) {
@@ -99,7 +87,7 @@ public class StudentLogService {
             StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLog(student, study, textBook, logDTO));
             questionLogSaveAll(logDTO, textBook, studentLog);
             student.changeStudyStatus(studentLog);
-        }else {
+        } else {
             StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLogNoneTextBook(student, study, logDTO));
             student.changeStudyStatus(studentLog);
         }

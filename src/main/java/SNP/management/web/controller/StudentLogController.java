@@ -2,10 +2,14 @@ package SNP.management.web.controller;
 
 import SNP.management.domain.DTO.LogDTO;
 import SNP.management.domain.DTO.StudyDTO;
+import SNP.management.domain.DTO.chart.DayChartDTO;
+import SNP.management.domain.DTO.chart.StepChartDTO;
 import SNP.management.domain.repository.StudyDataJpa;
+import SNP.management.domain.repository.student.StudentLogRepository;
 import SNP.management.domain.service.StudyService;
 import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.service.student.StudentLogService;
+import SNP.management.web.form.PracticeChartForm;
 import SNP.management.web.form.TodayStudyForm;
 import SNP.management.web.form.student.SaveLogForm;
 import SNP.management.web.resolver.BindingResolver;
@@ -29,6 +33,7 @@ public class StudentLogController {
     private final StudyService studyService;
     private final StudyDataJpa studyDataJpa;
     private final BindingResolver bindingResolver;
+    private final StudentLogRepository studentLogRepository;
 
 
     @GetMapping("/{id}")
@@ -54,4 +59,10 @@ public class StudentLogController {
         return studentLogService.findAllByStudentId(id);
     }
 
+    @GetMapping("/chart/{id}")
+    public PracticeChartForm getLogChart(@PathVariable Long id) {
+        List<DayChartDTO> dayChartDTOList = studentLogRepository.findDayChartByStudentId(id);
+        List<StepChartDTO> stepChartDTOList = studentLogRepository.findProcessingTimeByStudentIdGroupByDetail(id);
+        return new PracticeChartForm(dayChartDTOList, stepChartDTOList);
+    }
 }
