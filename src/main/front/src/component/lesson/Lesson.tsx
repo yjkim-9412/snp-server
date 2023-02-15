@@ -19,6 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import LessonRegister from "./LessonRegister";
 import {StudentType} from "../../interface/StudentFieldType";
 import AppBarComp from "../AppBarComp";
+import LogChart from "../chart/LogChart";
 
 
 type StudentList = {
@@ -90,6 +91,7 @@ const Lesson: React.FC = () => {
     const navigate = useNavigate();
     const [studentRows, setStudentRows] = useState<readonly StudentList[]>([]);
     const [studentName, setStudentName] = useState('');
+    const [studentId, setStudentId] = useState('');
 
     const [logRows, setLogRows] = useState<logType[]>([]);
 
@@ -140,6 +142,7 @@ const Lesson: React.FC = () => {
         {field: 'memo', headerName: '수업메모', width: 300},
 
     ]
+
     const onChangeDay = (e: SelectChangeEvent) => {
         let day = parseInt(e.target.value);
         setDaySelect(day);
@@ -163,6 +166,7 @@ const Lesson: React.FC = () => {
             .then(res => {
                 setLogRows(res.data);
                 setIsLogLoading(false);
+                setStudentId(id);
             }).catch(error => {
             if (error.response.status === 401) {
                 navigate('/login');
@@ -265,9 +269,8 @@ const Lesson: React.FC = () => {
                     </Paper>
                 </Grid>
             </Grid>
-            <Grid item xs={12} sm={9} >
 
-            </Grid>
+            <LogChart id={studentId} studentName={studentName}/>
         </Grid>
     )
 }

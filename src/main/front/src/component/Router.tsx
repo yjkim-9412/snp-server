@@ -8,6 +8,7 @@ import Info from "./student/Info";
 import StudentList from "./student/StudentList";
 import TextBook from "./textbook/TextBook";
 import Lesson from "./lesson/Lesson";
+import ChartMain from "./chart/ChartMain";
 
 interface ChildLogin {
     isLoggedIn: Boolean,
@@ -29,6 +30,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/students" element={<StudentList/>}/>
                     <Route path="/textbook" element={<TextBook/>}/>
                     <Route path="/lesson" element={<Lesson/>}/>
+                    <Route path="/chart" element={<ChartMain/>}/>
                 </Route>
                 <Route path="/login" element={<Auth  />}/>
                 <Route path="/student/register" element={<StudentReCard/>}/>

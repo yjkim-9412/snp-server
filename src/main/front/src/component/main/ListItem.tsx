@@ -35,7 +35,7 @@ const MainListItems:React.FC = () => {
                 </ListItemIcon>
                 <ListItemText primary="학생목록"/>
             </ListItemButton>
-            <ListItemButton selected={selectedIndex === 2} onClick={() => handleListItemClick('/',2)}>
+            <ListItemButton selected={selectedIndex === 2} onClick={() => handleListItemClick('/chart',2)}>
                 <ListItemIcon>
                     <BarChartIcon/>
                 </ListItemIcon>
