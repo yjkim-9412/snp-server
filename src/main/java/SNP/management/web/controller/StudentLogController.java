@@ -2,9 +2,10 @@ package SNP.management.web.controller;
 
 import SNP.management.domain.DTO.LogDTO;
 import SNP.management.domain.DTO.StudyDTO;
-import SNP.management.domain.DTO.chart.DayChartDTO;
-import SNP.management.domain.DTO.chart.StepChartDTO;
+import SNP.management.domain.DTO.chart.*;
+import SNP.management.domain.enumlist.TextBookType;
 import SNP.management.domain.repository.StudyDataJpa;
+import SNP.management.domain.repository.student.QuestionLogRepository;
 import SNP.management.domain.repository.student.StudentLogRepository;
 import SNP.management.domain.service.StudyService;
 import SNP.management.domain.service.schedule.ScheduleService;
@@ -29,7 +30,7 @@ import java.util.Map;
 public class StudentLogController {
 
     private final StudentLogService studentLogService;
-    private final ScheduleService scheduleService;
+    private final QuestionLogRepository questionLogRepository;
     private final StudyService studyService;
     private final StudyDataJpa studyDataJpa;
     private final BindingResolver bindingResolver;
@@ -63,6 +64,16 @@ public class StudentLogController {
     public PracticeChartForm getLogChart(@PathVariable Long id) {
         List<DayChartDTO> dayChartDTOList = studentLogRepository.findDayChartByStudentId(id);
         List<StepChartDTO> stepChartDTOList = studentLogRepository.findProcessingTimeByStudentIdGroupByDetail(id);
-        return new PracticeChartForm(dayChartDTOList, stepChartDTOList);
+        List<QuestionTypeChartDTO> questionTypeChartDTOList = questionLogRepository.findQuestionTypeAvgByStudentIdGroupByQuestionType(id);
+        List<CategoryChartDTO> categoryChartDTOList = questionLogRepository.findCategoryQuestionAvgByStudentIdGroupByCategoryName(id);
+
+        PracticeChartForm practiceChartForm = new PracticeChartForm(dayChartDTOList, stepChartDTOList, questionTypeChartDTOList, categoryChartDTOList);
+
+        Map<TextBookType, List<TextBookChartDTO>> textBookChart = studentLogService.getTextBookChart(id);
+        for (Map.Entry<TextBookType, List<TextBookChartDTO>> et : textBookChart.entrySet()) {
+            practiceChartForm.setTextBookChart(et.getKey(),et.getValue());
+        }
+
+        return practiceChartForm;
     }
 }

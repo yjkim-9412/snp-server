@@ -2,6 +2,7 @@ package SNP.management.domain.service.student;
 
 import SNP.management.domain.DTO.LogDTO;
 import SNP.management.domain.DTO.StudentDTO;
+import SNP.management.domain.DTO.chart.TextBookChartDTO;
 import SNP.management.domain.entity.student.QuestionLog;
 import SNP.management.domain.entity.student.Student;
 
@@ -9,6 +10,7 @@ import SNP.management.domain.entity.student.StudentLog;
 import SNP.management.domain.entity.study.Study;
 import SNP.management.domain.entity.textbook.Question;
 import SNP.management.domain.entity.textbook.TextBook;
+import SNP.management.domain.enumlist.TextBookType;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
 import SNP.management.domain.repository.student.QuestionLogDataJpa;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,9 +44,10 @@ public class StudentLogService {
     private final QuestionDataJpa questionDataJpa;
     private final StudyRepository studyRepository;
     private final RequestScheduleService requestScheduleService;
-
-
     private final StudentLogRepository studentLogRepository;
+
+    private static final TextBookType[] TEXTBOOK_ARRAY = TextBookType.values();
+
 
 
     protected void saveFirstLog(Student student) {
@@ -121,4 +125,14 @@ public class StudentLogService {
     }
 
 
+    public Map<TextBookType,List<TextBookChartDTO>> getTextBookChart(Long studentId) {
+        Map<TextBookType,List<TextBookChartDTO>> textBookChartMap = new HashMap<>();
+        for (TextBookType textBookType : TEXTBOOK_ARRAY) {
+            List<TextBookChartDTO> textBookChartDTOList = studentLogRepository.findStudentLogAvgByStudentIdAndCode(studentId, textBookType.code());
+            if (!textBookChartDTOList.isEmpty())        {
+                textBookChartMap.put(textBookType, textBookChartDTOList);
+            }
+        }
+        return textBookChartMap;
+    }
 }

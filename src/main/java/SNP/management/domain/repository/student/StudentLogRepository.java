@@ -66,7 +66,8 @@ public class StudentLogRepository {
     public List<DayChartDTO> findDayChartByStudentId(Long studentId) {
         List<DayChartDTO> dayChartDTOList = new ArrayList<>();
         List<StudentLog> logList = queryFactory.selectFrom(studentLog)
-                .where(studentLog.student.id.eq(studentId))
+                .join(studentLog.student, student)
+                .where(studentLog.student.id.eq(studentId).and(studentLog.student.studyType.eq(studentLog.studyType)))
                 .orderBy(studentLog.createDate.desc())
                 .fetch();
         for (StudentLog studentLog : logList) {
@@ -75,4 +76,18 @@ public class StudentLogRepository {
         return dayChartDTOList;
 
     }
+    public List<TextBookChartDTO> findStudentLogAvgByStudentIdAndCode(Long studentId, String firstCode) {
+        List<TextBookChartDTO> textBookChartDTOList = queryFactory.select(new QTextBookChartDTO(studentLog.intelligibility, studentLog.readCount, textBook.textBookType))
+                .from(studentLog)
+                .join(studentLog.textBook, textBook)
+                .where(studentLog.student.id.eq(studentId).and(textBook.code.startsWith(firstCode)))
+                .fetch();
+        for (TextBookChartDTO textBookChartDTO : textBookChartDTOList) {
+            textBookChartDTO.setTextBookTypeString();
+        }
+        return textBookChartDTOList;
+    }
+
+
+
 }

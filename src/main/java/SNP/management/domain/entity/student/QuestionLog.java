@@ -27,6 +27,10 @@ public class QuestionLog extends BaseEntity {
     @JoinColumn(name = "student_log_id")
     private StudentLog studentLog;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private Student student;
+
     private Integer score;
 
 
@@ -38,6 +42,7 @@ public class QuestionLog extends BaseEntity {
     private QuestionLog(Question question, StudentLog studentLog, int score) {
         this.question = question;
         this.score = score;
+        this.student = studentLog.getStudent();
         this.saveStudentLog(studentLog);
     }
 

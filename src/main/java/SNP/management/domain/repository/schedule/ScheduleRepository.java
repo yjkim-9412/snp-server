@@ -71,4 +71,6 @@ public class ScheduleRepository {
                 .where(schedule.dayOfWeek.eq(dayOfWeek))
                 .fetch();
     }
+
+
 }
