@@ -1,5 +1,6 @@
 package SNP.management.domain.entity.student;
 
+import SNP.management.domain.DTO.LogDTO;
 import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.entity.textbook.Question;
 import lombok.AccessLevel;
@@ -48,6 +49,15 @@ public class QuestionLog extends BaseEntity {
 
     public static QuestionLog createQuestionLog(Question question, StudentLog studentLog, Integer score) {
         return new QuestionLog(question, studentLog, score);
+    }
+
+    public void changeQuestionLog(Integer score, Question question) {
+        this.score = score;
+        this.question = question;
+    }
+
+    public void changeQuestionScore(Integer score) {
+        this.score = score;
     }
 
 }

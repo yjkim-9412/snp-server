@@ -2,6 +2,7 @@ package SNP.management;
 
 import SNP.management.domain.DTO.chart.*;
 import SNP.management.domain.enumlist.EyeBall;
+import SNP.management.domain.enumlist.TextBookType;
 import SNP.management.domain.repository.student.QuestionLogRepository;
 import SNP.management.domain.repository.student.StudentLogDataJpa;
 import SNP.management.domain.repository.student.StudentLogRepository;
@@ -94,10 +95,10 @@ public class ChartTest {
         STUDENT_ID = 68L;
 
         //when
-        Map<String, List<TextBookChartDTO>> textBookChart = studentLogService.getTextBookChart(STUDENT_ID);
+        Map<TextBookType, List<TextBookChartDTO>> textBookChart = studentLogService.getTextBookChart(STUDENT_ID);
 
         //then
-        for (Map.Entry<String, List<TextBookChartDTO>> et : textBookChart.entrySet()) {
+        for (Map.Entry<TextBookType, List<TextBookChartDTO>> et : textBookChart.entrySet()) {
             System.out.println("et.getKey() = " + et.getKey());
             for (TextBookChartDTO textBookChartDTO : et.getValue()) {
                 System.out.println("textBookChartDTO.toString() = " + textBookChartDTO.toString());

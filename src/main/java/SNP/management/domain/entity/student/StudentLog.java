@@ -79,7 +79,7 @@ public class StudentLog extends BaseEntity {
     @OneToMany(mappedBy = "studentLog")
     private List<QuestionLog> questionLog = new ArrayList<>();
 
-    private StudentLog(Student student, Study study,TextBook textBook, LogDTO logDTO ) {
+    private void setStudentLogWithTextBook(Student student, Study study,TextBook textBook, LogDTO logDTO ) {
         this.student = student;
         this.study = study;
         this.concentration = logDTO.getConcentration();
@@ -104,7 +104,7 @@ public class StudentLog extends BaseEntity {
 
 
 
-    private StudentLog(Student student, Study study, LogDTO logDTO ) {
+    private void setStudentLogNoneTextBook(Student student, Study study, LogDTO logDTO ) {
         this.student = student;
         this.study = study;
         this.concentration = logDTO.getConcentration();
@@ -155,15 +155,26 @@ public class StudentLog extends BaseEntity {
     }
 
     public static StudentLog createStudentLog(Student student, Study study, TextBook textBook , LogDTO logDTO ){
-        return new StudentLog(student, study,textBook, logDTO);
+        StudentLog studentLog = new StudentLog();
+        studentLog.setStudentLogWithTextBook(student, study, textBook, logDTO);
+        return studentLog;
     }
     public static StudentLog createStudentLogNoneTextBook(Student student, Study study,  LogDTO logDTO ){
-        return new StudentLog(student, study, logDTO);
+        StudentLog studentLog = new StudentLog();
+        studentLog.setStudentLogNoneTextBook(student, study, logDTO);
+        return studentLog;
     }
 
 
     public static StudentLog createFirstStudentLog(Student student){
         return new StudentLog(student);
+    }
+
+    public void updateStudentLogWithTextBook(LogDTO logDTO, Study study, Student student, TextBook textBook) {
+        this.setStudentLogWithTextBook(student,study,textBook,logDTO);
+    }
+    public void updateStudentLogNoneTextBook(LogDTO logDTO, Study study, Student student) {
+        this.setStudentLogNoneTextBook(student,study,logDTO);
     }
 
 }

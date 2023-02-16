@@ -1,10 +1,7 @@
 package SNP.management.domain.repository.student;
 
 import SNP.management.domain.DTO.chart.*;
-import SNP.management.domain.entity.QCategory;
-import SNP.management.domain.entity.student.QQuestionLog;
-import SNP.management.domain.entity.textbook.QQuestion;
-import SNP.management.domain.entity.textbook.QTextBook;
+import SNP.management.domain.entity.student.QuestionLog;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
@@ -57,6 +54,17 @@ public class QuestionLogRepository {
                 .groupBy(category.name)
                 .fetch();
     }
+
+    public void deleteAndFlush(QuestionLog questionLogP) {
+        queryFactory.delete(questionLog).where(questionLog.id.eq(questionLogP.getId()));
+        em.flush();
+    }
+
+    public void saveAndFlush(QuestionLog questionLog) {
+        em.persist(questionLog);
+        em.flush();
+    }
+
 
 
 

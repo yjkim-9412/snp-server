@@ -6,6 +6,8 @@ import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.entity.student.Student;
 import SNP.management.domain.entity.student.StudentLog;
 import SNP.management.domain.entity.study.Study;
+import SNP.management.domain.entity.textbook.Question;
+import SNP.management.domain.entity.textbook.TextBook;
 import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.enumlist.EyeBall;
 import SNP.management.domain.enumlist.StudyType;
@@ -16,6 +18,7 @@ import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentLogDataJpa;
 import SNP.management.domain.repository.student.StudentLogRepository;
 import SNP.management.domain.repository.student.StudentRepository;
+import SNP.management.domain.repository.textbook.TextBookDataJpa;
 import SNP.management.domain.service.StudyService;
 import SNP.management.domain.service.student.StudentLogService;
 import SNP.management.web.resolver.SessionConst;
@@ -26,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpSession;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,9 +42,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 public class StudentLogTest {
     
-
+    @PersistenceContext
+    EntityManager em;
     @Autowired
     StudentLogDataJpa studentLogDataJpa;
+    @Autowired
+    TextBookDataJpa textBookDataJpa;
     @Autowired
     StudentLogRepository studentLogRepository;
     @Autowired
@@ -158,14 +165,14 @@ public class StudentLogTest {
     @Test
     void getLogDTOListByStudentId() {
         //given
-        Long studentId = 68L;
+        STUDENT_ID = 68L;
 
         //when
-        List<LogDTO> resultList = studentLogService.findAllByStudentId(studentId);
+        List<LogDTO> resultList = studentLogService.findAllByStudentId( STUDENT_ID);
 
         //then
         assertThat(resultList).extracting("studentId",Long.class)
-                .contains(studentId);
+                .contains( STUDENT_ID);
         for (LogDTO logDTO : resultList) {
             System.out.println("logDTO.toString() = " + logDTO.toString());
         }
@@ -182,6 +189,72 @@ public class StudentLogTest {
         System.out.println("result = " + Math.round(result * 100.0) / 100.0);
         System.out.println("(totalStudentScore / totalQuestionScore) * 100 = " + (totalStudentScore / totalQuestionScore) * 100);
         //then
+
+    }
+
+    @Test
+    void changeLogSameTextBook() {
+        //given
+        STUDENT_ID = 68L;
+        Long logId = 98L;
+        StudentLog studentLog = studentLogDataJpa.findById(logId).orElseThrow(IllegalArgumentException::new);
+        Map<Integer, Integer> answerMap = new LinkedHashMap<>();
+        Study study = studentLog.getStudy();
+
+        List<Question> questionList = studentLog.getTextBook().getQuestionList();
+        for (int i = 0; i < questionList.size(); i++) {
+            answerMap.put(i + 1, i);
+        }
+
+        LogDTO logDTO = new LogDTO();
+        logDTO.setAnswerMap(answerMap);
+        logDTO.setTextBookCode(studentLog.getTextBook().getCode());
+        logDTO.setId(studentLog.getId());
+        logDTO.setStudentId(STUDENT_ID);
+        logDTO.setStudyCount(study.getStepCount());
+        logDTO.setStudyDetail(study.getDetail());
+        logDTO.setStudyType(study.getStudyType());
+        logDTO.setRapidEyeball(2);
+        //when
+        studentLogService.saveTodayLog(logDTO, 4);
+
+
+        //then
+        em.flush();
+    }
+
+    @Test
+    void changeLogDifferentTextBook() {
+        //given
+        STUDENT_ID = 68L;
+        Long logId = 98L;
+        Long textBookId = 65L;
+        StudentLog studentLog = studentLogDataJpa.findById(logId).orElseThrow(IllegalArgumentException::new);
+        Map<Integer, Integer> answerMap = new LinkedHashMap<>();
+        TextBook textBook = textBookDataJpa.findById(textBookId).orElseThrow(IllegalArgumentException::new);
+        Study study = studentLog.getStudy();
+
+        List<Question> questionList = textBook.getQuestionList();
+        Integer[] studentScore = {1, 4, 2, 4, 5, 6, 7, 8, 1, 2};
+        for (int i = 0; i < questionList.size(); i++) {
+            answerMap.put(i + 1, studentScore[i]);
+        }
+
+        LogDTO logDTO = new LogDTO();
+        logDTO.setAnswerMap(answerMap);
+        logDTO.setTextBookCode(textBook.getCode());
+        logDTO.setId(studentLog.getId());
+        logDTO.setStudentId(STUDENT_ID);
+        logDTO.setStudyCount(study.getStepCount());
+        logDTO.setStudyDetail(study.getDetail());
+        logDTO.setStudyType(study.getStudyType());
+        logDTO.setRapidEyeball(2);
+        //when
+        studentLogService.saveTodayLog(logDTO, 4);
+
+
+        //then
+        em.flush();
 
     }
 }

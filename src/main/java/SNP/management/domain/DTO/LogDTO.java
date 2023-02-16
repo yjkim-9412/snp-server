@@ -132,4 +132,8 @@ public class LogDTO {
     public boolean hasTextBookCode() {
         return this.getTextBookCode() != null;
     }
+
+    public boolean hasLogId() {
+        return this.getId() != null;
+    }
 }

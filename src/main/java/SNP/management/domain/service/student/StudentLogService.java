@@ -13,10 +13,7 @@ import SNP.management.domain.entity.textbook.TextBook;
 import SNP.management.domain.enumlist.TextBookType;
 import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.StudyRepository;
-import SNP.management.domain.repository.student.QuestionLogDataJpa;
-import SNP.management.domain.repository.student.StudentDataJpa;
-import SNP.management.domain.repository.student.StudentLogDataJpa;
-import SNP.management.domain.repository.student.StudentLogRepository;
+import SNP.management.domain.repository.student.*;
 import SNP.management.domain.repository.textbook.QuestionDataJpa;
 import SNP.management.domain.repository.textbook.TextBookDataJpa;
 import SNP.management.domain.service.schedule.RequestScheduleService;
@@ -26,16 +23,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class StudentLogService {
+    private static final String NOT_EQUAL_QUESTION = "is not same TextBook Question";
+    private static final String NONE_STUDENT_LOG = "not found StudentLog";
+    private static final String NONE_TEXTBOOK = "not found TextBook";
     private final StudentDataJpa studentDataJpa;
     private final StudyDataJpa studyDataJpa;
     private final StudentLogDataJpa studentLogDataJpa;
@@ -45,9 +42,8 @@ public class StudentLogService {
     private final StudyRepository studyRepository;
     private final RequestScheduleService requestScheduleService;
     private final StudentLogRepository studentLogRepository;
-
+    private final QuestionLogRepository questionLogRepository;
     private static final TextBookType[] TEXTBOOK_ARRAY = TextBookType.values();
-
 
 
     protected void saveFirstLog(Student student) {
@@ -60,8 +56,8 @@ public class StudentLogService {
         student.changeStudyType(studentDTO.getStudyType());
         saveFirstLog(student);
     }
-
     public void saveTodayLog(LogDTO logDTO, Integer today) {
+
         if (requestScheduleService.hasTodaySchedule(logDTO.getStudentId(), today)) {
             createStudentLog(logDTO);
         } else {
@@ -86,15 +82,110 @@ public class StudentLogService {
                         logDTO.getStudyDetail(), logDTO.getStudyType(), logDTO.getStudyCount())
                 .orElseThrow(IllegalArgumentException::new);
 
-        if (logDTO.hasTextBookCode()) {
-            TextBook textBook = textBookDataJpa.findByCode(logDTO.getTextBookCode()).orElseThrow(IllegalArgumentException::new);
-            StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLog(student, study, textBook, logDTO));
-            questionLogSaveAll(logDTO, textBook, studentLog);
-            student.changeStudyStatus(studentLog);
-        } else {
-            StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLogNoneTextBook(student, study, logDTO));
-            student.changeStudyStatus(studentLog);
+        if (logDTO.hasLogId()) {
+            updateStudentLog(logDTO, study, student);
+            return;
         }
+
+        Optional<TextBook> textBookOptional = hasTextBook(logDTO);
+        if (textBookOptional.isPresent()) {
+            TextBook textBook = textBookOptional.get();
+            createWithTextBook(logDTO, student, study, textBook);
+        } else {
+            createNoneTextBook(logDTO, student, study);
+        }
+
+    }
+
+    private void createNoneTextBook(LogDTO logDTO, Student student, Study study) {
+        StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLogNoneTextBook(student, study, logDTO));
+        student.changeStudyStatus(studentLog);
+    }
+
+    private void createWithTextBook(LogDTO logDTO, Student student, Study study, TextBook textBook) {
+        StudentLog studentLog = studentLogDataJpa.save(StudentLog.createStudentLog(student, study, textBook, logDTO));
+        questionLogSaveAll(logDTO, textBook, studentLog);
+    }
+
+    private Optional<TextBook> hasTextBook(LogDTO logDTO) {
+        if (logDTO.hasTextBookCode()) {
+            return getTextBook(logDTO);
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    private Optional<TextBook> getTextBook(LogDTO logDTO) {
+        Optional<TextBook> findByCode = textBookDataJpa.findByCode(logDTO.getTextBookCode());
+        if (findByCode.isEmpty()) {
+            throw new IllegalArgumentException(NONE_TEXTBOOK);
+        }
+        return findByCode;
+    }
+
+    private void updateStudentLog(LogDTO logDTO, Study study, Student student) {
+        StudentLog studentLog = studentLogDataJpa.findById(logDTO.getId()).orElseThrow(() -> new IllegalArgumentException(NONE_STUDENT_LOG));
+        Optional<TextBook> textBookOptional = hasTextBook(logDTO);
+        if (textBookOptional.isPresent()) {
+            log.info("studentUpdate textBook has = {}", true);
+            TextBook logDTOTextBook = textBookOptional.get();
+            questionLogUpdate(logDTO, logDTOTextBook, studentLog);
+            studentLog.updateStudentLogWithTextBook(logDTO, study, student, logDTOTextBook);
+        } else {
+            log.info("studentUpdate textBook has = {}", false);
+            studentLog.updateStudentLogNoneTextBook(logDTO, study, student);
+        }
+
+
+    }
+
+    private void questionLogUpdate(LogDTO logDTO, TextBook logDTOTextBook, StudentLog studentLog) {
+        Map<Integer, Integer> answerMap = logDTO.getAnswerMap();
+        List<QuestionLog> questionLogList = studentLog.getQuestionLog();
+
+        if (isSameTextBook(logDTOTextBook, studentLog.getTextBook())) {
+            log.info("studentUpdate textBook is same = {}", true);
+
+            updateQuestionLogList(studentLog, answerMap, questionLogList);
+        } else {
+            log.info("studentUpdate textBook is same = {}", false);
+            List<Question> questionList = logDTOTextBook.getQuestionList();
+            questionLogList.clear();
+            createQuestionLogList(questionList, answerMap, studentLog);
+        }
+
+    }
+
+    private void updateQuestionLog(StudentLog studentLog, Map<Integer, Integer> answerMap, List<QuestionLog> questionLogList) {
+        double totalQuestionScore = questionLogList.size() * 10;
+        double totalStudentScore = 0;
+        for (int i = 0; i < answerMap.size(); i++) {
+            Integer score = answerMap.get(i + 1);
+            QuestionLog questionLog = questionLogList.get(i);
+            questionLog.changeQuestionScore(score);
+            totalStudentScore += score;
+        }
+        studentLog.intelligibilityCalculator(totalQuestionScore, totalStudentScore);
+    }
+
+    private void updateQuestionLogList(StudentLog studentLog, Map<Integer, Integer> answerMap, List<QuestionLog> questionLogList) {
+        if (isLogSizeEqual(questionLogList, answerMap)) {
+            updateQuestionLog(studentLog, answerMap, questionLogList);
+        } else {
+            throw new IllegalArgumentException(NOT_EQUAL_QUESTION);
+        }
+    }
+
+    private void deleteAllQuestionLog(List<QuestionLog> questionLogList) {
+        for (QuestionLog questionLog : questionLogList) {
+            questionLogRepository.deleteAndFlush(questionLog);
+        }
+    }
+
+    private boolean isSameTextBook(TextBook logDTOTextBook, TextBook textBook) {
+        Long existingCode = textBook.getId();
+        Long newCode = logDTOTextBook.getId();
+        return existingCode == newCode;
     }
 
     private void questionLogSaveAll(LogDTO logDTO, TextBook textBook, StudentLog studentLog) {
@@ -104,7 +195,7 @@ public class StudentLogService {
             createQuestionLogList(questionList, answerMap, studentLog);
             return;
         }
-        throw new IllegalArgumentException("question size is not match");
+        throw new IllegalArgumentException(NOT_EQUAL_QUESTION);
     }
 
     private void createQuestionLogList(List<Question> questionList, Map<Integer, Integer> answerMap, StudentLog studentLog) {
@@ -117,19 +208,26 @@ public class StudentLogService {
             totalStudentScore += score;
         }
         studentLog.intelligibilityCalculator(totalQuestionScore, totalStudentScore);
-        questionLogDataJpa.saveAll(questionLogList);
+
+        for (QuestionLog questionLog : questionLogList) {
+            questionLogRepository.saveAndFlush(questionLog);
+        }
     }
 
     private boolean isSizeEqual(List<Question> questionList, Map<Integer, Integer> answerMap) {
         return questionList.size() == answerMap.size();
     }
 
+    private boolean isLogSizeEqual(List<QuestionLog> questionLogList, Map<Integer, Integer> answerMap) {
+        return questionLogList.size() == answerMap.size();
+    }
 
-    public Map<TextBookType,List<TextBookChartDTO>> getTextBookChart(Long studentId) {
-        Map<TextBookType,List<TextBookChartDTO>> textBookChartMap = new HashMap<>();
+
+    public Map<TextBookType, List<TextBookChartDTO>> getTextBookChart(Long studentId) {
+        Map<TextBookType, List<TextBookChartDTO>> textBookChartMap = new HashMap<>();
         for (TextBookType textBookType : TEXTBOOK_ARRAY) {
             List<TextBookChartDTO> textBookChartDTOList = studentLogRepository.findStudentLogAvgByStudentIdAndCode(studentId, textBookType.code());
-            if (!textBookChartDTOList.isEmpty())        {
+            if (!textBookChartDTOList.isEmpty()) {
                 textBookChartMap.put(textBookType, textBookChartDTOList);
             }
         }
