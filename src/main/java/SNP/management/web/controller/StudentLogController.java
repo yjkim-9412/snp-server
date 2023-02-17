@@ -11,6 +11,7 @@ import SNP.management.domain.service.StudyService;
 import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.service.student.StudentLogService;
 import SNP.management.web.form.PracticeChartForm;
+import SNP.management.web.form.StudentLogForm;
 import SNP.management.web.form.TodayStudyForm;
 import SNP.management.web.form.student.SaveLogForm;
 import SNP.management.web.resolver.BindingResolver;
@@ -75,5 +76,12 @@ public class StudentLogController {
         }
 
         return practiceChartForm;
+    }
+
+    @GetMapping("/log/{logId}")
+    public StudentLogForm getOneLog(@PathVariable Long logId) {
+
+        StudentLogForm studentLogForm = StudentLogForm.createForm(studentLogService.getStudentLog(logId));
+        return studentLogForm;
     }
 }

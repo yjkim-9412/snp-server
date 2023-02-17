@@ -116,6 +116,8 @@ public class LogDTO {
     }
 
 
+
+
     public static LogDTO createLogDTO(SaveLogForm saveLogForm) {
         LogDTO logDTO = saveLogForm.getLogForm();
         logDTO.changeAnswerMap(saveLogForm.getAnswerMap());

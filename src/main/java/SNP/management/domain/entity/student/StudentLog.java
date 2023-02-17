@@ -177,4 +177,8 @@ public class StudentLog extends BaseEntity {
         this.setStudentLogNoneTextBook(student,study,logDTO);
     }
 
+    public boolean hasTextBook () {
+        return this.textBook != null;
+    }
+
 }

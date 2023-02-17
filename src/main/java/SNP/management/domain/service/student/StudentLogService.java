@@ -233,4 +233,24 @@ public class StudentLogService {
         }
         return textBookChartMap;
     }
+
+    public LogDTO getStudentLog(Long logId) {
+        StudentLog studentLog = studentLogDataJpa.findById(logId).orElseThrow(() -> new IllegalArgumentException("not found studentLog"));
+        LogDTO logDTO = LogDTO.createLogDTOByStudentLog(studentLog);
+        if (studentLog.hasTextBook()) {
+            log.info("getStudentLog has textBook = {}",true);
+            convertQuestionLogListToMap(studentLog, logDTO);
+        }
+
+        return logDTO;
+    }
+
+    private void convertQuestionLogListToMap(StudentLog studentLog, LogDTO logDTO) {
+        List<QuestionLog> questionLogList = studentLog.getQuestionLog();
+        Map<Integer, Integer> answerMap = new LinkedHashMap<>();
+        for (int i = 0; i < questionLogList.size(); i++) {
+            answerMap.put(i + 1, questionLogList.get(i).getScore());
+        }
+        logDTO.setAnswerMap(answerMap);
+    }
 }
