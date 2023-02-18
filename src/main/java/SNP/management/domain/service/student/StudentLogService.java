@@ -176,16 +176,12 @@ public class StudentLogService {
         }
     }
 
-    private void deleteAllQuestionLog(List<QuestionLog> questionLogList) {
-        for (QuestionLog questionLog : questionLogList) {
-            questionLogRepository.deleteAndFlush(questionLog);
-        }
-    }
+
 
     private boolean isSameTextBook(TextBook logDTOTextBook, TextBook textBook) {
         Long existingCode = textBook.getId();
         Long newCode = logDTOTextBook.getId();
-        return existingCode == newCode;
+        return existingCode.equals(newCode);
     }
 
     private void questionLogSaveAll(LogDTO logDTO, TextBook textBook, StudentLog studentLog) {
