@@ -46,7 +46,9 @@ public class TeacherController {
     @GetMapping("/logout")
     public void logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        session.invalidate();
+        if (session != null) {
+            session.invalidate();
+        }
     }
 
 
