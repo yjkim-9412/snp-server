@@ -181,7 +181,6 @@ const LogChart: React.FC<PropsType> = ({id, studentName}) => {
             axios.get(`/api/lesson/chart/${id}`)
                 .then(
                     async (res) => {
-                        console.log(res.data);
                         const dayChartData: DayChartType = res.data.dayChart;
                         const stepChartData: StepChartType = res.data.stepChart;
                         const categoryData: CategoryType = res.data.categoryChart;

@@ -35,7 +35,11 @@ type StudentStudyType = {
     dayCount: string
     study: string[],
     dayOfStudy?: DayOfStudyType,
-    getDay: number
+    getLogInfo?:LogType,
+    getDay: number,
+    getAnswerMap: answerType,
+    getQuestionCount: number
+
 
 }
 type DayOfStudyType = {
@@ -51,7 +55,7 @@ type DayOfStudyType = {
 type LogType = {
     id: string,
     studentId: string,
-    StudyDetail: string,
+    studyDetail: string,
     studyCount: string,
     concentration: string,
     concentrationAnswer: string,
@@ -62,10 +66,10 @@ type LogType = {
     figureTwoClear: number,
     figureTwo: number,
     textBookCode: string,
-    intelligibility: string,
-    processingTime: number,
-    processingMin: number,
-    processingSec: number,
+    intelligibility: number | null,
+    processingTime: string,
+    processingMin: string,
+    processingSec: string,
     readCount: string,
     memo: string,
     studyType: string,
@@ -75,12 +79,13 @@ type answerType = {
     [answer: string]: string;
 }
 
-const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy, getDay}) => {
+const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy, getDay,
+                                                        getLogInfo, getAnswerMap,getQuestionCount}) => {
     const navigate = useNavigate();
     const colorType = ['green', 'red'];
     const [color, setColor] = useState(colorType[0]);
     const [day, setDay] = useState(-1);
-    const clearLogForm = {
+    const clearLogForm:LogType = {
         id: '',
         studentId: '',
         studyDetail: '',
@@ -98,6 +103,7 @@ const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy
         processingMin: '',
         processingSec: '',
         readCount: '',
+        intelligibility: null,
         memo: '',
         studyType: '',
         dayOfWeek: ''
@@ -114,7 +120,7 @@ const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy
         9: '',
         10: ''
     };
-    const [logForm, setLogForm] = useState(() => {
+    const [logForm, setLogForm] = useState<LogType>(() => {
         return clearLogForm
     });
     const [dayOfStudyValue, setDayOfStudyValue] = useState<DayOfStudyType>({
@@ -136,6 +142,7 @@ const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy
     const [answerMap, setAnswerMap] = useState<answerType>(() => {
         return clearAnswer
     });
+    const [notServerInfo, setNotServerInfo] = useState(true);
 
     const [questionCount, setQuestionCount] = useState(0);
 
@@ -159,7 +166,7 @@ const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy
         setAnswerMap({...answerMap, [name]: value})
     }
     useEffect(() => {
-
+        setNotServerInfo(true);
         if (study !== undefined) {
             setStudyValue(study);
             setDay(getDay);
@@ -183,17 +190,36 @@ const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy
             }
         }
     }, [study, dayOfStudy])
+    useEffect(() => {
+        if (getLogInfo !== undefined) {
+            setNotServerInfo(false);
+            setLogForm(getLogInfo);
+            setQuestionCount(getQuestionCount);
+            setLogForm({
+                ...logForm, studentId: getLogInfo.id, studyCount: getLogInfo.studyCount,
+                studyDetail: getLogInfo.studyDetail, studyType: getLogInfo.studyType, concentration: getLogInfo.concentration,
+                concentrationAnswer: getLogInfo.concentrationAnswer, rapidEyeball: getLogInfo.rapidEyeball, eyeBallCount: getLogInfo.eyeBallCount,
+                figureOneClear: getLogInfo.figureOneClear, figureOne: getLogInfo.figureOne, figureTwoClear: getLogInfo.figureTwoClear, figureTwo: getLogInfo.figureTwo,
+                textBookCode: getLogInfo.textBookCode, processingMin: getLogInfo.processingMin, processingSec: getLogInfo.processingSec,
+                readCount: getLogInfo.readCount, memo: getLogInfo.memo,
+            })
+        }
+    },[getLogInfo])
     const fullCount = 10;
     let totalCount = 0;
     useEffect(() => {
-        setAnswerMap(clearAnswer);
-        if (questionCount !== 0) {
-            totalCount = (fullCount + questionCount) - fullCount;
-            for (let i = fullCount; i > totalCount; i--) {
-                delete answerMap[i.toString()];
-                setAnswerMap({...answerMap});
+        if (notServerInfo){
+            console.log(notServerInfo);
+            setAnswerMap(clearAnswer);
+            if (questionCount !== 0 ) {
+                totalCount = (fullCount + questionCount) - fullCount;
+                for (let i = fullCount; i > totalCount; i--) {
+                    delete answerMap[i.toString()];
+                    setAnswerMap({...answerMap});
+                }
             }
         }
+
     }, [questionCount])
     const onChangeSelect = (e: SelectChangeEvent) => {
         setStudyDetail(e.target.value);
@@ -203,20 +229,20 @@ const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy
         e.preventDefault();
         setIsLoading(true)
         let data = {logForm, answerMap}
-        axios.post(`/api/lesson/save/${day}`, data)
-            .then(() => {
-                setColor(colorType[0]);
-                setSuccessMes('저장성공')
-            })
-            .catch(error => {
-                console.log(error)
-                setColor(colorType[1]);
-                setSuccessMes('저장 실패');
-
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
+        console.log(data);
+        // axios.post(`/api/lesson/save/${day}`, data)
+        //     .then(() => {
+        //         setColor(colorType[0]);
+        //         setSuccessMes('저장성공')
+        //     })
+        //     .catch(error => {
+        //         setColor(colorType[1]);
+        //         setSuccessMes('저장 실패');
+        //
+        //     })
+        //     .finally(() => {
+        //         setIsLoading(false);
+        //     })
 
 
     }
@@ -311,7 +337,10 @@ const LessonRegister: React.FC<StudentStudyType> = ({dayCount, study, dayOfStudy
 
                                 <SearchTextbook getScore={answerMap} onChange={onChangeProps} getMin={logForm.processingMin}
                                                 getSec={logForm.processingSec} getTextBookCode={logForm.textBookCode} getQuestionCount={questionCount}
-                                                onChangeNumber={onChangeNumber} onChangeAnswer={onChangeAnswer}/>
+                                                onChangeNumber={onChangeNumber} onChangeAnswer={onChangeAnswer} notServerInfo={notServerInfo} getReadCount={logForm.readCount}
+                                                getAnswerMap={getAnswerMap}
+
+                                />
 
                             </Stack>
                         </Grid>

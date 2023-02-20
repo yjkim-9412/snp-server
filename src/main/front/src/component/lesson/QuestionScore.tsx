@@ -6,10 +6,11 @@ type QuestionScoreType = {
     num:string,
     getScore?:string,
     onChange: (name: string, value: string) => void,
-    questionCount: number;
+    questionCount: number,
+    notServerInfo:boolean
 }
 
-const QuestionScore:React.FC<QuestionScoreType> = ({num,getScore,onChange, questionCount}) => {
+const QuestionScore:React.FC<QuestionScoreType> = ({num,getScore,onChange, questionCount,notServerInfo}) => {
     const [isDisable, setIsDisable] = useState(true);
     const [score, setScore] = useState('');
     const [errorText, setErrorText] = useState('');
@@ -29,7 +30,9 @@ const QuestionScore:React.FC<QuestionScoreType> = ({num,getScore,onChange, quest
     }
 
     useEffect(() => {
-        setScore('');
+        if (notServerInfo){
+            setScore('');
+        }
         setErrorText('');
         if (parseInt(num) > questionCount) {
             setIsDisable(true)
@@ -39,7 +42,9 @@ const QuestionScore:React.FC<QuestionScoreType> = ({num,getScore,onChange, quest
 
     },[questionCount])
     useEffect(() => {
-        setScore('');
+        if (notServerInfo){
+            setScore('');
+        }
         setErrorText('');
         if (getScore !== undefined && getScore !== '') {
             setScore(getScore.toString());

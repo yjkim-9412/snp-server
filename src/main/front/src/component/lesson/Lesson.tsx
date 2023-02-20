@@ -46,32 +46,32 @@ type DayOfStudyType = {
     studyTypeString: string,
 }
 type logType = {
-    concentration:string,
-    concentrationAnswer:string,
-    createDate:string,
-    dayOfWeek:string,
-    eyeBallCount:string,
-    figureOne:string,
-    figureOneClear:string,
-    figureTwo:string,
-    figureTwoClear:string,
-    id:string,
-    intelligibilityReadOnly:string,
-    memo:string,
-    processingMin:string,
-    processingSec:string,
-    processingTime:string,
-    rapidEyeball:string,
-    readCount:string,
-    studentId:string,
-    studyCount:string,
-    studyDetail:string,
-    studyType:string,
-    textBookCode:string,
-    textBookName:string,
-    textBookType:string,
-    textBookTypeString:string
+    id: string,
+    studentId: string,
+    studyDetail: string,
+    studyCount: string,
+    concentration: string,
+    concentrationAnswer: string,
+    rapidEyeball: string,
+    eyeBallCount: string,
+    figureOneClear: number,
+    figureOne: number,
+    figureTwoClear: number,
+    figureTwo: number,
+    textBookCode: string,
+    intelligibility: number | null,
+    processingTime: string,
+    processingMin: string,
+    processingSec: string,
+    readCount: string,
+    memo: string,
+    studyType: string,
+    dayOfWeek: string
 }
+type answerType = {
+    [answer: string]: string ;
+}
+
 const Lesson: React.FC = () => {
     dayjs.locale('ko');
     const [value, setValue] = React.useState<Dayjs | null>(dayjs());
@@ -94,9 +94,12 @@ const Lesson: React.FC = () => {
     const [studentId, setStudentId] = useState('');
 
     const [logRows, setLogRows] = useState<logType[]>([]);
+    const [logInfo, setLogInfo] = useState<logType | undefined>();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isLogLoading, setIsLogLoading] = useState<boolean>(false);
+    const [getAnswerMap, setGetAnswerMap] = useState<answerType>({})
+    const [getQuestionCount, setGetQuestionCount] = useState(0);
 
     const dataGridRef = useRef<HTMLDivElement | null>(null);
     const dayOfStudyColumns: GridColDef[] = [
@@ -118,7 +121,12 @@ const Lesson: React.FC = () => {
     ];
     const logColumns: GridColDef[] =[
         {field: 'createDate', headerName: '수업일자', width: 110},
-        {field: 'studyDetail', headerName: '수업단계', width: 110},
+        {field: 'studyDetail', headerName: '수업단계', width: 110, renderCell: (params) => (
+                <Button fullWidth onClick={() => {
+                    getStudentLog(params.row.id)
+                }}>
+                    {params.row.studyDetail}</Button>
+            )},
         {field: 'studyCount', headerName: '일수', width: 50},
         {field: 'concentration', headerName: '정신집중', width: 90, renderCell: (params) => (
         `${params.row.concentration} - ${params.row.concentrationAnswer === true? 'O':'X'}`
@@ -146,6 +154,19 @@ const Lesson: React.FC = () => {
     const onChangeDay = (e: SelectChangeEvent) => {
         let day = parseInt(e.target.value);
         setDaySelect(day);
+    }
+    const getStudentLog = (logId:string) => {
+        axios.get(`/api/lesson/log/${logId}`, {params: {daySelect}})
+            .then(res => {
+                console.log(res.data)
+                setLogInfo(res.data.studentLog);
+                setGetAnswerMap(res.data.answerMap);
+                setGetQuestionCount(res.data.questionCount);
+            }).catch(error => {
+            if (error.response && error.response.status === 401) {
+                navigate('/login');
+            }
+        })
     }
     const getStudentStudy = (id: string, name:string) => {
         axios.get(`/api/lesson/${id}`, {params: {daySelect}})
@@ -238,7 +259,8 @@ const Lesson: React.FC = () => {
             </Grid>
             <Grid item xs={12} sm={9} >
                 <Grid item xs={12}  >
-                <LessonRegister dayOfStudy={dayOfStudy} dayCount={dayOfStudy.currentStudyCount} study={studyList} getDay={daySelect}/>
+                <LessonRegister dayOfStudy={dayOfStudy} dayCount={dayOfStudy.currentStudyCount} study={studyList}
+                                getDay={daySelect} getLogInfo={logInfo} getAnswerMap={getAnswerMap} getQuestionCount={getQuestionCount}/>
                 </Grid>
                 <Grid item xs={12}  sx={{marginTop:2}}>
                     <Paper

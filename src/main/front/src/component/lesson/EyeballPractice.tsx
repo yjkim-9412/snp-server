@@ -52,15 +52,17 @@ const EyeballPractice: React.FC<ConcentrationFieldType> = ({
     }
 
     useEffect(() => {
-        if (typeof getRapidEyeball === "string") {
-            setEyeball({...eyeball, rapidEyeball: getRapidEyeball});
+
+        if (typeof getRapidEyeball !== "undefined") {
+            setEyeball(prevState => ({...prevState, rapidEyeball: getRapidEyeball}))
         }
     }, [getRapidEyeball]);
     useEffect(() => {
         if (typeof getEyeBallCount === "string") {
-            setEyeball({...eyeball, eyeBallCount: getEyeBallCount});
+            setEyeball(prevState => ({...prevState, eyeBallCount: getEyeBallCount}))
         }
     }, [getEyeBallCount]);
+
     return (
         <Paper
             sx={{

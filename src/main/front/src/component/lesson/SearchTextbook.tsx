@@ -16,14 +16,19 @@ type  SearchTextbookType = {
     getMin:string,
     getSec:string,
     getTextBookCode:string
-    getQuestionCount:number;
+    getQuestionCount:number,
+    notServerInfo:boolean,
+    getReadCount: string,
+    getAnswerMap:answerType
+
 }
 type answerType = {
     [answer: string]: string;
 }
 
 const SearchTextbook: React.FC<SearchTextbookType> = ({onChange, onChangeNumber, getScore, onChangeAnswer,getSec
-                                                          ,getMin,getTextBookCode, getQuestionCount}) => {
+                                                          ,getMin,getTextBookCode, getQuestionCount, notServerInfo,getReadCount,
+                                                      getAnswerMap}) => {
     const answerForm = {
         1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: '', 10: ''
     };
@@ -76,22 +81,30 @@ const SearchTextbook: React.FC<SearchTextbookType> = ({onChange, onChangeNumber,
         }
     }, [getScore])
     useEffect(() => {
-            setProcessingTime({...processingTime,processingMin: getMin})
+        setProcessingTime({...processingTime,processingMin: getMin})
     },[getMin])
     useEffect(() => {
-            setProcessingTime({...processingTime,processingSec: getSec})
+        setProcessingTime({...processingTime,processingSec: getSec})
     },[getSec])
     useEffect(() => {
-        setTextBook({...textBook,code:getTextBookCode, name: '', detail:''});
-        setProcessingTime({...processingTime,processingMin: '', processingSec: ''})
-        setReadCount('')
-        setProcessTimeError('')
-        setReadCountError('');
+        if (notServerInfo){
+            setTextBook({...textBook,code:getTextBookCode, name: '', detail:''});
+            setProcessingTime({...processingTime,processingMin: '', processingSec: ''})
+            setReadCount('')
+            setProcessTimeError('')
+            setReadCountError('');
+        }else {
+            setTextBook({...textBook,code:getTextBookCode});
+            setProcessingTime({...processingTime,processingMin: getMin, processingSec: getSec})
+            setQuestionCount(getQuestionCount);
+            setReadCount(getReadCount);
+            setProcessTimeError('')
+            setReadCountError('');
+            setAnswer(getAnswerMap);
+        }
     },[getTextBookCode])
     useEffect(() => {
-        if (getQuestionCount === 0) {
             setQuestionCount(getQuestionCount);
-        }
     },[getQuestionCount])
 
     return (
@@ -143,27 +156,27 @@ const SearchTextbook: React.FC<SearchTextbookType> = ({onChange, onChangeNumber,
                 <Grid item xs={12}>
                     <Grid>
                         <QuestionScore num={'1'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["1"]}/>
+                                       getScore={answer["1"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'2'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["2"]}/>
+                                       getScore={answer["2"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'3'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["3"]}/>
+                                       getScore={answer["3"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'4'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["4"]}/>
+                                       getScore={answer["4"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'5'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["5"]}/>
+                                       getScore={answer["5"]} notServerInfo={notServerInfo}/>
                     </Grid>
                     <Grid>
                         <QuestionScore num={'6'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["6"]}/>
+                                       getScore={answer["6"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'7'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["7"]}/>
+                                       getScore={answer["7"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'8'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["8"]}/>
+                                       getScore={answer["8"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'9'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["9"]}/>
+                                       getScore={answer["9"]} notServerInfo={notServerInfo}/>
                         <QuestionScore num={'10'} onChange={onChangeAnswer} questionCount={questionCount}
-                                       getScore={answer["10"]}/>
+                                       getScore={answer["10"]} notServerInfo={notServerInfo}/>
                     </Grid>
                 </Grid>
             </Paper>
