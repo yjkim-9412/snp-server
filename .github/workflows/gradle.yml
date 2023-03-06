@@ -13,7 +13,7 @@ env:
   # AWS & Elastic Bean Stalk
   AWS_REGION: ap-northeast-2
   EB_ENVIRONMENT_NAME: Snpservice-env
-  EB_APPLICATION_NAME: snpservice-env
+  EB_APPLICATION_NAME: snp-service
   EB_DEPLOYMENT_PACKAGE: elasticbeanstalk/docker-compose.yml
   
 jobs:
