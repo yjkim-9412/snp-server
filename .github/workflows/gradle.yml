@@ -40,7 +40,7 @@ jobs:
     - name: Docker build
       run: |
        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-       docker build -t snp-backend
+       docker build -t snp-backend .
        docker tag snp-backend jackghl/snp-service:backend
        docker push jackghl/snp-service:backend
    
