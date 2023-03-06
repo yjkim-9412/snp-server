@@ -43,7 +43,10 @@ jobs:
        docker build -t snp-backend
        docker tag snp-backend jackghl/snp-service:backend
        docker push jackghl/snp-service:backend
-     
+   
+    - name: Generate docker-compose.yml
+      run: echo "${{ secrets.DOCKER_COMPOSE }}" > docker-compose.yml
+      
      # Beanstalk
     - name: Beanstalk Deploy
       uses: einaregilsson/beanstalk-deploy@v20
@@ -52,11 +55,13 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESSKEY }}
         application_name: ${{ env.EB_APPLICATION_NAME }}
         environment_name: ${{ env.EB_ENVIRONMENT_NAME }}
-        version_label: "v${{ github.run_number }}"
+        version_label: "test-back-v${{ github.run_number }}"
         region: ${{ env.AWS_REGION }}
         deployment_package: docker-compose.yml
     
     #remove yml
     - name: Remove application.yml
       run: rm ./src/main/resources/application.yml
+    - name: Remove application.yml
+      run: rm docker-compose.yml
        
