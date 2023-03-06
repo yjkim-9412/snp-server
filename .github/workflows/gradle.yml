@@ -6,15 +6,10 @@ on:
     branches: [ "master" ]
 
 env:
-  # Java
-  JAVA_VERSION: 1.15
-  # DockerHub
-  DOCKER_HUB_USERNAME: woohobi
   # AWS & Elastic Bean Stalk
   AWS_REGION: ap-northeast-2
   EB_ENVIRONMENT_NAME: Snpservice-env
   EB_APPLICATION_NAME: snp-service
-  EB_DEPLOYMENT_PACKAGE: elasticbeanstalk/docker-compose.yml
   
 jobs:
   build:
