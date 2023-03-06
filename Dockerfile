@@ -2,7 +2,7 @@ FROM amazoncorretto:11
 
 CMD ["./gradlew", "clean", "build"]
 
-ARG JAR_FILE=./build/libs/*.jar
+ARG JAR_FILE=./build/libs/app.jar
 
 COPY ${JAR_FILE} ./app.jar
 
