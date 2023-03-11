@@ -24,7 +24,6 @@ public class TextBookController {
     private final TextBookService textBookService;
     private final BindingResolver bindingResolver;
     private final QuestionService questionService;
-    private final QuestionDataJpa questionDataJpa;
 
     private final CategoryDataJpa categoryDataJpa;
     @GetMapping("/")

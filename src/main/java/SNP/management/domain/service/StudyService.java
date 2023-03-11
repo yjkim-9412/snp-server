@@ -10,7 +10,6 @@ import SNP.management.domain.repository.StudyDataJpa;
 import SNP.management.domain.repository.student.StudentDataJpa;
 import SNP.management.domain.repository.student.StudentLogRepository;
 import SNP.management.domain.service.schedule.RequestScheduleService;
-import SNP.management.domain.service.schedule.ScheduleService;
 import SNP.management.domain.exceptionlist.ScheduleException;
 
 import lombok.RequiredArgsConstructor;

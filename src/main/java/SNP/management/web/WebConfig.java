@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
         resolvers.add(new LoginArgumentResolver());
     }
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")

@@ -1,8 +1,6 @@
 package SNP.management.domain.repository.schedule;
 
 import SNP.management.domain.DTO.QTodayScheduleDTO;
-import SNP.management.domain.DTO.ScheduleDTO;
-import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.enumlist.DayOfWeek;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static SNP.management.domain.entity.QTeacher.teacher;

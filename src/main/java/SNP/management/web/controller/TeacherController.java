@@ -5,7 +5,6 @@ import SNP.management.web.resolver.BindingResolver;
 import SNP.management.web.resolver.Login;
 import SNP.management.web.resolver.SessionConst;
 import SNP.management.domain.DTO.TeacherDTO;
-import SNP.management.domain.repository.teacher.TeacherRepository;
 import SNP.management.domain.service.teacher.TeacherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ public class TeacherController {
 
     private final TeacherService teacherService;
     private final BindingResolver bindingResolver;
-    private final TeacherRepository teacherRepository;
 
 
     @PostMapping("/login")

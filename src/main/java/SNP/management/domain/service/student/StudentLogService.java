@@ -33,6 +33,8 @@ public class StudentLogService {
     private static final String NOT_EQUAL_QUESTION = "is not same TextBook Question";
     private static final String NONE_STUDENT_LOG = "not found StudentLog";
     private static final String NONE_TEXTBOOK = "not found TextBook";
+    private static final TextBookType[] TEXTBOOK_ARRAY = TextBookType.values();
+
     private final StudentDataJpa studentDataJpa;
     private final StudyDataJpa studyDataJpa;
     private final StudentLogDataJpa studentLogDataJpa;
@@ -43,7 +45,6 @@ public class StudentLogService {
     private final RequestScheduleService requestScheduleService;
     private final StudentLogRepository studentLogRepository;
     private final QuestionLogRepository questionLogRepository;
-    private static final TextBookType[] TEXTBOOK_ARRAY = TextBookType.values();
 
 
     protected void saveFirstLog(Student student) {
@@ -179,8 +180,8 @@ public class StudentLogService {
 
 
     private boolean isSameTextBook(TextBook logDTOTextBook, TextBook textBook) {
-        Long existingCode = textBook.getId();
-        Long newCode = logDTOTextBook.getId();
+        String existingCode = textBook.getCode();
+        String newCode = logDTOTextBook.getCode();
         return existingCode.equals(newCode);
     }
 

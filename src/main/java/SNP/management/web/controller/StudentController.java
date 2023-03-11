@@ -20,7 +20,6 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
-    private final ScheduleService scheduleService;
     private final BindingResolver bindingResolver;
 
 

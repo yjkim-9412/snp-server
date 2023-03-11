@@ -1,6 +1,7 @@
 package SNP.management;
 
 import SNP.management.domain.DTO.chart.*;
+import SNP.management.domain.entity.basictest.StudyHabitsLog;
 import SNP.management.domain.enumlist.EyeBall;
 import SNP.management.domain.enumlist.TextBookType;
 import SNP.management.domain.repository.student.QuestionLogRepository;
@@ -49,6 +50,7 @@ public class ChartTest {
             System.out.println("stepChartDTO.getProcessingTime() = " + stepChartDTO.getProcessingTime());
 
         }
+
 
     }
     @Test

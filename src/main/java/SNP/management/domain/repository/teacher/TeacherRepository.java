@@ -1,7 +1,6 @@
 package SNP.management.domain.repository.teacher;
 
 import SNP.management.domain.DTO.TeacherDTO;
-import SNP.management.domain.entity.QTeacher;
 import SNP.management.domain.entity.Teacher;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;

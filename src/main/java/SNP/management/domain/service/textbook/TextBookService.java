@@ -55,9 +55,7 @@ public class TextBookService {
 
         TextBook textBook = TextBook.createTextBook(textBookDTO, category);
 
-        textBookDataJpa.save(textBook);
-
-        return textBook;
+        return textBookDataJpa.save(textBook);
     }
 
     public void update(TextBookDTO textBookDTO, List<QuestionDTO> questionDTOList) {

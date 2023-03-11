@@ -1,11 +1,9 @@
 package SNP.management.domain.service.schedule;
 
-import SNP.management.domain.DTO.TodayScheduleDTO;
 import SNP.management.domain.DTO.ScheduleDTO;
 
 import SNP.management.domain.entity.student.Schedule;
 import SNP.management.domain.entity.student.Student;
-import SNP.management.domain.enumlist.DayOfWeek;
 import SNP.management.domain.repository.schedule.ScheduleDataJpa;
 import SNP.management.domain.repository.schedule.ScheduleRepository;
 import SNP.management.domain.repository.student.StudentDataJpa;
