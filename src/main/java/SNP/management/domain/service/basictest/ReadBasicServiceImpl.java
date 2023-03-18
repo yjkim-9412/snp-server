@@ -1,17 +1,18 @@
 package SNP.management.domain.service.basictest;
 
 import SNP.management.domain.DTO.BasicTestDTO;
+import SNP.management.domain.repository.basictest.StudyHabitsDataJpa;
+import SNP.management.domain.repository.student.StudentDataJpa;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
 public class ReadBasicServiceImpl implements BasicTestService{
 
+    private final StudyHabitsDataJpa studyHabitsDataJpa;
+    private final StudentDataJpa studentDataJpa;
     @Override
     public void saveStudentAnswer(List<BasicTestDTO> basicTestDTO) {
 

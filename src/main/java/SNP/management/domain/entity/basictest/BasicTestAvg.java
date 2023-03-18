@@ -1,6 +1,7 @@
 package SNP.management.domain.entity.basictest;
 
 import SNP.management.domain.DTO.BasicTestDTO;
+import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.entity.student.Student;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Table(name = "BASIC_TEST_AVERAGE")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BasicTestAvg {
+public class BasicTestAvg extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +34,6 @@ public class BasicTestAvg {
     @Column(name = "study_habits")
     private double studyHabits;
 
-    public void CalculatorBasicTestAvg(BasicTestDTO basicTestDTO) {
-
-    }
 
     public static BasicTestAvg createBasicTestAvg(Student student) {
         return new BasicTestAvg(student);

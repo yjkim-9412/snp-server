@@ -1,9 +1,11 @@
 package SNP.management.domain.enumlist;
 
+import SNP.management.domain.resolver.BasicTestConst;
+
 public enum BasicTestType {
-    STUDY_HABITS("studyHabitsServiceImpl"),
-    READ_BASIC("readBasicServiceImpl"),
-    INTELLIGENCE("intelligenceImpl");
+    STUDY_HABITS(BasicTestConst.STUDY_HABITS),
+    READ_BASIC(BasicTestConst.READ_BASIC),
+    INTELLIGENCE(BasicTestConst.INTELLIGENCE);
 
     private final String string;
 

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
 public class IntelligenceImpl implements BasicTestService {
