@@ -43,11 +43,6 @@ public class BasicTestConfig {
             BasicTestType basicTestType = BasicTestType.findByString(beanName);
             basicTestServiceMap.put(basicTestType, basicTestServiceBeanMap.get(beanName));
         }
-        for (Map.Entry<BasicTestType, BasicTestService> et : basicTestServiceMap.entrySet()) {
-            System.out.println("et.getKey() = " + et.getKey());
-            System.out.println("et.getValue() = " + et.getValue());
-
-        }
         return basicTestServiceMap;
     }
 
