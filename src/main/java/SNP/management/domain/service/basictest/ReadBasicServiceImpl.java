@@ -1,6 +1,6 @@
 package SNP.management.domain.service.basictest;
 
-import SNP.management.domain.DTO.BasicTestDTO;
+import SNP.management.domain.DTO.basictest.BasicTestDTO;
 import SNP.management.domain.repository.basictest.StudyHabitsDataJpa;
 import SNP.management.domain.repository.student.StudentDataJpa;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
 package SNP.management.domain.entity.basictest;
 
-import SNP.management.domain.DTO.BasicTestDTO;
 import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.entity.student.Student;
 import lombok.AccessLevel;
@@ -8,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "BASIC_TEST_AVERAGE")

@@ -1,6 +1,6 @@
 package SNP.management.domain.service.basictest;
 
-import SNP.management.domain.DTO.BasicTestDTO;
+import SNP.management.domain.DTO.basictest.BasicTestDTO;
 import SNP.management.domain.enumlist.BasicTestType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
