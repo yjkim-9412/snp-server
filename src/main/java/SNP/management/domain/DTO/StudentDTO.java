@@ -30,7 +30,7 @@ public class StudentDTO {
     private Integer readLv;
     private Integer intLv;
     private String address;
-    private Boolean registration;
+    private boolean registration;
     private String date;
     private String stepName;
     private Integer studyCount;
@@ -40,7 +40,7 @@ public class StudentDTO {
     @QueryProjection
     public StudentDTO(String name, int age, String birth, String phone, String email, String parentName,
                       String parentPhone, String gender, StudyType studyType, String address,
-                      GradeType grade, int gradeLv, int speed, int readLv, int intLv, Long teacherId, Boolean registration) {
+                      GradeType grade, int gradeLv, int speed, int readLv, int intLv,  boolean registration) {
         this.name = name;
         this.age = age;
         this.birth = birth;

@@ -34,17 +34,7 @@ public class Question extends BaseEntity {
     private AnswerType answerType;
 
     public static Question createQuestion(QuestionDTO questionDTO, TextBook textBook){
-        Question question = new Question();
-        question.setQuestion(questionDTO, textBook);
-        return question;
-    }
-    private void setQuestion(QuestionDTO questionDTO, TextBook textBook){
-        this.textBook = textBook;
-        this.number =  questionDTO.getNumber() != null?  questionDTO.getNumber() : 0;
-        this.answerType = questionDTO.getAnswerType();
-        this.questionType = questionDTO.getQuestionType();
-        this.textBook.getQuestionList().add(this);
-
+        return new Question(textBook, questionDTO.getQuestionType(), questionDTO.getNumber(), questionDTO.getAnswerType());
     }
 
     public void changeQuestion(QuestionDTO questionDTO, TextBook textBook) {
@@ -54,4 +44,11 @@ public class Question extends BaseEntity {
         this.answerType = questionDTO.getAnswerType();
     }
 
+    private Question(TextBook textBook, QuestionType questionType, Integer number, AnswerType answerType) {
+        this.textBook = textBook;
+        this.questionType = questionType;
+        this.number = number != null ?  number : 0;
+        this.answerType = answerType;
+        this.textBook.getQuestionList().add(this);
+    }
 }

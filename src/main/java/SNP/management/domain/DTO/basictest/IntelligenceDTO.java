@@ -1,7 +1,7 @@
 package SNP.management.domain.DTO.basictest;
 
-import SNP.management.domain.enumlist.BasicTestType;
-import SNP.management.domain.enumlist.IntelligenceType;
+import SNP.management.domain.enumlist.basictest.BasicTestType;
+import SNP.management.domain.enumlist.basictest.IntelligenceType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -23,12 +23,12 @@ public class Grade {
     private Integer gradeLv;
 
 
-    private Grade (StudentDTO studentDTO) {
-        this.gradeType = studentDTO.getGrade();
-        this.gradeLv = studentDTO.getGradeLv();
+    private Grade (GradeType gradeType, Integer gradeLv) {
+        this.gradeType = gradeType;
+        this.gradeLv = gradeLv;
     }
 
-    public static Grade createGrade(StudentDTO studentDTO) {
-        return new Grade(studentDTO);
+    public static Grade createGrade(GradeType gradeType, Integer gradeLv) {
+        return new Grade(gradeType, gradeLv);
     }
 }

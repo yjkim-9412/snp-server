@@ -34,25 +34,27 @@ public class TextBookTest {
     @PersistenceContext
     EntityManager em;
     @Autowired
-     CategoryDataJpa categoryDataJpa;
+    CategoryDataJpa categoryDataJpa;
     @Autowired
     TextBookDataJpa textBookDataJpa;
     @Autowired
     QuestionDataJpa questionDataJpa;
     @Autowired
-     TextBookService textBookService;
+    TextBookService textBookService;
     @Autowired
     HttpSession session;
+
     @BeforeEach
     void beforeEach() {
-        session.setAttribute(SessionConst.LOGIN_TEACHER,"xxt1205@gmail.com");
+        session.setAttribute(SessionConst.LOGIN_TEACHER, "xxt1205@gmail.com");
     }
+
     @Test
     void saveTextBookAndFindById() {
         //given
         Integer categoryId = 6;
 
-        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300,categoryId);
+        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300, categoryId);
 
         TextBook textBook = textBookService.save(textBookDTO);
         Long textBookId = textBook.getId();
@@ -67,14 +69,15 @@ public class TextBookTest {
         assertThat(textBookId).isEqualTo(foundTextBook.getId());
 
     }
+
     @Test
     void saveTextBookAndQuestion() {
         //given
         Integer categoryId = 9;
 
-        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "과학의 발상", 1000,categoryId);
+        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "과학의 발상", 1000, categoryId);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
-        QuestionType[] questionType = {QuestionType.CREATIVITY,QuestionType.CRITICISM,QuestionType.REASONING,
+        QuestionType[] questionType = {QuestionType.CREATIVITY, QuestionType.CRITICISM, QuestionType.REASONING,
                 QuestionType.ANALYTICAL, QuestionType.CRITICISM, QuestionType.LOGICAL, QuestionType.CREATIVITY,
                 QuestionType.UNDERSTANDING, QuestionType.CREATIVITY, QuestionType.LOGICAL,};
 
@@ -91,7 +94,7 @@ public class TextBookTest {
     void updateTextBook() {
         //given
         Integer categoryId = 6;
-        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300,categoryId);
+        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300, categoryId);
         TextBook textBook = textBookService.save(textBookDTO);
         Long textBookId = textBook.getId();
         em.flush();
@@ -104,7 +107,8 @@ public class TextBookTest {
         TextBook foundTextBook = textBookDataJpa.findById(textBookId).orElseThrow(IllegalArgumentException::new);
         Category category = categoryDataJpa.findById(textBookDTOUpdate.getCategoryId()).orElseThrow(IllegalArgumentException::new);
 
-        foundTextBook.ChangeTextBook(textBookDTOUpdate, category);
+        foundTextBook.changeTextBook(category, textBookDTO.getName(), textBookDTO.getTextBookType(),
+                textBookDTO.getNumberOfCharacters(), textBookDTO.getQuestionCount());
         em.flush();
 
         //then
@@ -116,7 +120,7 @@ public class TextBookTest {
     void updateTextBookService() {
         //given
         Integer categoryId = 6;
-        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300,categoryId);
+        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300, categoryId);
         TextBook textBook = textBookService.save(textBookDTO);
         Long textBookId = textBook.getId();
         em.flush();
@@ -136,7 +140,7 @@ public class TextBookTest {
     void deleteTextBook() {
         //given
         Integer categoryId = 6;
-        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300,categoryId);
+        TextBookDTO textBookDTO = new TextBookDTO(TextBookType.BASIC, "윌리를 찾아서", 1300, categoryId);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         TextBookDTO textBookDTOResult = textBookService.saveWithQuestion(textBookDTO, questionDTOList);

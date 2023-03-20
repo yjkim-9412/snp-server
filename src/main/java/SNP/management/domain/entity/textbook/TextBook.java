@@ -16,7 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "TEXT_BOOK", indexes = @Index(name = "idx_code", columnList = "code"))
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter @Slf4j
+@Getter
+@Slf4j
 public class TextBook extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,36 +40,38 @@ public class TextBook extends BaseEntity {
     @Column(name = "question_count")
     private Integer questionCount;
 
-    @OneToMany(mappedBy = "textBook",orphanRemoval = true)
+    @OneToMany(mappedBy = "textBook", orphanRemoval = true)
     private List<Question> questionList = new ArrayList<>();
 
     public void createCode() {
         if (this.id != null) {
             this.code = this.getTextBookType().code() + this.id;
             log.info("code = {}", this.code);
-        }else {
+        } else {
             throw new NullPointerException("createCode id is empty");
         }
     }
+
     public static TextBook createTextBook(TextBookDTO textBookDTO, Category category) {
-        TextBook textBook = new TextBook();
-        textBook.category = category;
-        textBook.textBookType = textBookDTO.getTextBookType();
-        textBook.numberOfCharacters = textBookDTO.getNumberOfCharacters();
-        textBook.name = textBookDTO.getName();
-        return textBook;
+        return new TextBook(category, textBookDTO.getName(), textBookDTO.getTextBookType(), textBookDTO.getNumberOfCharacters());
     }
 
-    public void ChangeTextBook(TextBookDTO textBookDTO, Category category) {
+    public void changeTextBook(Category category, String name, TextBookType textBookType, int numberOfCharacters, int questionCount) {
         this.category = category;
-        this.name = textBookDTO.getName();
-        this.textBookType = textBookDTO.getTextBookType();
-        this.numberOfCharacters = textBookDTO.getNumberOfCharacters();
-        this.questionCount = textBookDTO.getQuestionCount();
+        this.name = name;
+        this.textBookType = textBookType;
+        this.numberOfCharacters = numberOfCharacters;
+        this.questionCount = questionCount;
     }
-    public void createQuestionCount(Integer questionSize){
+
+    public void createQuestionCount(Integer questionSize) {
         this.questionCount = questionSize;
     }
 
-
+    private TextBook(Category category, String name, TextBookType textBookType, Integer numberOfCharacters) {
+        this.category = category;
+        this.name = name;
+        this.textBookType = textBookType;
+        this.numberOfCharacters = numberOfCharacters;
+    }
 }

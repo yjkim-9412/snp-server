@@ -5,6 +5,7 @@ import SNP.management.domain.DTO.StudentDTO;
 import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.entity.Teacher;
 import SNP.management.domain.entity.study.Study;
+import SNP.management.domain.enumlist.GradeType;
 import SNP.management.domain.enumlist.StudyType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +19,8 @@ import javax.persistence.*;
 @Table(name = "STUDENT")
 public class Student extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -49,7 +51,6 @@ public class Student extends BaseEntity {
     private Study study;
 
 
-
     @Column(name = "study_count")
     private int studyCount;
     @Column(insertable = false)
@@ -58,32 +59,53 @@ public class Student extends BaseEntity {
     private Boolean registration;
 
 
-    private void setStudent(StudentDTO studentDTO) {
-        this.name = studentDTO.getName();
-        this.age = studentDTO.getAge();
-        this.birth = studentDTO.getBirth();
-        this.phone = studentDTO.getPhone();
-        this.email = studentDTO.getEmail();
-        this.parentName = studentDTO.getParentName();
-        this.parentPhone = studentDTO.getParentPhone();
-        this.gender = studentDTO.getGender();
-        this.studyType = studentDTO.getStudyType();
-        this.address = studentDTO.getAddress();
-        this.grade = Grade.createGrade(studentDTO);
-        this.skill = Skill.createSkill(studentDTO);
-        this.registration = studentDTO.getRegistration();
-        this.studyCount = studentDTO.getStudyCount() == null ? 0
-                : studentDTO.getStudyCount();
+
+    private Student(String name, Integer age, String birth, String phone, String email, String parentName, String parentPhone,
+                    String gender, StudyType studyType, String address, GradeType gradeType, Integer gradeLv, int speed, int readLv, int intLv,
+                    boolean registration, Integer studyCount) {
+        this.name = name;
+        this.age = age;
+        this.birth = birth;
+        this.phone = phone;
+        this.email = email;
+        this.parentName = parentName;
+        this.parentPhone = parentPhone;
+        this.gender = gender;
+        this.studyType = studyType;
+        this.address = address;
+        this.grade = Grade.createGrade(gradeType, gradeLv);
+        this.skill = Skill.createSkill(speed, readLv, intLv);
+        this.registration = registration;
+        this.studyCount = studyCount == null ? 0
+                : studyCount;
     }
 
     public static Student createStudent(StudentDTO studentDTO) {
-        Student student = new Student();
-        student.setStudent(studentDTO);
-        return student;
+        return new Student(studentDTO.getName(), studentDTO.getAge(), studentDTO.getBirth(), studentDTO.getPhone(), studentDTO.getEmail(),
+                studentDTO.getParentName(), studentDTO.getParentPhone(), studentDTO.getGender(), studentDTO.getStudyType(), studentDTO.getAddress(),
+                studentDTO.getGrade(), studentDTO.getGradeLv(), studentDTO.getSpeed(), studentDTO.getReadLv(), studentDTO.getIntLv(),
+                studentDTO.isRegistration(), studentDTO.getStudyCount());
+
     }
 
-    public void changeStudent(StudentDTO studentDTO) {
-        this.setStudent(studentDTO);
+    public void changeStudent(String name, Integer age, String birth, String phone, String email, String parentName, String parentPhone,
+                              String gender, StudyType studyType, String address, GradeType gradeType, Integer gradeLv, int speed, int readLv, int intLv,
+                              boolean registration, Integer studyCount) {
+        this.name = name;
+        this.age = age;
+        this.birth = birth;
+        this.phone = phone;
+        this.email = email;
+        this.parentName = parentName;
+        this.parentPhone = parentPhone;
+        this.gender = gender;
+        this.studyType = studyType;
+        this.address = address;
+        this.grade = Grade.createGrade(gradeType, gradeLv);
+        this.skill = Skill.createSkill(speed, readLv, intLv);
+        this.registration = registration;
+        this.studyCount = studyCount == null ? 0
+                : studyCount;
     }
 
     public void changeStudy(Study study) {
@@ -92,7 +114,7 @@ public class Student extends BaseEntity {
         this.studyCount = 1;
     }
 
-    public boolean hasStudy(){
+    public boolean hasStudy() {
         return this.getStudy() != null;
     }
 

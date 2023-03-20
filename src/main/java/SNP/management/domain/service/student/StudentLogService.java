@@ -132,10 +132,15 @@ public class StudentLogService {
             log.info("studentUpdate textBook has = {}", true);
             TextBook logDTOTextBook = textBookOptional.get();
             questionLogUpdate(logDTO, logDTOTextBook, studentLog);
-            studentLog.updateStudentLogWithTextBook(logDTO, study, student, logDTOTextBook);
+            studentLog.updateStudentLogWithTextBook(study, student, logDTOTextBook,logDTO.getConcentration(), logDTO.getConcentrationAnswer(),
+                    logDTO.getRapidEyeball(), logDTO.getEyeBallCount(), logDTO.getEyeballTotal(), logDTO.getFigureOne(), logDTO.getFigureTwo(),
+                    logDTO.getFigureOneClear(), logDTO.getFigureTwoClear(), logDTO.getMemo(), logDTO.getStudyType(), logDTO.getStudyCount(),
+                    logDTO.getProcessingMin(), logDTO.getProcessingSec(), logDTO.getReadCount());
         } else {
             log.info("studentUpdate textBook has = {}", false);
-            studentLog.updateStudentLogNoneTextBook(logDTO, study, student);
+            studentLog.updateStudentLogNoneTextBook(study, student, logDTO.getConcentration(),logDTO.getConcentrationAnswer(),logDTO.getRapidEyeball(),
+                    logDTO.getEyeBallCount(),logDTO.getEyeballTotal(),logDTO.getFigureOne(),logDTO.getFigureTwo(), logDTO.getMemo(),
+                    logDTO.getStudyType(),logDTO.getStudyCount(),logDTO.getReadCount());
         }
 
 

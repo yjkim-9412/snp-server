@@ -1,7 +1,7 @@
 package SNP.management.domain.DTO.basictest;
 
-import SNP.management.domain.enumlist.BasicTestType;
-import SNP.management.domain.enumlist.StudyHabitType;
+import SNP.management.domain.enumlist.basictest.BasicTestType;
+import SNP.management.domain.enumlist.basictest.StudyHabitType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,4 +16,6 @@ public class StudyHabitsDTO extends BasicTestDTO {
         super(studentId,questionNum,score,basicTestType);
         this.studyHabitType = studyHabitType;
     }
+
+
 }

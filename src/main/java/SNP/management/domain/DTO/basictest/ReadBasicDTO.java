@@ -1,6 +1,6 @@
 package SNP.management.domain.DTO.basictest;
 
-import SNP.management.domain.enumlist.BasicTestType;
+import SNP.management.domain.enumlist.basictest.BasicTestType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +18,5 @@ public class ReadBasicDTO extends BasicTestDTO{
         this.intelligibility = intelligibility;
     }
 
+    
 }

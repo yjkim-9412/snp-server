@@ -1,4 +1,4 @@
-package SNP.management.domain.enumlist;
+package SNP.management.domain.enumlist.basictest;
 
 public enum StudyHabitType {
 

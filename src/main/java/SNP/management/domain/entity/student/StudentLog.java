@@ -79,69 +79,50 @@ public class StudentLog extends BaseEntity {
     @OneToMany(mappedBy = "studentLog")
     private List<QuestionLog> questionLog = new ArrayList<>();
 
-    private void setStudentLogWithTextBook(Student student, Study study,TextBook textBook, LogDTO logDTO ) {
+
+    private StudentLog(Student student, Study study, TextBook textBook, Integer concentration, boolean concentrationAnswer,
+                       Integer rapidEyeball, EyeBall eyeBallCount, Integer eyeballTotal, Integer figureOne, Integer figureTwo,
+                       Integer figureOneClear, Integer figureTwoClear, String memo, StudyType studyType, Integer studyCount,
+                       Integer processingMin, Integer processingSec, Integer readCount) {
         this.student = student;
         this.study = study;
-        this.concentration = logDTO.getConcentration();
-        this.concentrationAnswer = logDTO.getConcentrationAnswer();
-        this.rapidEyeball = logDTO.getRapidEyeball();
-        this.eyeBallCount = logDTO.getEyeBallCount();
-        this.eyeballTotal = logDTO.getEyeballTotal();
-        this.figureOne = logDTO.getFigureOne();
-        this.figureOneClear = logDTO.getFigureOneClear();
-        this.figureTwo = logDTO.getFigureTwo();
-        this.figureTwoClear = logDTO.getFigureTwoClear();
-        this.memo = logDTO.getMemo();
-        this.studyType = student.getStudyType();
-        this.studyCount = logDTO.getStudyCount();
         this.textBook = textBook;
-        this.processingMin = logDTO.getProcessingMin();
-        this.processingSec = logDTO.getProcessingSec();
-        this.readCount = logDTO.getReadCount();
+        this.concentration = concentration;
+        this.concentrationAnswer = concentrationAnswer;
+        this.rapidEyeball = rapidEyeball;
+        this.eyeBallCount = eyeBallCount;
+        this.eyeballTotal = eyeballTotal;
+        this.figureOne = figureOne;
+        this.figureOneClear = figureOneClear;
+        this.figureTwo = figureTwo;
+        this.figureTwoClear = figureTwoClear;
+        this.memo = memo;
+        this.studyType = studyType;
+        this.studyCount = studyCount;
+        this.processingMin = processingMin;
+        this.processingSec = processingSec;
+        this.readCount = readCount;
         sumPractice();
-
     }
 
-
-
-    private void setStudentLogNoneTextBook(Student student, Study study, LogDTO logDTO ) {
+    private StudentLog(Student student, Study study, Integer concentration, boolean concentrationAnswer, Integer rapidEyeball, EyeBall eyeballCount,
+                       Integer eyeballTotal, Integer figureOne, Integer figureTwo, String memo, StudyType studyType, Integer studyCount, Integer readCount) {
         this.student = student;
         this.study = study;
-        this.concentration = logDTO.getConcentration();
-        this.concentrationAnswer = logDTO.getConcentrationAnswer();
-        this.rapidEyeball = logDTO.getRapidEyeball() == null? 0 : logDTO.getRapidEyeball();
-        this.eyeBallCount = logDTO.getEyeBallCount();
-        this.eyeballTotal = logDTO.getEyeballTotal();
-        this.figureOne = logDTO.getFigureOne();
-        this.figureTwo = logDTO.getFigureTwo();
-        this.memo = logDTO.getMemo();
-        this.studyType = student.getStudyType();
-        this.studyCount = logDTO.getStudyCount() == null? 0 : logDTO.getStudyCount();
-        this.readCount = logDTO.getReadCount();
+        this.concentration = concentration;
+        this.concentrationAnswer = concentrationAnswer;
+        this.rapidEyeball = rapidEyeball == null ? 0 : rapidEyeball;
+        this.eyeBallCount = eyeballCount;
+        this.eyeballTotal = eyeballTotal;
+        this.figureOne = figureOne;
+        this.figureTwo = figureTwo;
+        this.memo = memo;
+        this.studyType = studyType;
+        this.studyCount = studyCount == null ? 0 : studyCount;
+        this.readCount = readCount;
         sumEyeBall();
-    }
-    private void sumPractice() {
-        sumProcessingTime();
-        sumEyeBall();
-    }
-    private void sumProcessingTime() {
-        this.processingTime = (this.processingMin * MIN) + this.processingSec;
-    }
-    private void sumEyeBall() {
-        if (hasEyeballScore()) {
-            this.eyeballTotal = (this.rapidEyeball * EYEBALL_SIZE) + this.eyeBallCount.count();
-        } else {
-            this.eyeballTotal = 0;
-        }
-    }
-    public boolean hasEyeballScore() {
-        return this.eyeBallCount != null;
     }
 
-    public void intelligibilityCalculator (double totalQuestionScore, double totalStudentScore) {
-        double result =totalStudentScore / totalQuestionScore * 100;
-        this.intelligibility = Math.round(result * 100.0) / 100.0;
-    }
     private StudentLog(Student student) {
         this.student = student;
         this.study = student.getStudy();
@@ -150,35 +131,100 @@ public class StudentLog extends BaseEntity {
 
     }
 
-    public void changeStudyCount(Integer studyCount){
+    public void changeStudyCount(Integer studyCount) {
         this.studyCount = studyCount;
     }
 
-    public static StudentLog createStudentLog(Student student, Study study, TextBook textBook , LogDTO logDTO ){
-        StudentLog studentLog = new StudentLog();
-        studentLog.setStudentLogWithTextBook(student, study, textBook, logDTO);
-        return studentLog;
-    }
-    public static StudentLog createStudentLogNoneTextBook(Student student, Study study,  LogDTO logDTO ){
-        StudentLog studentLog = new StudentLog();
-        studentLog.setStudentLogNoneTextBook(student, study, logDTO);
-        return studentLog;
+    public static StudentLog createStudentLog(Student student, Study study, TextBook textBook, LogDTO logDTO) {
+        return new StudentLog(student, study, textBook, logDTO.getConcentration(), logDTO.getConcentrationAnswer(),
+                logDTO.getRapidEyeball(), logDTO.getEyeBallCount(), logDTO.getEyeballTotal(), logDTO.getFigureOne(), logDTO.getFigureTwo(),
+                logDTO.getFigureOneClear(), logDTO.getFigureTwoClear(), logDTO.getMemo(), logDTO.getStudyType(), logDTO.getStudyCount(),
+                logDTO.getProcessingMin(), logDTO.getProcessingSec(), logDTO.getReadCount());
     }
 
+    public static StudentLog createStudentLogNoneTextBook(Student student, Study study, LogDTO logDTO) {
+        return new StudentLog(student, study, logDTO.getConcentration(), logDTO.getConcentrationAnswer(), logDTO.getRapidEyeball(),
+                logDTO.getEyeBallCount(), logDTO.getEyeballTotal(), logDTO.getFigureOne(), logDTO.getFigureTwo(),
+                logDTO.getMemo(), logDTO.getStudyType(), logDTO.getStudyCount(), logDTO.getReadCount());
+    }
 
-    public static StudentLog createFirstStudentLog(Student student){
+    public static StudentLog createFirstStudentLog(Student student) {
         return new StudentLog(student);
     }
 
-    public void updateStudentLogWithTextBook(LogDTO logDTO, Study study, Student student, TextBook textBook) {
-        this.setStudentLogWithTextBook(student,study,textBook,logDTO);
-    }
-    public void updateStudentLogNoneTextBook(LogDTO logDTO, Study study, Student student) {
-        this.setStudentLogNoneTextBook(student,study,logDTO);
+    public void updateStudentLogWithTextBook(Study study, Student student, TextBook textBook,
+                                             Integer concentration, boolean concentrationAnswer,
+                                             Integer rapidEyeball, EyeBall eyeBallCount, Integer eyeballTotal, Integer figureOne, Integer figureTwo,
+                                             Integer figureOneClear, Integer figureTwoClear, String memo, StudyType studyType, Integer studyCount,
+                                             Integer processingMin, Integer processingSec, Integer readCount) {
+        this.student = student;
+        this.study = study;
+        this.textBook = textBook;
+        this.concentration = concentration;
+        this.concentrationAnswer = concentrationAnswer;
+        this.rapidEyeball = rapidEyeball;
+        this.eyeBallCount = eyeBallCount;
+        this.eyeballTotal = eyeballTotal;
+        this.figureOne = figureOne;
+        this.figureOneClear = figureOneClear;
+        this.figureTwo = figureTwo;
+        this.figureTwoClear = figureTwoClear;
+        this.memo = memo;
+        this.studyType = studyType;
+        this.studyCount = studyCount;
+        this.processingMin = processingMin;
+        this.processingSec = processingSec;
+        this.readCount = readCount;
+        sumPractice();
     }
 
-    public boolean hasTextBook () {
+    public void updateStudentLogNoneTextBook(
+            Study study, Student student, Integer concentration, boolean concentrationAnswer, Integer rapidEyeball, EyeBall eyeballCount,
+            Integer eyeballTotal, Integer figureOne, Integer figureTwo, String memo, StudyType studyType, Integer studyCount, Integer readCount) {
+        this.student = student;
+        this.study = study;
+        this.concentration = concentration;
+        this.concentrationAnswer = concentrationAnswer;
+        this.rapidEyeball = rapidEyeball == null ? 0 : rapidEyeball;
+        this.eyeBallCount = eyeballCount;
+        this.eyeballTotal = eyeballTotal;
+        this.figureOne = figureOne;
+        this.figureTwo = figureTwo;
+        this.memo = memo;
+        this.studyType = studyType;
+        this.studyCount = studyCount == null ? 0 : studyCount;
+        this.readCount = readCount;
+        sumEyeBall();
+    }
+
+    public boolean hasTextBook() {
         return this.textBook != null;
+    }
+
+    private void sumPractice() {
+        sumProcessingTime();
+        sumEyeBall();
+    }
+
+    private void sumProcessingTime() {
+        this.processingTime = (this.processingMin * MIN) + this.processingSec;
+    }
+
+    private void sumEyeBall() {
+        if (hasEyeballScore()) {
+            this.eyeballTotal = (this.rapidEyeball * EYEBALL_SIZE) + this.eyeBallCount.count();
+        } else {
+            this.eyeballTotal = 0;
+        }
+    }
+
+    public boolean hasEyeballScore() {
+        return this.eyeBallCount != null;
+    }
+
+    public void intelligibilityCalculator(double totalQuestionScore, double totalStudentScore) {
+        double result = totalStudentScore / totalQuestionScore * 100;
+        this.intelligibility = Math.round(result * 100.0) / 100.0;
     }
 
 }

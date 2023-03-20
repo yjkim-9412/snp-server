@@ -40,7 +40,7 @@ public class TeacherRepository {
 
     public void update(TeacherDTO teacherDTO) {
         Teacher teacher = findById(teacherDTO.getId()).orElseThrow(IllegalArgumentException::new);
-        teacher.update(teacherDTO);
+        teacher.update(teacherDTO.getName(),teacherDTO.getPhone(),teacherDTO.getEmail(),teacherDTO.getPw());
     }
 
     public void delete(Long id) {

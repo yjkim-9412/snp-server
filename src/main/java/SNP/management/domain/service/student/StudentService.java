@@ -62,7 +62,10 @@ public class StudentService {
         studentLogHandler.isUpdate(studentDTO, findByStudent);
 
         //학생 업데이트
-        findByStudent.changeStudent(studentDTO);
+        findByStudent.changeStudent(studentDTO.getName(), studentDTO.getAge(), studentDTO.getBirth(), studentDTO.getPhone(), studentDTO.getEmail(),
+                studentDTO.getParentName(), studentDTO.getParentPhone(), studentDTO.getGender(), studentDTO.getStudyType(), studentDTO.getAddress(),
+                studentDTO.getGrade(), studentDTO.getGradeLv(), studentDTO.getSpeed(), studentDTO.getReadLv(), studentDTO.getIntLv(),
+                studentDTO.isRegistration(), studentDTO.getStudyCount());
 
     }
 

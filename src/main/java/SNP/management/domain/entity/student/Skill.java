@@ -26,13 +26,8 @@ public class Skill {
         this.readLv = readLv;
         this.intLv = intLv;
     }
-    private Skill (StudentDTO studentDTO) {
-        this.speed = studentDTO.getSpeed();
-        this.readLv = studentDTO.getReadLv();
-        this.intLv = studentDTO.getIntLv();
-    }
 
-    public static Skill createSkill(StudentDTO studentDTO) {
-        return new Skill(studentDTO);
+    public static Skill createSkill(int speed, int readLv, int intLv) {
+        return new Skill(speed, readLv, intLv);
     }
 }

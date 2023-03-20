@@ -1,6 +1,6 @@
-package SNP.management.domain.enumlist;
+package SNP.management.domain.enumlist.basictest;
 
-public enum IntelligenceType {
+public enum IntelligenceType{
     VOCABULARY,
     NUMERICAL_ABILITIES,
     REASONING_POWER,

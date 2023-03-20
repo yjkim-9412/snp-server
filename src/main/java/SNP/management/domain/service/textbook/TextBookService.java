@@ -62,8 +62,8 @@ public class TextBookService {
         TextBook textBookFindById = textBookDataJpa.findById(textBookDTO.getId())
                 .orElseThrow(IllegalArgumentException::new);
 
-        textBookFindById.ChangeTextBook(textBookDTO,
-                categoryDataJpa.findById(textBookDTO.getCategoryId()).orElseThrow(IllegalArgumentException::new));
+        textBookFindById.changeTextBook(categoryDataJpa.findById(textBookDTO.getCategoryId()).orElseThrow(IllegalArgumentException::new),
+                textBookDTO.getName(),textBookDTO.getTextBookType(),textBookDTO.getNumberOfCharacters(),textBookDTO.getQuestionCount());
 
         updateTextbookQuestion(questionDTOList, textBookFindById);
     }

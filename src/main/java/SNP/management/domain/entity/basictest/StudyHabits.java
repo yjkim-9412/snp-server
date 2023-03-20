@@ -2,7 +2,7 @@ package SNP.management.domain.entity.basictest;
 
 import SNP.management.domain.entity.BaseEntity;
 import SNP.management.domain.entity.student.Student;
-import SNP.management.domain.enumlist.StudyHabitType;
+import SNP.management.domain.enumlist.basictest.StudyHabitType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

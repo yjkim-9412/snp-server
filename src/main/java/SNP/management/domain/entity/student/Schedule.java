@@ -40,15 +40,6 @@ public class Schedule extends BaseEntity {
         return schedule;
     }
 
-    public Schedule changeTime(String time) {
-        this.time = time;
-        return this;
-    }
-
-    public Schedule changeDayOfWeek(int day) {
-        this.dayOfWeek = DayOfWeek.values()[day];
-        return this;
-    }
 
     public void changeSchedule(Integer day, String time) {
         this.dayOfWeek = DayOfWeek.values()[day];
