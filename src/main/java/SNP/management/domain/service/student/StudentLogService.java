@@ -35,14 +35,14 @@ public class StudentLogService {
     private static final String NONE_TEXTBOOK = "not found TextBook";
     private static final TextBookType[] TEXTBOOK_ARRAY = TextBookType.values();
 
+    private final RequestScheduleService requestScheduleService;
+
     private final StudentDataJpa studentDataJpa;
     private final StudyDataJpa studyDataJpa;
     private final StudentLogDataJpa studentLogDataJpa;
-    private final QuestionLogDataJpa questionLogDataJpa;
     private final TextBookDataJpa textBookDataJpa;
     private final QuestionDataJpa questionDataJpa;
     private final StudyRepository studyRepository;
-    private final RequestScheduleService requestScheduleService;
     private final StudentLogRepository studentLogRepository;
     private final QuestionLogRepository questionLogRepository;
 
@@ -57,6 +57,7 @@ public class StudentLogService {
         student.changeStudyType(studentDTO.getStudyType());
         saveFirstLog(student);
     }
+
     public void saveTodayLog(LogDTO logDTO, Integer today) {
 
         if (requestScheduleService.hasTodaySchedule(logDTO.getStudentId(), today)) {
@@ -178,7 +179,6 @@ public class StudentLogService {
     }
 
 
-
     private boolean isSameTextBook(TextBook logDTOTextBook, TextBook textBook) {
         String existingCode = textBook.getCode();
         String newCode = logDTOTextBook.getCode();
@@ -235,7 +235,7 @@ public class StudentLogService {
         StudentLog studentLog = studentLogDataJpa.findById(logId).orElseThrow(() -> new IllegalArgumentException("not found studentLog"));
         LogDTO logDTO = LogDTO.createLogDTOByStudentLog(studentLog);
         if (studentLog.hasTextBook()) {
-            log.info("getStudentLog has textBook = {}",true);
+            log.info("getStudentLog has textBook = {}", true);
             convertQuestionLogListToMap(studentLog, logDTO);
         }
 

@@ -23,6 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class StudyService {
 
+    private final static String EMPTY_STUDY = "studentLog.study is Null";
+    private final static String ILLEGAL_COUNT = "Illegal StudyCount";
+    private final static int PLUS_STEP = 1;
+    private final static int PLUS_COUNT = 1;
+
     private final RequestScheduleService requestScheduleService;
     private final StudyDataJpa studyDataJpa;
     private final StudentDataJpa studentDataJpa;
@@ -50,7 +55,7 @@ public class StudyService {
             studyDTO.setStudentInfo(StudentDTO.createStudentDTO(student));
             return studyDTO;
         }
-        throw new NullPointerException("studentLog.study is Null");
+        throw new NullPointerException(EMPTY_STUDY);
     }
 
 
@@ -67,13 +72,13 @@ public class StudyService {
     }
 
     public Study getNextStepStudy(int step, StudyType studyType) {
-        int nextStep = step + 1;
+        int nextStep = step + PLUS_STEP;
         return studyDataJpa.findByStudyTypeAndStep(studyType, nextStep)
                 .orElseThrow(IllegalArgumentException::new);
     }
 
     public Study getStillSameStudy(int studyCount, String detail, StudyType studyType) {
-        int nextStudyCount = studyCount + 1;
+        int nextStudyCount = studyCount + PLUS_COUNT;
         return getStudyNumberOfDays(detail, studyType, nextStudyCount);
     }
 
@@ -97,6 +102,6 @@ public class StudyService {
 
             return true;
         }
-        throw new IllegalArgumentException("Illegal StudyCount");
+        throw new IllegalArgumentException(ILLEGAL_COUNT);
     }
 }
